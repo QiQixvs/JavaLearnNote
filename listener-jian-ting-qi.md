@@ -471,13 +471,9 @@ public class MyServletContextListener implements ServletContextListener {
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 
-	<!-- 监听器案例
-	<listener>
-		<listener-class>cn.itcast.listener.demo.MyServletContextListener</listener-class>
-	</listener>
-
-	<listener>
-		<listener-class>cn.itcast.listener.demo.MyHttpSessionListener</listener-class>
+	<!-- 注册监听ServletContext对象创建与销毁 -->
+	<listener> 
+		<listener-class>cn.itcast.web.listener.application.MyServletContextListener</listener-class> 
 	</listener> -->
 
 	<welcome-file-list>
