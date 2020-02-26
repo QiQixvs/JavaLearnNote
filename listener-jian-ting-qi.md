@@ -476,50 +476,33 @@ public class MyServletContextListener implements ServletContextListener {
 
 </web-app>
 ```
+## 何时创建何时销毁
+1. 监听application对象是服务器启动时创建，服务器关闭时销毁。
+2. 监听session对象
+    session对象创建:reqeust.getSession\(\);它是用于获session.
+    是否创建，分以下几种情况:
 
-1.监听application对象的创建与销毁.
+        1.请求中如果没有jsessionid,那么就是创建session对象。
 
-问题:application对象什么时候创建，什么时候销毁的?
+        2.如果请求头中有jsessionid值：
 
-application对象是服务器启动时创建，
+            1.如果在服务器端，有一个session的id值与其一样，不创建，直接使用。
 
-服务器关闭时销毁。
+            2.如果在服务器端，没有这个session的id值，那么会创建。
 
-2.监听session对象创建与销毁
+    session销毁:
 
-问题:session对象什么时候创建，什么时候销毁？
+        1.默认超时 30分钟
 
-session对象创建:
+        2.设置session超时时间
 
-reqeust.getSession\(\);它是用于获取session.
+            setMaxInactiveInterval\(int interval\)
 
-是否创建，分以下几种情况:
+        3.invalidate\(\)手动销毁.
 
-1.请求中如果没有jsessionid,那么就是创建session对象。
+        4.关闭服务器
 
-2.如果请求头中有jsessionid值：
-
-1.如果在服务器端，有一个session的id值与其一样，不创建，直接使用。
-
-2.如果在服务器端，没有这个session的id值，那么会创建。
-
-session销毁:
-
-1.默认超时 30分钟
-
-2.设置session超时时间
-
-setMaxInactiveInterval\(int interval\)
-
-3.invalidate\(\)手动销毁.
-
-4.关闭服务器
-
-3.监听request对象创建与销毁
-
-问题:request对象什么时候创建，什么时候销毁？
-
-请求发生，request对象创建，响应产生request对象销毁。
+3. 监听request对象 请求发生，request对象创建，响应产生request对象销毁。
 
 演示监听属性变化
 
