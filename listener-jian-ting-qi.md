@@ -260,13 +260,13 @@ select \* from 表 limit \(页码-1\)\*每页条数,每页条数;
 
 3.在showCustomerByPage.jsp页面上添加
 
-&lt;a href="/day20\_1/findAllByPage?pageNum=1"&gt;首页&lt;/a&gt;   
+&lt;a href="/day20\_1/findAllByPage?pageNum=1"&gt;首页&lt;/a&gt;
 
-&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.pageNum-1}"&gt;上一页&lt;/a&gt;   
+&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.pageNum-1}"&gt;上一页&lt;/a&gt;
 
-&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.pageNum+1 }"&gt;下一页&lt;/a&gt;   
+&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.pageNum+1 }"&gt;下一页&lt;/a&gt;
 
-&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.totalPage }"&gt;尾页&lt;/a&gt;   
+&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.totalPage }"&gt;尾页&lt;/a&gt;
 
 !\[图片包含 屏幕截图
 
@@ -290,25 +290,25 @@ pageNum = Integer.parseInt\(\_pageNum\);
 
 &lt;c:if test="${pb.pageNum==1}"&gt;
 
-上一页   
+上一页
 
 &lt;/c:if&gt;
 
 &lt;c:if test="${pb.pageNum!=1}"&gt;
 
-&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.pageNum-1}"&gt;上一页&lt;/a&gt;   
+&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.pageNum-1}"&gt;上一页&lt;/a&gt;
 
 &lt;/c:if&gt;
 
 &lt;c:if test="${pb.pageNum==pb.totalPage}"&gt;
 
-下一页   
+下一页
 
 &lt;/c:if&gt;
 
 &lt;c:if test="${pb.pageNum!=pb.totalPage}"&gt;
 
-&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.pageNum+1 }"&gt;下一页&lt;/a&gt;   
+&lt;a href="/day20\_1/findAllByPage?pageNum=${pb.pageNum+1 }"&gt;下一页&lt;/a&gt;
 
 &lt;/c:if&gt;
 
@@ -350,7 +350,7 @@ location.href="/day20\_1/findAllByPage?currentPage="+value;
 
 &lt;c:forEach begin="1" end="${pb.totalPage}" var="n" step="1"&gt;
 
-&lt;a href="/day20\_1/findAllByPage?pageNum=${n}¤tPage=${pb.currentPage}"&gt;第${n}页&lt;/a&gt;  
+&lt;a href="/day20\_1/findAllByPage?pageNum=${n}¤tPage=${pb.currentPage}"&gt;第${n}页&lt;/a&gt;
 
 &lt;/c:forEach&gt;
 
@@ -468,7 +468,7 @@ public class MyServletContextListener implements ServletContextListener {
     <!-- 注册监听ServletContext对象创建与销毁 -->
     <listener> 
         <listener-class>cn.itcast.web.listener.application.MyServletContextListener</listener-class> 
-    </listener> -->
+    </listener>
 
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
@@ -476,45 +476,53 @@ public class MyServletContextListener implements ServletContextListener {
 
 </web-app>
 ```
-## 何时创建何时销毁
-1. 监听application对象是服务器启动时创建，服务器关闭时销毁。
-2. 监听session对象
-    session对象创建:reqeust.getSession\(\);它是用于获session.
-    是否创建，分以下几种情况:
 
-        1.请求中如果没有jsessionid,那么就是创建session对象。
+### 三个对象何时创建何时销毁
 
-        2.如果请求头中有jsessionid值：
+1. application对象是服务器启动时创建，服务器关闭时销毁。
+2. session对象 session对象创建:reqeust.getSession\(\);它是用于获session. 是否创建，分以下几种情况:
 
-            1.如果在服务器端，有一个session的id值与其一样，不创建，直接使用。
+   ```text
+    1.请求中如果没有jsessionid,那么就是创建session对象。
 
-            2.如果在服务器端，没有这个session的id值，那么会创建。
+    2.如果请求头中有jsessionid值：
 
-    session销毁:
+        1.如果在服务器端，有一个session的id值与其一样，不创建，直接使用。
 
-        1.默认超时 30分钟
+        2.如果在服务器端，没有这个session的id值，那么会创建。
+   ```
 
-        2.设置session超时时间
+   session销毁:
 
-            setMaxInactiveInterval\(int interval\)
+   ```text
+    1.默认超时 30分钟
 
-        3.invalidate\(\)手动销毁.
+    2.设置session超时时间
 
-        4.关闭服务器
+        setMaxInactiveInterval\(int interval\)
 
-3. 监听request对象 请求发生，request对象创建，响应产生request对象销毁。
+    3.invalidate\(\)手动销毁.
 
-演示监听属性变化
+    4.关闭服务器
+   ```
+
+3. request对象 请求发生，request对象创建，响应产生request对象销毁。
+
+{% hint style="info" %}
+session对象是否创建，看请求中所要的session与服务器端的session是否是同一个。
+{% endhint %}
+
+### 演示监听属性变化
 
 演示监听session的属性变化
 
-问题:在监听器中是否可以得到属性值?
+题:在监听器中是否可以得到属性值?
 
-常识:在java的监听机制中，是可以在监听器中获取事件源的。
+![](.gitbook/assets/image%20%282%29.png)
 
-我们在开发中，如果有到了事件触发机制，那么一般情况下，都可以使用
-
-方法的参数\(事件对象\)来获取想要的信息.
+{% hint style="success" %}
+在java的监听机制中，是可以在监听器中获取事件源的我们在开发中，如果有到了事件触发机制，那么一般情况下，都可以使用方法的参数\(事件对象\)来获取想要的信息.
+{% endhint %}
 
 思考一个问题:这些监听器在开发中有什么用?
 
