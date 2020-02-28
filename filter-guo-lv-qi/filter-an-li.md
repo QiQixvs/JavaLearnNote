@@ -1,7 +1,5 @@
 # Filter案例
 
-
-
 ## 全站统一字符编码过滤器（post）
 
 编写jsp 输入用户名，在Servlet中获取用户名，将用户名输出到浏览器上。
@@ -17,7 +15,7 @@ response.setContentType("text/html;charset=utf-8");
 
 而过滤器可以在目标资源之前执行，将很多程序中处理乱码公共代码，提取到过滤器中，以后程序中不需要处理编码问题了
 
-* 配置filter参数
+### 配置filter参数
 
 ```markup
 <!-- post编码过滤器 -->
@@ -36,7 +34,7 @@ response.setContentType("text/html;charset=utf-8");
 </filter-mapping>
 ```
 
-* EncodingFilter代码
+### EncodingFilter代码
 
 ```java
 public class EncodingFilter implements Filter {
@@ -129,7 +127,7 @@ response.setDateHeader("expires", System.currentTimeMillis()
     3. 做一个Filter，它拦截所有请求，当访问资源时，我们从cookie中获取用户名和密码，进行登录操作。
 ```
 
-![](.gitbook/assets/2020-02-28-18-19-52.png)
+![](https://github.com/QiQixvs/JavaLearnNote/tree/69e9dac4467d13d1f0b9545874d7f9a678515a3a/.gitbook/assets/2020-02-28-18-19-52.png)
 
 * 首先要有登录功能
 
@@ -194,7 +192,7 @@ public void doFilter(ServletRequest req, ServletResponse resp,FilterChain chain)
     chain.doFilter(request, response);
 ```
 
-**补充问题**
+### **补充问题**
 
 * 如果用户已经登录了，就不需要自动登陆了
 
@@ -331,7 +329,7 @@ public class PrivilegeException extends RuntimeException {}
 </error-page>
 ```
 
-* 优化
+### 优化
 
 将不同用户的权限对应的访问资源路径写成配置文件或数据库，方便判断权限的时候的读取。
 
@@ -366,7 +364,7 @@ if (admins.contains(path) || users.contains(path))
 
 ## 全局编码过滤（通过get和post乱码过滤器）
 
-![](.gitbook/assets/2020-02-28-23-32-19.png)
+![request&#x3001;response&#x521B;&#x5EFA;&#x4E0E;&#x9500;&#x6BC1;](../.gitbook/assets/2020-02-28-23-32-19.png)
 
 用装饰模式类对request进行增强，解决编码问题。被装饰类是由服务器实现的request。
 
