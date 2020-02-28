@@ -1,8 +1,6 @@
 # Listener 监听器
 
-## **Listener**
-
-### **概念**
+## **概念**
 
 1. 事件ActionEvent
 2. 事件源 Jbutton
@@ -19,7 +17,7 @@
 
    在javaweb中servlet规范中定义了三种技术 servlet Listener Filter
 
-### 对应的监听器接口
+## 对应的监听器接口
 
 #### 1.监听创建与销毁
 
@@ -61,7 +59,7 @@ ServletContext属性变化
        监听器:**ServletContextAttributeListener**监听application对象的属性变化。
 ```
 
-### web中监听器怎样使用？
+## web中监听器怎样使用？
 
 创建监听器步骤:
 
@@ -234,7 +232,7 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 ```
 {% endhint %}
 
-### session绑定javaBean\(了解\)
+## session绑定javaBean\(了解\)
 
 1. HttpSessionBindingListener
 2. HttpSessionActivationListener
@@ -243,14 +241,13 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 
 1. 它们是由javaBean实现.
 2. 它们不需要在web.xml文件中配置.
+3. HttpSessionBindingListener
 
-* HttpSessionBindingListener
+   这个监听器，可以让javaBean对象，感知它被绑定到session中或从session中移除。
 
-  这个监听器，可以让javaBean对象，感知它被绑定到session中或从session中移除。
+4. HttpSessionActivationListener
 
-* HttpSessionActivationListener
-
-  这个监听器，可以让javaBean感知，被钝化或活化。
+   这个监听器，可以让javaBean感知，被钝化或活化。
 
 {% hint style="info" %}
 钝化---&gt;将session中的javaBean保存到文件中. 活化---&gt;从文件中将javaBean直接获取。
