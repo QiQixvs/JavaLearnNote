@@ -1,6 +1,6 @@
 # Filter 过滤器
 
-## Filter 过滤器
+## Filter过滤器
 
 ### 概念
 
@@ -21,11 +21,11 @@ java.servlet.Filter接口
 
 ```markup
 <!-- Filter入门 --!>
-<filter> 
+<filter>  
     <filter-name>demoFilter</filter-name>
-    <filter-class>cn.itcast.web.filter.Demo1Filter</filter-class> 
+    <filter-class>cn.itcast.web.filter.Demo1Filter</filter-class>  
 </filter>
-<filter-mapping> 
+<filter-mapping>  
     <filter-name>demo2Filter</filter-name>
     <url-pattern>/index.jsp</url-pattern>
     <!-- 访问index.jsp页面会被DemoFilter过滤 -->
@@ -62,15 +62,15 @@ java.servlet.Filter接口
 #### 配置Filter
 
 ```markup
-<filter> 
-    <filter-name></filter-name> 
-    <filter-class></filter-class> 
-</filter> 
+<filter>  
+    <filter-name></filter-name>  
+    <filter-class></filter-class>  
+</filter>  
 
-<init-param> 
-    <param-name></param-name> 
-    <param-value></param-value> 
-</init-param> 
+<init-param>  
+    <param-name></param-name>  
+    <param-value></param-value>  
+</init-param>  
 <filter-mapping>
     <filter-name></filter-name>
     <url-pattern></url-pattern>
@@ -120,7 +120,7 @@ public void doFilter(ServletRequest request, ServletResponse response,FilterChai
 `
 ```
 
-#### &lt;url-Pattern&gt;
+#### &lt;url-Pattern&gt;  
 
 对于Filter来说，它是用于确定拦截资源的路径
 
@@ -281,4 +281,4 @@ response.setDateHeader("expires", System.currentTimeMillis()
 ### URL级别的权限控制
 
 ### 通过get和post乱码过滤器
-
+![](2020-02-28-17-17-14.png)
