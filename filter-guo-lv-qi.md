@@ -51,8 +51,11 @@ Idea中使用JavaEE 6 annotated class对应Filter模版。@WebFilter(filterName 
 * 真正进行拦截操作的方法
 
   ```java
-  public viod doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-  //通过chain.doFilter(request,response)向下执行
+  public viod doFilter(ServletRequest request, ServletResponse response, FilterChain chain){
+    //1. 强制转换
+    //2. 操作
+    //3. 通过chain.doFilter(request,response)向下执行
+  }
   ```
 
 * 销毁操作
@@ -527,3 +530,64 @@ if (admins.contains(path) || users.contains(path))
 
 ### 全局编码过滤（通过get和post乱码过滤器）
 
+![](2020-02-28-23-32-19.png)
+
+用装饰模式类对request进行增强，解决编码问题。被装饰类是由服务器实现的request。
+
+#### 装饰步骤
+
+1. 装饰类与被装饰类要实现同一接口或继承同一父类
+2. 在装饰类中持有一个被装饰类引用
+3. 重写方法，进行功能增强
+
+#### 代码实现
+
+* 直接实现HttpServletRequest需要重写的方法太多，继承HttpServletRequestWrapper
+
+```java
+class MyRequest extends HttpServletRequestWrapper {
+
+    private HttpServletRequest request;
+//HttpServletRequestWrapper 没有无参构造 子类实现需要指定构造方法
+    public MyRequest(HttpServletRequest request) {
+        super(request);
+        this.request = request;
+    }
+    ...//重写方法
+}
+```
+
+* 重写关于获取请求参数的方法.
+
+```java
+String getParameter(String name)
+String[] getParameterValues(String name)
+Map<String, String[][]> getParameterMap()
+```
+
+* getParamter 与 getParamterValues方法可以调用getParameterMap()方法实现。重点重写getParameterMap()
+
+```java
+//request中获得的参数只需要进行一次转码就可以，添加开关量作为判断，避免二次转码 
+private boolean flag = true;
+@Override
+public Map getParameterMap() {
+    // 1.得到所有请求参数的Map集合
+    Map<String, String[]> map = request.getParameterMap();
+    // 2.解决编码问题.
+    if (flag) {
+        //遍历map集合
+        for (String key : map.keySet()) {
+            String[] values = map.get(key);
+            for (int i = 0; i < values.length; i++) {
+                try {
+                    values[i] = new String(values[i].getBytes("iso8859-1"),"utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+            }
+        }
+        flag = false;
+    }
+    return map;
+}
+```
