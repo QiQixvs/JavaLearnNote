@@ -31,6 +31,10 @@ java.servlet.Filter接口
     <!-- 访问index.jsp页面会被DemoFilter过滤 -->
 ```
 
+{% hint style="info" %}
+Idea中使用JavaEE 6 annotated class对应Filter模版。@WebFilter(filterName ="DemoFilter",urlPatterns={"过滤路径"}
+{% endhint %}
+
 #### Filter怎样实现过滤操作
 
 1. 在&lt;url-Pattern&gt;它是用于设置过滤的路径
@@ -139,14 +143,14 @@ public void doFilter(ServletRequest request, ServletResponse response,FilterChai
 在Servlet配置中常用的完全匹配，而在Filter配置中较常使用\*通配符，用来作用于一类的资源。
 {% endhint %}
 
-### &lt;servlet-name&gt;
+#### &lt;servlet-name&gt;
 
 它的作用是针对某一个sevlet进行拦截，它需要的是servlet的名称
 
 * 如果在一个&lt;filter-mapping&gt;中配置了servlet-name，那么它的顺序与url-pattern不一样。
 * 对于tomcat7，如果在一个filter-mapping中配置了servlet-name，还配置了url-pattern，这个filter只执行一次，但是tomcat6会执行两次
 
-### &lt;dispatcher&gt;
+#### &lt;dispatcher&gt;
 
 &lt;dispatcher&gt;指定过滤器所拦截的资源被 Servlet 容器调用的方式，可以是REQUEST,INCLUDE,FORWARD和ERROR之一，默认REQUEST。用户可以设置多个 子元素用来指定 Filter 对资源的多种调用方式进行拦截。
 
@@ -174,7 +178,7 @@ response.setContentType("text/html;charset=utf-8");
 
 * 配置filter参数
 
-```text
+```markup
 <!-- post编码过滤器 -->
 <filter>
     <filter-name>encodingFilter</filter-name>
@@ -251,7 +255,7 @@ public void doFilter(ServletRequest req, ServletResponse resp,
 
 Filter的url-pattern配置
 
-```text
+```markdown
 <url-pattern>*.jsp</url-pattern>
 ```
 
@@ -264,7 +268,7 @@ response.setDateHeader("expires", System.currentTimeMillis()
         +60*60*24*10*1000);//缓存10天
 ```
 
-```text
+```markdown
 <filter>
     <filter-name>imageFilter</filter-name>
     <filter-class>cn.itcast.filter.demo3.ImageCacheFilter</filter-class>
@@ -278,7 +282,216 @@ response.setDateHeader("expires", System.currentTimeMillis()
 
 ### 自动登录案例
 
+```text
+    1. 登录成功后，判断是否勾选了自动登录。
+    2. 如果勾选了自动登录，将用户名与密码存储到cookie中。
+    3. 做一个Filter，它拦截所有请求，当访问资源时，我们从cookie中获取用户名和密码，进行登录操作。
+```
+
+![](2020-02-28-18-19-52.png)
+
+* 首先要有登录功能
+
+login.jsp----LoginServlet--UserService--UserDao
+
+* 完成自动登录原理
+
+在login.jsp页码上添加一个checkbox
+
+```markdown
+<input type="checkbox" name="autologin" value= "ok">自动登录<br>
+```
+
+**在LoginServlet中**
+登录成功后，判断是否勾选了自动登录，如果勾选了自动登录，将用户名与密码存储到cookie中。
+
+```java
+if (user != null) {
+ // 登录成功
+ //判断是否勾选了自动登录
+    String autologin=request.getParameter("autologin");
+    if("ok".equals(autologin)){
+        //勾选了.
+        Cookie cookie=new Cookie("autologin",URLEncoder.encode(username,"utf-8")+"::"+password);
+        cookie.setMaxAge(60*60*24*10);//存储10天
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+}
+```
+
+{% hint style="danger" %}
+Cookie没有无参构造函数，新建cookie对象需要两个String参数，将用户名和密码用特定方式连接传入。
+{% endhint %}
+  
+**创建一个AutoLoginFilter进行自动登录操作**
+  
+```java
+public void doFilter(ServletRequest req, ServletResponse resp,FilterChain chain) throws IOException, ServletException {
+
+    // 1.强制转换 request,response
+    // 2.操作
+    // 2.1 得到cookie中的username,password
+    Cookie cookie = CookieUtils.findCookieByName(request.getCookies(), "autologin");
+
+    if (cookie != null) {
+    //2.2 得到username和password,进行自动登录
+        String username = cookie.getValue().split("::")[0];
+        String password = cookie.getValue().split("::")[1];
+
+        UserService service = new UserService();
+        User user;
+        try  {
+            user = service.login(username,password);
+            if (user != null) {
+    //2.3 查找到了用户，进行自动登录
+                request.getSession().setAttribute("user", user);
+             }
+
+    ...
+    //无论是否找到用户是否有cookie
+    // 3.放行
+    chain.doFilter(request, response);
+```
+
+**补充问题**
+
+* 如果用户已经登录了，就不需要自动登陆了
+
+```java
+//在Filter中先判断session中是否已经存有用户信息
+User u = (User)request.getSession().getAttribute("user");
+if(u == null){
+    ...//进行自动登录的操作
+}
+```
+
+* 如果用户不想登录而是要注册,则不需要自动登录
+
+```java
+//得到请求资源路径，判断是否是登录，注册操作
+//判断如果用户访问的是登录操作，不进行自动登录
+    String uri = request.getRequestURI();
+    //-->/day21/login .jsp
+    String contextPath = request.getContextPath();
+    //-->/day21
+    String path = uri.substring(contextPath.length());
+    //从contextPath结束取至end
+    //-->login.jsp
+if (!(path.equals("/demo4/login.jsp") || path.equals("/login"))) {
+    ...//进行自动登录的操作
+}
+```
+
+* 如果用户信息是中文
+
+```java
+//Servlet里存，编码
+Cookie cookie =new Cookie("autologin",URLEncoder.encode(username,"utf-8")+"::"+password)
+//Filter里取，解码
+String username = URLDecoder.decode(cookie.getValue().split("::")[0],"utf-8");
+String password = cookie.getValue().split("::")[1];
+```
+
+{% hint style="danger" %}
+Cookie中不能存中文
+{% endhint %}
+
+#### 对密码进行加密 md5
+
+md5加密算法是一个单向加密算法 ，支持明文---密文 不支持密文解密
+
+```java
+1. mysql:md5字段
+update user set password=MD5(password);123
+
+2. java
+
+//Md5
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class Md5Utils {
+
+	public static String md5(String plainText) { //明文
+		byte[] secretBytes = null;
+		try {
+			secretBytes = MessageDigest.getInstance("md5").digest(
+					plainText.getBytes());
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("没有md5这个算法！");
+		}
+		String md5code = new BigInteger(1, secretBytes).toString(16);
+		for (int i = 0; i < 32 - md5code.length(); i++) {
+			md5code = "0" + md5code;
+		}
+		return md5code;
+    }
+}
+//在UserDao中使用
+runner.query(sql,new BeanHandler<Usesr>(User.class),username,Md6Utils.md5(password))
+```
+
 ### URL级别的权限控制
 
+权限控制的原理：
+可以做一个权限的Filter，在Filter中判断用户是否登陆了，如果登录了，可以访问资源，如果没有登录就不能访问资源。
+
+```java
+// 判断用户是否登录了.
+User user = (User) request.getSession().getAttribute("user");
+
+if (user == null) {
+    throw new PrivilegeException();
+}
+```
+
+* 判断那些资源访问需要权限，哪些不用
+
+```java
+// 判断当前资源是否需要权限控制.
+String uri = request.getRequestURI();
+String contextPath = request.getContextPath();
+String path = uri.substring(contextPath.length());
+
+if (path.equals("/book_add") || path.equals("/book_update")|| path.equals("/book_delete") || path.equals("/book_search")) {
+   ...
+}
+```
+
+* 用户权限不同，能访问的资源不同
+
+```java
+
+// 判断用户的角色，是否可以访问当前资源路径。
+if ("admin".equals(user.getRole())) {// 这是admin角色
+
+    if (!(path.equals("/book_add") || path.equals("/book_update") || path.equals("/book_delete"))) {
+        throw new PrivilegeException();
+    }
+
+} else {
+    // 这是user角色
+    if (!(path.equals("/book_search"))) {
+        throw new PrivilegeException();
+    }
+}
+```
+
+* 自定义Exception和errorpage
+
+```java
+public class PrivilegeException extends RuntimeException {}
+````
+
+```markdown
+<!-- 在web.xml中配置 -->
+<error-page>
+    <exception-type>PivilegeException全路径类名</exception-type>
+    <location>/error/pivilege.jsp</location>
+</error-page>
+```
+
+
 ### 通过get和post乱码过滤器
-![](2020-02-28-17-17-14.png)
