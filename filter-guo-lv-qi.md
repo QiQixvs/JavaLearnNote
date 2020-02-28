@@ -29,6 +29,7 @@ java.servlet.Filter接口
 ##Filter怎样实现过滤操作
 1. 在\<url\-pattern\>它是用于设置过滤的滤镜
 2. 在doFilter方法中的第三个参数FilterChain，它是用于控制是否可以访问资源的。
+
 # Filter的生命周期（了解）
 - 初始化方法，只执行一次
 ```java
@@ -105,17 +106,20 @@ public void doFilter(ServletRequest request, ServletResponse response,FilterChai
 ## \<url\-pattern\>
 
 对于Filter来说，它是用于确定拦截资源的路径
+
 写法：
 
 - 完全匹配 必须以“/”开始
 - 可以使用*通配符
-    ```text
+
+```markup
     1. 目录匹配 /a/*  /* 要求必须“/”开始
     2. 扩展名匹配
         *.do *.action 要求，不能以“/”开始，以“.xxx”结束。 
 
 
-    ```
+```
+
 {% hint style="info" %}
 在Servlet配置中常用的完全匹配，而在Filter配置中较常使用*通配符，用来作用于一类的资源。
 {% endhint %}
