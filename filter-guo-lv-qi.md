@@ -31,7 +31,7 @@ java.servlet.Filter接口
 
 ### Filter怎样实现过滤操作
 
-1. 在\它是用于设置过滤的滤镜
+1. 在&lt;url-Pattern&gt它是用于设置过滤的路径
 2. 在doFilter方法中的第三个参数FilterChain，它是用于控制是否可以访问资源的。
 
 ## Filter的生命周期（了解）
@@ -94,7 +94,7 @@ java.servlet.Filter接口
 ### FilterChain
 
 * 在一个web应用中，可以开发编写多个Filter，这些Filter组合起来称之为一个Filter链。
-* web服务器根据Filter在web.xml文件中的**注册顺序** \，决定先调用哪个Filter。当第一个Filter的doFilter方法被调用时，web服务器会创建一个代表Filter链的FilterChain对象传递给该方法。
+* web服务器根据Filter在web.xml文件中的**注册顺序**&lt;filter-mapping&gt ，决定先调用哪个Filter。当第一个Filter的doFilter方法被调用时，web服务器会创建一个代表Filter链的FilterChain对象传递给该方法。
 * 在doFilter方法中，开发人员如果调用了FilterChain对象的doFilter方法，则web服务器会检查FilterChain对象中是否还有filter，如果有，则调用第2个filter，如果没有，则调用目标资源。
 
 ```java
