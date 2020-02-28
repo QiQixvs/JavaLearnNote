@@ -32,7 +32,7 @@ java.servlet.Filter接口
 ```
 
 {% hint style="info" %}
-Idea中使用JavaEE 6 annotated class对应Filter模版。@WebFilter(filterName ="DemoFilter",urlPatterns={"过滤路径"}
+Idea中使用JavaEE 6 annotated class对应Filter模版。@WebFilter\(filterName ="DemoFilter",urlPatterns={"过滤路径"}
 {% endhint %}
 
 #### Filter怎样实现过滤操作
@@ -64,9 +64,25 @@ Idea中使用JavaEE 6 annotated class对应Filter模版。@WebFilter(filterName 
   public void destroy()
   ```
 
+### FilterConfig
+
+在Filter的init方法中有一个参数是FilterConfig，它的作用也是获取Filter的相关配置信息
+
+```java
+    1. 初始化参数的获取
+        String getInitParamter(String name);
+        Enumeration getInitP aramterNames();
+       //在web.xml中配置的<init-param>
+    2. Filter的名称获取
+        getFilterName();
+        //在web.xml中配置的<filter-name>
+    3. ServletContext对象的获取
+        getServletContext();
+```
+
 ### Filter详细配置信息
 
-#### 配置Filter
+#### Filter映射
 
 ```markup
 <filter>  
@@ -82,22 +98,6 @@ Idea中使用JavaEE 6 annotated class对应Filter模版。@WebFilter(filterName 
     <filter-name></filter-name>
     <url-pattern></url-pattern>
 </filter-mapping>
-```
-
-#### FilterConfig
-
-在Filter的init方法中有一个参数是FilterConfig，它的作用也是获取Filter的相关配置信息
-
-```java
-    1. 初始化参数的获取
-        String getInitParamter(String name);
-        Enumeration getInitP aramterNames();
-       //在web.xml中配置的<init-param>
-    2. Filter的名称获取
-        getFilterName();
-        //在web.xml中配置的<filter-name>
-    3. ServletContext对象的获取
-        getServletContext();
 ```
 
 #### FilterChain
@@ -127,7 +127,7 @@ public void doFilter(ServletRequest request, ServletResponse response,FilterChai
 `
 ```
 
-#### &lt;url-Pattern&gt;  
+#### &lt;url-Pattern&gt;
 
 对于Filter来说，它是用于确定拦截资源的路径
 
@@ -155,12 +155,12 @@ public void doFilter(ServletRequest request, ServletResponse response,FilterChai
 
 #### &lt;dispatcher&gt;
 
-&lt;dispatcher&gt;指定过滤器所拦截的资源被 Servlet 容器调用的方式，可以是REQUEST,INCLUDE,FORWARD和ERROR之一，默认REQUEST。用户可以设置多个 子元素用来指定 Filter 对资源的多种调用方式进行拦截。
+&lt;dispatcher&gt;指定过滤器所拦截的资源被 Servlet 容器调用的方式，可以是REQUEST, INCLUDE, FORWARD和ERROR之一，默认REQUEST。用户可以设置多个子元素用来指定 Filter 对资源的多种调用方式进行拦截。
 
 * REQUEST：默认值 代表直接访问资源
 * INCLUDE：include包含的访问
 * FORWARD：请求转发
-* ERROR：用于声明异常拦截 例如\
+* ERROR：用于声明异常拦截 例如&lt;error-page&gt;
 
 ## Filter案例
 
@@ -258,7 +258,7 @@ public void doFilter(ServletRequest req, ServletResponse resp,
 
 Filter的url-pattern配置
 
-```markdown
+```text
 <url-pattern>*.jsp</url-pattern>
 ```
 
@@ -271,7 +271,7 @@ response.setDateHeader("expires", System.currentTimeMillis()
         +60*60*24*10*1000);//缓存10天
 ```
 
-```markdown
+```text
 <filter>
     <filter-name>imageFilter</filter-name>
     <filter-class>cn.itcast.filter.demo3.ImageCacheFilter</filter-class>
@@ -291,7 +291,7 @@ response.setDateHeader("expires", System.currentTimeMillis()
     3. 做一个Filter，它拦截所有请求，当访问资源时，我们从cookie中获取用户名和密码，进行登录操作。
 ```
 
-![](2020-02-28-18-19-52.png)
+![](.gitbook/assets/2020-02-28-18-19-52.png)
 
 * 首先要有登录功能
 
@@ -301,12 +301,11 @@ login.jsp----LoginServlet--UserService--UserDao
 
 在login.jsp页码上添加一个checkbox
 
-```markdown
+```text
 <input type="checkbox" name="autologin" value= "ok">自动登录<br>
 ```
 
-**在LoginServlet中**
-登录成功后，判断是否勾选了自动登录，如果勾选了自动登录，将用户名与密码存储到cookie中。
+**在LoginServlet中** 登录成功后，判断是否勾选了自动登录，如果勾选了自动登录，将用户名与密码存储到cookie中。
 
 ```java
 if (user != null) {
@@ -326,9 +325,9 @@ if (user != null) {
 {% hint style="danger" %}
 Cookie没有无参构造函数，新建cookie对象需要两个String参数，将用户名和密码用特定方式连接传入。
 {% endhint %}
-  
+
 **创建一个AutoLoginFilter进行自动登录操作**
-  
+
 ```java
 public void doFilter(ServletRequest req, ServletResponse resp,FilterChain chain) throws IOException, ServletException {
 
@@ -437,8 +436,7 @@ runner.query(sql,new BeanHandler<Usesr>(User.class),username,Md6Utils.md5(passwo
 
 ### URL级别的权限控制
 
-权限控制的原理：
-可以做一个权限的Filter，在Filter中判断用户是否登陆了，如果登录了，可以访问资源，如果没有登录就不能访问资源。
+权限控制的原理： 可以做一个权限的Filter，在Filter中判断用户是否登陆了，如果登录了，可以访问资源，如果没有登录就不能访问资源。
 
 ```java
 // 判断用户是否登录了.
@@ -465,7 +463,6 @@ if (path.equals("/book_add") || path.equals("/book_update")|| path.equals("/book
 * 用户权限不同，能访问的资源不同
 
 ```java
-
 // 判断用户的角色，是否可以访问当前资源路径。
 if ("admin".equals(user.getRole())) {// 这是admin角色
 
@@ -485,9 +482,10 @@ if ("admin".equals(user.getRole())) {// 这是admin角色
 
 ```java
 public class PrivilegeException extends RuntimeException {}
-````
+`
+```
 
-```markdown
+```text
 <!-- 在web.xml中配置 -->
 <error-page>
     <exception-type>PivilegeException全路径类名</exception-type>
@@ -499,7 +497,7 @@ public class PrivilegeException extends RuntimeException {}
 
 将不同用户的权限对应的访问资源路径写成配置文件或数据库，方便判断权限的时候的读取。
 
-1. 在src下创建两个配置文件 user.properties, admin.properties。在这两个文件中分别保存不同的角色具有的权限路径。 例如： url=/book_add，/book_delete
+1. 在src下创建两个配置文件 user.properties, admin.properties。在这两个文件中分别保存不同的角色具有的权限路径。 例如： url=/book\_add，/book\_delete
 2. 在PrivilegeFilter中完成权限控制
 
 ```java
@@ -530,7 +528,7 @@ if (admins.contains(path) || users.contains(path))
 
 ### 全局编码过滤（通过get和post乱码过滤器）
 
-![](2020-02-28-23-32-19.png)
+![](.gitbook/assets/2020-02-28-23-32-19.png)
 
 用装饰模式类对request进行增强，解决编码问题。被装饰类是由服务器实现的request。
 
@@ -565,7 +563,7 @@ String[] getParameterValues(String name)
 Map<String, String[][]> getParameterMap()
 ```
 
-* getParamter 与 getParamterValues方法可以调用getParameterMap()方法实现。重点重写getParameterMap()
+* getParamter 与 getParamterValues方法可以调用getParameterMap\(\)方法实现。重点重写getParameterMap\(\)
 
 ```java
 //request中获得的参数只需要进行一次转码就可以，添加开关量作为判断，避免二次转码 
@@ -591,3 +589,4 @@ public Map getParameterMap() {
     return map;
 }
 ```
+
