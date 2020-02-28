@@ -457,7 +457,7 @@ public class MyServletContextListener implements ServletContextListener {
 }
 ```
 
-```markup
+```java
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -612,37 +612,47 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 {% endhint %}
 
 
-session绑定javaBean
+### session绑定javaBean(了解)
 
-1.HttpSessionBindingListener
-
-这个监听器，可以让javaBean对象，感知它被绑定到session中或从session中移除。
-
-2.HttpSessionActivationListener
-
-这个监听器，可以让javaBean感知，被钝化或活化。
-
-钝化---&gt;将session中的javaBean保存到文件中.
-
-活化---&gt;从文件中将javaBean直接获取。
-
-需要创建一个配置文件context.xml
-
-这个文件保存到META-INF目录下.
-
-&lt;Context&gt;
-
-&lt;Manager className="org.apache.catalina.session.PersistentManager" maxIdleSwap="1"&gt;
-
-&lt;Store className="org.apache.catalina.session.FileStore" directory="it315"/&gt;
-
-&lt;/Manager&gt;
-
-&lt;/Context&gt;
+1. HttpSessionBindingListener
+2. HttpSessionActivationListener
 
 这两个监听器特点;
 
-1.它们是由javaBean实现.
+1. 它们是由javaBean实现.
 
-2.它们不需要在web.xml文件中配置.
+2. 它们不需要在web.xml文件中配置.
+
+
+- HttpSessionBindingListener
+
+    这个监听器，可以让javaBean对象，感知它被绑定到session中或从session中移除。
+- HttpSessionActivationListener
+
+    这个监听器，可以让javaBean感知，被钝化或活化。
+
+{% hint style="info" %}
+
+   钝化---&gt;将session中的javaBean保存到文件中.
+   活化---&gt;从文件中将javaBean直接获取。
+
+{% endhint %}
+
+
+    需要创建一个配置文件context.xml
+
+    这个文件保存到META-INF目录下.
+
+```java
+<Context>
+
+    <Manager className="org.apache.catalina.session.PersistentManager" maxIdleSwap="1">
+
+        <Store className="org.apache.catalina.session.FileStore" directory="it315">
+
+    </Manager>
+
+</Context>
+```
+
 
