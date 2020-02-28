@@ -528,8 +528,6 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 
 在主流中应用比较少，但是可以完成一些性能监试操作。
 
-
-
 ### 监听器案例
 
 功能：扫描session对象在指定时间内没有使用，人为销毁。
@@ -538,81 +536,81 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 
 1. 怎样知道session多长时间没有使用？
 
-    当前时间-最后使用时间（public long getLastAccessedTime\(\)）
+   当前时间-最后使用时间（public long getLastAccessedTime\(\)）
 
 2. 什么时候开始扫描，扫描多长时间?
 
-    可以使用Timer完成
-    ```java
+   可以使用Timer完成
+
+   ```java
     import java.util.Timer;
     import java.util.TimerTask;
 
     public class TimerDemo {
 
-	    public static void main(String[] args) {
+        public static void main(String[] args) {
 
-		    Timer t = new Timer();
+            Timer t = new Timer();
 
-		    t.schedule(new TimerTask() {
+            t.schedule(new TimerTask() {
 
-			    @Override
-			    public void run() {
-				    System.out.println("hello timer");
-			    }
-		    }, 1000,2000);//延迟一秒，间隔两秒 
-	    }
+                @Override
+                public void run() {
+                    System.out.println("hello timer");
+                }
+            }, 1000,2000);//延迟一秒，间隔两秒 
+        }
     }
-    ```
+   ```
 
 完成定时扫描session，如果超时没有使用，销毁案例：
 
 1. 要将所有的session对象得到，保存到集合中。
-
-2. 创建一个监听器 ServletContextListener,它**服务器启动**时，创建一个集合保存到ServletContext域。    
-
+2. 创建一个监听器 ServletContextListener,它**服务器启动**时，创建一个集合保存到ServletContext域。
 3. 创建一个监听器 HttpSessionListener,当创建一个session时，就从ServletContext域中获取集合，将session对象储存到集合中。
-
 4. 定时扫描
-```java
+
+   ```java
     public void contextInitialized(ServletContextEvent sce) {
-		// 这个方法执行了，就说明项目启动了.
+        // 这个方法执行了，就说明项目启动了.
 
-		// 1.得到ServletContext对象
-		ServletContext context = sce.getServletContext();
+        // 1.得到ServletContext对象
+        ServletContext context = sce.getServletContext();
 
-		// 2,将集合保存到context中.
-		context.setAttribute("sessions", sessions);
- 
-		// 3.开始扫描
-		Timer t = new Timer();
+        // 2,将集合保存到context中.
+        context.setAttribute("sessions", sessions);
 
-		t.schedule(new TimerTask() {
+        // 3.开始扫描
+        Timer t = new Timer();
 
-			@Override
-			public void run() {
-				// 判断session是否过期.----session如果10秒钟没有使用
-				// 从集合中删除
-				// 销毁session
-				}
-			}
-		}, 1000, 3000);
+        t.schedule(new TimerTask() {
 
-	}
-```
+            @Override
+            public void run() {
+                // 判断session是否过期.----session如果10秒钟没有使用
+                // 从集合中删除
+                // 销毁session
+                }
+            }
+        }, 1000, 3000);
+
+    }
+   ```
+
 {% hint style="info" %}
-    
-    问题:
-    1. session超时，不能只销毁session，还要从集合中移除。
+```text
+问题:
+1. session超时，不能只销毁session，还要从集合中移除。
 
-    2. 我们的操作，它是多线程的，要考虑集合的同步问题。
+2. 我们的操作，它是多线程的，要考虑集合的同步问题。
 
-        1. 集合需要是线程安全的。 
+    1. 集合需要是线程安全的。 
 
-        2. 需要使用迭代器进行遍历。
+    2. 需要使用迭代器进行遍历。
+```
 {% endhint %}
 
-
-### session绑定javaBean(了解)
+### session绑定javaBean\(了解\)
 
 1. HttpSessionBindingListener
 2. HttpSessionActivationListener
@@ -620,28 +618,25 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 这两个监听器特点;
 
 1. 它们是由javaBean实现.
-
 2. 它们不需要在web.xml文件中配置.
 
+* HttpSessionBindingListener
 
-- HttpSessionBindingListener
+  这个监听器，可以让javaBean对象，感知它被绑定到session中或从session中移除。
 
-    这个监听器，可以让javaBean对象，感知它被绑定到session中或从session中移除。
-- HttpSessionActivationListener
+* HttpSessionActivationListener
 
-    这个监听器，可以让javaBean感知，被钝化或活化。
+  这个监听器，可以让javaBean感知，被钝化或活化。
 
 {% hint style="info" %}
-
-   钝化---&gt;将session中的javaBean保存到文件中.
-   活化---&gt;从文件中将javaBean直接获取。
-
+钝化---&gt;将session中的javaBean保存到文件中. 活化---&gt;从文件中将javaBean直接获取。
 {% endhint %}
 
+```text
+需要创建一个配置文件context.xml
 
-    需要创建一个配置文件context.xml
-
-    这个文件保存到META-INF目录下.
+这个文件保存到META-INF目录下.
+```
 
 ```java
 <Context>
@@ -654,5 +649,4 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 
 </Context>
 ```
-
 
