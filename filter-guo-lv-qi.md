@@ -107,6 +107,17 @@ public void doFilter(ServletRequest request, ServletResponse response,FilterChai
 访问-调用第一个Filter-调用第二个Filter-...-调用目标资源-...-结束第二个-结束第一个
 {% endhint %}
 
+```markup
+
+<filter-mapping>
+    <filter-name>testFilter</filter-name>
+    <url-pattern>/index.jsp</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+</filter-mapping>
+
+````
+
 ### &lt;url-Pattern&gt;
 
 对于Filter来说，它是用于确定拦截资源的路径
@@ -125,4 +136,156 @@ public void doFilter(ServletRequest request, ServletResponse response,FilterChai
 {% hint style="info" %}
 在Servlet配置中常用的完全匹配，而在Filter配置中较常使用\*通配符，用来作用于一类的资源。
 {% endhint %}
+
+## &lt;servlet-name&gt;
+
+它的作用是针对某一个sevlet进行拦截，它需要的是servlet的名称
+
+- 如果在一个&lt;filter-mapping&gt;中配置了servlet-name，那么它的顺序与url-pattern不一样。
+
+- 对于tomcat7，如果在一个filter-mapping中配置了servlet-name，还配置了url-pattern，这个filter只执行一次，但是tomcat6会执行两次
+
+## &lt;dispatcher&gt;
+
+\<dispatcher\>指定过滤器所拦截的资源被 Servlet 容器调用的方式，可以是REQUEST,INCLUDE,FORWARD和ERROR之一，默认REQUEST。用户可以设置多个<dispatcher> 子元素用来指定 Filter 对资源的多种调用方式进行拦截。
+
+- REQUEST：默认值 代表直接访问资源
+- INCLUDE：include包含的访问
+- FORWARD：请求转发
+- ERROR：用于声明异常拦截 例如\<error-page\>
+
+
+
+# Filter案例
+
+## 全站统一字符编码过滤器（post）
+
+编写jsp 输入用户名，在Servlet中获取用户名，将用户名输出到浏览器上。
+
+- 在Servlet中处理编码问题：
+
+```java
+//处理请求post乱码代码
+request.setCharacterEncoding("utf-8");
+//设置响应编码集代码
+response.setContentType("text/html;charset=utf-8");
+```
+
+而过滤器可以在目标资源之前执行，将很多程序中处理乱码公共代码，提取到过滤器中，以后程序中不需要处理编码问题了
+
+- 配置filter参数
+
+```markdown
+<!-- post编码过滤器 -->
+<filter>
+	<filter-name>encodingFilter</filter-name>
+	<filter-class>cn.itcast.filter.demo1.EncodingFilter</filter-class>
+		
+	<init-param>
+		<param-name>encode</param-name>
+		<param-value>utf-8</param-value>
+	</init-param>
+</filter>
+<filter-mapping>
+	<filter-name>encodingFilter</filter-name>
+	<url-pattern>/*</url-pattern><!-- 全站用 -->
+</filter-mapping>
+```
+
+- EncodingFilter代码
+
+```java
+public class EncodingFilter implements Filter {
+	private String encode;
+	public void destroy() {}
+
+	public void doFilter(ServletRequest arg0, ServletResponse arg1,
+			FilterChain chain) throws IOException, ServletException {
+        // 1.强制转换
+		HttpServletRequest request = (HttpServletRequest) arg0;
+		HttpServletResponse response = (HttpServletResponse) arg1;
+
+		// 2.操作
+		request.setCharacterEncoding(encode);
+		// 3.放行
+		chain.doFilter(request, response);
+	}
+
+	public void init(FilterConfig config) throws ServletException {
+		this.encode = config.getInitParameter("encode");//初始化获得encode参数
+	}
+
+}
+
+```
+
+## 禁用所有JSP页面缓存（3个响应头）
+
+问题：为什么禁用jsp页面缓存
+    为了得到实时信息
+
+- 在jsp页面上设置
+
+```markdown
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">    
+```
+
+- 可以通过Filter来控制
+
+```java
+public void doFilter(ServletRequest req, ServletResponse resp,
+			FilterChain chain) throws IOException, ServletException {
+		
+	// 1.强制转换
+	HttpServletRequest request = (HttpServletRequest) req;
+	HttpServletResponse response = (HttpServletResponse) resp;
+
+	// 2.操作
+	response.setHeader("pragma", "no-cache");
+	response.setHeader("cache-control", "no-cache");
+	response.setDateHeader("expires", 0);
+		
+	// 3.放行
+	chain.doFilter(request, response);
+}
+```
+
+Filter的url\-pattern配置
+
+```markdown
+<url-pattern>*.jsp</url-pattern>
+```
+
+## 设置图片缓存时间
+
+让图片缓存：缓存的目的是为了提高访问效率
+
+
+```java
+response.setDateHeader("expires", System.currentTimeMillis()
+        +60*60*24*10*1000);//缓存10天
+```
+
+```markdown
+<filter>
+	<filter-name>imageFilter</filter-name>
+	<filter-class>cn.itcast.filter.demo3.ImageCacheFilter</filter-class>
+</filter>
+	
+<filter-mapping>
+	<filter-name>imageFilter</filter-name>
+	<url-pattern>*.bmp</url-pattern>
+</filter-mapping>
+```
+
+
+## 自动登录案例
+
+
+
+## URL级别的权限控制
+
+## 通过get和post乱码过滤器
 
