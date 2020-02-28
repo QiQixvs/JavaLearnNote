@@ -524,43 +524,93 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 在java的监听机制中，是可以在监听器中获取事件源的我们在开发中，如果有到了事件触发机制，那么一般情况下，都可以使用方法的参数\(事件对象\)来获取想要的信息.
 {% endhint %}
 
-思考一个问题:这些监听器在开发中有什么用?
+这些监听器在开发中有什么用?
 
 在主流中应用比较少，但是可以完成一些性能监试操作。
 
-监听器案例:
+
+
+### 监听器案例
 
 功能：扫描session对象在指定时间内没有使用，人为销毁。
 
 分析:
 
-1.怎样知识session多长时间没有使用？
+1. 怎样知道session多长时间没有使用？
 
-当前时间-最后使用时间（public long getLastAccessedTime\(\)）
+    当前时间-最后使用时间（public long getLastAccessedTime\(\)）
 
-2.什么时候开始扫描，扫描多长时间?
+2. 什么时候开始扫描，扫描多长时间?
 
-可以使用Timer完成
+    可以使用Timer完成
+    ```java
+    import java.util.Timer;
+    import java.util.TimerTask;
+
+    public class TimerDemo {
+
+	    public static void main(String[] args) {
+
+		    Timer t = new Timer();
+
+		    t.schedule(new TimerTask() {
+
+			    @Override
+			    public void run() {
+				    System.out.println("hello timer");
+			    }
+		    }, 1000,2000);//延迟一秒，间隔两秒 
+	    }
+    }
+    ```
 
 完成定时扫描session，如果超时没有使用，销毁案例：
 
-1.要将所有的session对象得到，保存到集合中。
+1. 要将所有的session对象得到，保存到集合中。
 
-1.创建一个监听器 ServletContextListener,它服务器启动时，创建一个集合保存到ServletContext域。
+2. 创建一个监听器 ServletContextListener,它**服务器启动**时，创建一个集合保存到ServletContext域。    
 
-2.创建一个监听器 HttpSessionListener,当创建一个session时，就从ServletContext域中获取集合，将session对象储存到集合中。
+3. 创建一个监听器 HttpSessionListener,当创建一个session时，就从ServletContext域中获取集合，将session对象储存到集合中。
 
-2.定时扫描
+4. 定时扫描
+```java
+    public void contextInitialized(ServletContextEvent sce) {
+		// 这个方法执行了，就说明项目启动了.
 
-问题:
+		// 1.得到ServletContext对象
+		ServletContext context = sce.getServletContext();
 
-1.session超时，不能只销毁session，还要从集合中移除。
+		// 2,将集合保存到context中.
+		context.setAttribute("sessions", sessions);
+ 
+		// 3.开始扫描
+		Timer t = new Timer();
 
-2.我们的操作，它是多线程的，要考虑集合的同步问题。
+		t.schedule(new TimerTask() {
 
-1.集合需要是线程安全的。
+			@Override
+			public void run() {
+				// 判断session是否过期.----session如果10秒钟没有使用
+				// 从集合中删除
+				// 销毁session
+				}
+			}
+		}, 1000, 3000);
 
-2.需要使用迭代器进行遍历。
+	}
+```
+{% hint style="info" %}
+    
+    问题:
+    1. session超时，不能只销毁session，还要从集合中移除。
+
+    2. 我们的操作，它是多线程的，要考虑集合的同步问题。
+
+        1. 集合需要是线程安全的。 
+
+        2. 需要使用迭代器进行遍历。
+{% endhint %}
+
 
 session绑定javaBean
 
