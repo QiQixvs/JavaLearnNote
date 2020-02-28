@@ -414,19 +414,18 @@ import java.security.NoSuchAlgorithmException;
 
 public class Md5Utils {
 
-	public static String md5(String plainText) { //明文
-		byte[] secretBytes = null;
-		try {
-			secretBytes = MessageDigest.getInstance("md5").digest(
-					plainText.getBytes());
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException("没有md5这个算法！");
-		}
-		String md5code = new BigInteger(1, secretBytes).toString(16);
-		for (int i = 0; i < 32 - md5code.length(); i++) {
-			md5code = "0" + md5code;
-		}
-		return md5code;
+    public static String md5(String plainText) { //明文
+        byte[] secretBytes = null;
+        try {
+            secretBytes = MessageDigest.getInstance("md5").digest(plainText.getBytes());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("没有md5这个算法");
+        }
+        String md5code = new BigInteger(1, secretBytes).toString(16);
+        for (int i = 0; i < 32 - md5code.length(); i++) {
+            md5code = "0" + md5code;
+        }
+        return md5code;
     }
 }
 //在UserDao中使用
@@ -493,5 +492,38 @@ public class PrivilegeException extends RuntimeException {}
 </error-page>
 ```
 
+* 优化
 
-### 通过get和post乱码过滤器
+将不同用户的权限对应的访问资源路径写成配置文件或数据库，方便判断权限的时候的读取。
+
+1. 在src下创建两个配置文件 user.properties, admin.properties。在这两个文件中分别保存不同的角色具有的权限路径。 例如： url=/book_add，/book_delete
+2. 在PrivilegeFilter中完成权限控制
+
+```java
+// 在init方法中将配置文件中的信息读取出来分别保存到两个List<String>集合中
+public void init(FilterConfig filterConfig) throws ServletException {
+    this.admins = new ArrayList<String>();
+    this.users = new ArrayList<String>();
+
+    fillPath("user", users);
+    fillPath("admin", admins);
+    }
+
+private void fillPath(String baseName, List<String> list) {
+    ResourceBundle bundle = ResourceBundle.getBundle(baseName);//baseName 配置文件文件名(不包括扩展名)
+
+    String path = bundle.getString("url");
+    String[] paths = path.split(",");
+    for (String p : paths) {
+    list.add(p);
+    }
+}
+```
+
+```java
+//判断权限
+if (admins.contains(path) || users.contains(path))
+```
+
+### 全局编码过滤（通过get和post乱码过滤器）
+
