@@ -2,11 +2,13 @@
 
 ## 概念
 
-什么是文件上传？为什么使用文件上传? 就是将客户端资源，通过网络传递到服务器端。因为数据比较大，我们必须通过文件上传才可以完成将数据保存到服务器端操作。 文件上传的本质:就是IO流的操作。
+什么是文件上传？为什么使用文件上传? 就是将客户端资源，通过网络传递到服务器端。因为数据比较大，我们必须通过文件上传才可以完成将数据保存到服务器端操作。 
+
+文件上传的本质: 就是IO流的操作。
 
 ## 演示分析: 文件上传操作
 
-浏览器端
+### 浏览器端
 
 1. method=post 只有post才可以携带大数据
 2. 必须使用&lt;input type='file' name='f'&gt; 要有name属性
@@ -18,7 +20,7 @@
 
 * [enctype详解](enctype.md)
 
-**服务器端**
+### **服务器端**
 
 request对象是用于获取请求信息。它有一个方法 getInputStream\(\); 可以获取一个字节输入流，通过这个流，可以读取到所有的请求正文信息.
 
@@ -36,7 +38,7 @@ throws ServletException, IOException {
 }
 ```
 
-**文件上传原理**
+### **文件上传原理**
 
 浏览器端注意上述三件事，在服务器端通过流将数据读取到，再对数据进行解析。将上传文件内容得到，保存在服务器端，就完成了文件上传。
 
@@ -64,7 +66,7 @@ commons-fileupload有三个核心:
 
 #### 创建upload2.jsp页面
 
-```markdown
+```text
 <form action="${pageContext.request.contextPath}/upload2" method="post" encType="multipart/form-data">
     <input type="file" name="f"><br>
     <input type="submit" value="上传">
@@ -94,16 +96,16 @@ List<FileItem> items = upload.parseRequest(request);
 
 * 遍历items集合，集合中的每一项，就是一个上传数据
 
-![FiledItem API](2020-02-29-20-16-16.png)
+![FiledItem API](.gitbook/assets/2020-02-29-20-16-16.png)
 
-1. isFormField();
-2. getFieldName();
-3. getName();
-4. getString();
-5. item.getInputStream();
-6. IOUtils.copy(item.getInputStream(), fos);
+1. isFormField\(\);
+2. getFieldName\(\);
+3. getName\(\);
+4. getString\(\);
+5. item.getInputStream\(\);
+6. IOUtils.copy\(item.getInputStream\(\), fos\);
 
-### 核心API介绍
+### 核心API详解 
 
 * DiskFileItemFactory
 
@@ -112,7 +114,7 @@ List<FileItem> items = upload.parseRequest(request);
   * 默认缓存大小是  10240\(10k\)。
   * 临时文件默认存储在系统的临时文件目录下.（可以在环境变量中查看）
 
-```markdown
+```java
     1.new DiskFileItemFactory();
         缓存大小与临时文件存储位置使用默认的.
 
@@ -121,7 +123,7 @@ List<FileItem> items = upload.parseRequest(request);
         repository:临时文件存储位置
 ```
 
-如果临时文件存储位置希望是部署在服务器后工程目录下 .getServletContext().getRealPath()
+如果临时文件存储位置希望是部署在服务器后工程目录下 .getServletContext\(\).getRealPath\(\)
 
 ```java
 File file = new File(this.getServletContext().getRealPath("/temp"));// 获取temp目录部署到tomcat后的绝对磁盘路径
@@ -133,11 +135,11 @@ DiskFileItemFactory factory = new DiskFileItemFactory(1024 * 100, file);
 ```java
     setSizeThreshold(int sizeThreshold)
     setRepository(File repository)
-````
+```
 
 * ServletFileUpload
 
-```markdown
+```java
     1.ServletFileUpload upload=new ServletFileUpload(factory);
         创建一个上传工具，指定使用缓存区与临时文件存储位置.
 
@@ -157,12 +159,12 @@ DiskFileItemFactory factory = new DiskFileItemFactory(1024 * 100, file);
 ```
 
 {% hint style="info" %}
-注意: 如果使用reqeust.setCharacterEncoding("utf-8")也可以，但不建议使用。
+注意: 如果使用reqeust.setCharacterEncoding\("utf-8"\)也可以，但不建议使用。
 {% endhint %}
 
 * FileItem
 
-```markdown
+```text
     1.isFormField();
         返回值是布尔类型，判断是否是上传组件，如果是<input type="file">返回的就是false,否则返回true.
 
@@ -208,8 +210,7 @@ ServletFileUpload.setHeaderEncoding("utf-8"）;
 ```
 
 {% hint style="info" %}
-上传文件信息是否会乱码，需要解决吗?
-不需要解决，因为我们在上传时，使用的字节流来进行复制。
+上传文件信息是否会乱码，需要解决吗? 不需要解决，因为我们在上传时，使用的字节流来进行复制。
 {% endhint %}
 
 ### 服务器端代码实现
@@ -254,7 +255,7 @@ upload.setHeaderEncoding("utf-8");
 
 ## 多文件上传
 
-```markdown
+```text
 function addFile(){  
     var div=document.getElementById("content");  
 
@@ -276,15 +277,15 @@ function removeFile(btn){
 
 * 保存在可以被浏览器直接访问的位置
 
-    例如:商城的商品图片保存在工程的WebRoot下的路径(不包含META-INF以及WEB-INF目录及其子目录)
+  例如:商城的商品图片保存在工程的WebRoot下的路径\(不包含META-INF以及WEB-INF目录及其子目录\)
 
 * 保存在不能被浏览器直接访问的位置
 
-    例如:付费的视频。
+  例如:付费的视频。
 
-    1.工程中   META-INF  WEB-INF目录及其子目录
+  1.工程中 META-INF WEB-INF目录及其子目录
 
-    2.不在工程中的服务器的磁盘目录下.
+  2.不在工程中的服务器的磁盘目录下.
 
 ### 上传文件在同一个目录重名问题
 
@@ -314,3 +315,4 @@ public static String generateRandomDir(String uuidFileName) {
 return "/" + d2 + "/" + d1;// 共有256目录l
 }
 ```
+
