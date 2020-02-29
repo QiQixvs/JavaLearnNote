@@ -18,6 +18,9 @@
 <form action="${ pageContext.request.contextPath}/upload" method="post" encType = "multipart/form-data">
 ```
 
+* [enctype详解](enctype.md)
+
+
 		服务器端:
 			request对象是用于获取请求信息。
 			它有一个方法  getInputStream(); 可以获取一个字节输入流，通过这个流，可以读取到
