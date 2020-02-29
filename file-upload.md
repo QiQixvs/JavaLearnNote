@@ -255,7 +255,7 @@ if (flag) {
 
 ## 多文件上传
 
-![&#x591A;&#x6587;&#x4EF6;&#x4E0A;&#x4F20;&#x9875;&#x9762;](.gitbook/assets/image%20%283%29.png)
+![&#x591A;&#x6587;&#x4EF6;&#x4E0A;&#x4F20;&#x9875;&#x9762;](.gitbook/assets/image%20%285%29.png)
 
 ```markup
 	<input type="button" value="add File" onclick="addFile();">
