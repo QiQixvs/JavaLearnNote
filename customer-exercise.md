@@ -7,34 +7,33 @@
 1. 在showCustomer.jsp页面上添加一个连接，可以直接访问到添加页面 add.jsp
 2. 创建add.jsp
 
-   问题:id是varchar类型，它的获取问题?
+问题:id是varchar类型，它的获取问题?
+UUID工具类来获取.
 
-   UUID工具类来获取.
-
-关于生日的日历组件
+### 关于生日的日历组件
 
 {% hint style="info" %}
 My97DatePickerBeta
 {% endhint %}
 
-1. 将组件导入js
+* 将组件导入js
 
 ```markup
  <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/My97DatePicker/WdatePicker.js">
  </script>
 ```
 
-   2. ****在input type=text组件上添加 class, onclick.
+* 在input type=text组件上添加 class, onclick.
 
 ```markup
 客户生日:<input type="text" name="birthday" class="Wdate" onclick="WdatePicker()" readonly="readonly">
 ```
 
+### 关于id问题
 
+使用UUID获取 生成随机不重复字符串类型ID
 
-关于id问题
-
-           使用UUID获取 生成随机不重复字符串类型ID
+UUID.randomUUID()作用是生成随机字符串。
 
 ```java
 import java.util.UUID;
@@ -49,21 +48,23 @@ public class IdUtils {
 }
 ```
 
-3.创建CustomerAddServlet完成添加操作
+* 创建CustomerAddServlet完成添加操作
 
-               1.得到所有请求参数封装到Customer对象
+```markdown
+1.得到所有请求参数封装到Customer对象
 
-                                          注意:1.编码问题
+    注意:1.编码问题
 
-                                                  2.我们使用BeanUtils，注意Date类型转换问题
+        2.我们使用BeanUtils，注意Date类型转换问题
 
-                                                  3.要手动封装id.
+        3.要手动封装id.
 
-                  2.调用service完成添加操作成批量删除
+2.调用service完成添加操作成批量删除
+```
 
 ### 批量删除
 
-1. 完成页面上全选与全不选操作
+#### 完成页面上全选与全不选操作
 
 ```javascript
 function change(){
@@ -79,37 +80,35 @@ function change(){
   }
 ```
 
-    2. 完成批量删除
+#### 完成批量删除
 
-             页面上怎样将数据提交到服务器端.
+页面上怎样将数据提交到服务器端.
 
 * 可以创建一个表单，将表单数据提交就可以。
 
-![](.gitbook/assets/1%20%281%29.png)
+![](.gitbook/assets/1.png)
 
-![](.gitbook/assets/2%20%281%29.png)
+![](.gitbook/assets/2.png)
 
 * 直接使用js操作
 
 需要手动拼出url路径
 
-![](.gitbook/assets/3%20%281%29.png)
+![](.gitbook/assets/3.png)
 
 在服务器端怎样批量删除.
 
-1. 得到所有要删除的id值
+* 得到所有要删除的id值
 
 request.getParameterValues\("ck"\);
 
-     2.在dao中使用QueryRunner的batch方法
+* 在dao中使用QueryRunner的batch方法
 
 batch\(sql,Object\[\]\[\]\);
 
 注意:参数二维数据，它代表的是每一条sql的参数。
 
-![](.gitbook/assets/4%20%281%29.png)
-
-=========================================
+![](.gitbook/assets/4.png)
 
 ## 简单条件查询
 
@@ -150,7 +149,7 @@ batch\(sql,Object\[\]\[\]\);
  String sql="select \* from customer where "+field+" like ?";
 ```
 
-![](.gitbook/assets/5%20%281%29.png)
+![](.gitbook/assets/5.png)
 
 ## 分页查询
 
@@ -233,7 +232,7 @@ select \* from 表 limit \(页码-1\)\*每页条数,每页条数;
 
 ![](.gitbook/assets/6.png)
 
-![](.gitbook/assets/7%20%281%29.png)
+![](.gitbook/assets/7.png)
 
 * 在showCustomerByPage.jsp页面上添加
 
@@ -325,7 +324,7 @@ function changeCurrentPage(value){
 
 ```markup
 <c:forEach begin="1" end="${pb.totalPage}" var="n" step="1">
-				<a href="/day20_1/findAllByPage?pageNum=${n}&currentPage=${pb.currentPage}">第${n}页</a>&nbsp;&nbsp;
+	<a href="/day20_1/findAllByPage?pageNum=${n}&currentPage=${pb.currentPage}">第${n}页</a>&nbsp;&nbsp;
 </c:forEach>
 
 ```
@@ -336,11 +335,12 @@ function changeCurrentPage(value){
 
 可以在自定义标签中通过java代码来解决判断操作。如果直接在页面上，使用&lt;c:if&gt;代码太乱。
 
-![&#x6CE8;&#x518C;&#x81EA;&#x5B9A;&#x4E49;&#x6807;&#x7B7E;](.gitbook/assets/10%20%281%29.png)
+![](.gitbook/assets/9.png)
 
-![&#x5F53;&#x524D;&#x9875;&#x9762;&#x9875;&#x7801;&#x6807;&#x8BB0;&#x989C;&#x8272;](.gitbook/assets/11%20%281%29.png)
+![](.gitbook/assets/10.png)
+
+![](.gitbook/assets/11.png)
 
 用java编写页码判断
 
-![&#x5224;&#x65AD;&#x663E;&#x793A;&#x524D;&#x540E;&#x9875;&#x7801;&#x6570;&#x91CF;](.gitbook/assets/12%20%281%29.png)
-
+![](.gitbook/assets/12.png)

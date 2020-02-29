@@ -2,7 +2,7 @@
 
 ## 概念
 
-什么是文件上传？为什么使用文件上传? 就是将客户端资源，通过网络传递到服务器端。因为数据比较大，我们必须通过文件上传才可以完成将数据保存到服务器端操作。 
+什么是文件上传？为什么使用文件上传? 就是将客户端资源，通过网络传递到服务器端。因为数据比较大，我们必须通过文件上传才可以完成将数据保存到服务器端操作。
 
 文件上传的本质: 就是IO流的操作。
 
@@ -10,7 +10,7 @@
 
 ### 浏览器端
 
-1. method=post 只有post才可以携带大数据
+1. method=post 只有post才可以携带大数据，get提交默认仅把文件名作为属性值来上传
 2. 必须使用&lt;input type='file' name='f'&gt; 要有name属性
 3. encType = "multipart/form-data"
 
@@ -105,7 +105,7 @@ List<FileItem> items = upload.parseRequest(request);
 5. item.getInputStream\(\);
 6. IOUtils.copy\(item.getInputStream\(\), fos\);
 
-### 核心API详解 
+### 核心API详解
 
 * DiskFileItemFactory
 
@@ -119,11 +119,15 @@ List<FileItem> items = upload.parseRequest(request);
         缓存大小与临时文件存储位置使用默认的.
 
     2.DiskFileItemFactory(int sizeThreshold, File repository)
-        sizeThreshold :缓存大小
+        sizeThreshold :缓存大小 超过缓存大小就会存入指定的临时文件存储位置
         repository:临时文件存储位置
 ```
 
 如果临时文件存储位置希望是部署在服务器后工程目录下 .getServletContext\(\).getRealPath\(\)
+
+{% hint style="danger" %}
+设定File路径后，应判断路径是否存在，不存在新建。
+{% endhint %}
 
 ```java
 File file = new File(this.getServletContext().getRealPath("/temp"));// 获取temp目录部署到tomcat后的绝对磁盘路径
@@ -258,16 +262,16 @@ if (flag) {
 ![&#x591A;&#x6587;&#x4EF6;&#x4E0A;&#x4F20;&#x9875;&#x9762;](.gitbook/assets/image%20%285%29.png)
 
 ```markup
-	<input type="button" value="add File" onclick="addFile();">
-	<br>
-	<br>
-	<form action="${pageContext.request.contextPath}/upload4" method="post" encType="multipart/form-data">
-		<input type="file" name="f"><br>
-		<div id="content">
-		
-		</div>
-		<input type="submit" value="上传">
-	</form>
+<input type="button" value="add File" onclick="addFile();">
+<br>
+<br>
+<form action="${pageContext.request.contextPath}/upload4" method="post" encType="multipart/form-data">
+    <input type="file" name="f"><br>
+    <div id="content">
+
+    </div>
+    <input type="submit" value="上传">
+</form>
 ```
 
 ```javascript
@@ -279,7 +283,7 @@ function addFile(){
 
 function removeFile(btn){  
 
-    document.getElementById("content").removeChild(btn.parentNode); 
+    document.getElementById("content").removeChild(btn.parentNode);
 
 }
 ```
@@ -292,11 +296,11 @@ function removeFile(btn){
 
 * 保存在可以被浏览器直接访问的位置
 
-  例如:商城的商品图片保存在工程的WebRoot下的路径\(不包含META-INF以及WEB-INF目录及其子目录\)
+  例如:  商城的商品图片保存在工程的WebRoot下的路径\(不包含META-INF以及WEB-INF目录及其子目录\)
 
 * 保存在不能被浏览器直接访问的位置
 
-  例如:付费的视频。
+  例如:  付费的视频。
 
   1.工程中 META-INF WEB-INF目录及其子目录
 
@@ -309,20 +313,52 @@ function removeFile(btn){
 1. 使用毫秒值
 2. 使用uuid
 
+```java
+// 获取随机名称 a.txt
+public static String getUUIDFileName(String filename) {
+    int index = filename.lastIndexOf(".");
+    if (index != -1) {  
+        return UUID.randomUUID() + filename.substring(index);
+        //随机名+后缀名
+    } else {
+        return UUID.randomUUID().toString();
+        //没有后缀名，只有随机文件名
+    }
+}
+```
+
 ### 同一目录下文件过多
 
 只需要分目录就可以
 
 1. 按照上传时间进行目录分离 （周、月 ）
-2. 按照上传用户进行目录分离 ----- 为每个用户建立单独目录 
+2. 按照上传用户进行目录分离 ----- 为每个用户建立单独目录
 3. 按照固定数量进行目录分离 ------ 假设每个目录只能存放3000个文件 ，每当一个目录存满3000个文件后，创建一个新的目录
 4. 按照文件名的hashcode进行目录分离.
 
+写法一
+
+```java
+//获取文件名对应的hashcode，十进制
+int hashcode = filename.hashCode();
+//int类型数据在内存中占32位。转换成16进制数，就得到8个16进制数
+String hex = Integer.toHexString(hashcode);
+// hex =056d9363，每一位对应一层目录
+path = "/" + hex.charAt(0) + "/" + hex.charAt(1)
+File file = new File("d:/upload");
+File directory = new File(file,path);
+if(!directory.exist()){
+    directory.mkdirs();
+}
+```
+
+写法二
+
 ```java
 public static String generateRandomDir(String uuidFileName) {
-    // 获得唯一文件名的hashcode
+    // 获得唯一文件名的hashcode 二进制数
     int hashcode = uuidFileName.hashCode();
-    // 获得一级目录
+    // 获得一级目录 取四位
     int d1 = hashcode & 0xf;
     // 获得二级目录
     int d2 = (hashcode >>> 4) & 0xf;
@@ -330,4 +366,3 @@ public static String generateRandomDir(String uuidFileName) {
 return "/" + d2 + "/" + d1;// 共有256目录l
 }
 ```
-
