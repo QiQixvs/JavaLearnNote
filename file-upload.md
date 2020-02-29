@@ -227,11 +227,11 @@ ServletFileUpload upload = new ServletFileUpload(factory);
 boolean flag = upload.isMultipartContent(request);
 if (flag) {
 
-// 解决上传文件名称中文乱码
-upload.setHeaderEncoding("utf-8");
+    // 解决上传文件名称中文乱码
+    upload.setHeaderEncoding("utf-8");
 
-// 设置上传文件大小
-//upload.setSizeMax(1024 * 1024 * 10);// 总大小为10m
+    // 设置上传文件大小
+    //upload.setSizeMax(1024 * 1024 * 10);// 总大小为10m
 
     //4.解决request,得到所有的上传项FileItem
     List<FileItem> items = upload.parseRequest(request);
@@ -255,10 +255,25 @@ upload.setHeaderEncoding("utf-8");
 
 ## 多文件上传
 
-```text
+![&#x591A;&#x6587;&#x4EF6;&#x4E0A;&#x4F20;&#x9875;&#x9762;](.gitbook/assets/image%20%283%29.png)
+
+```markup
+	<input type="button" value="add File" onclick="addFile();">
+	<br>
+	<br>
+	<form action="${pageContext.request.contextPath}/upload4" method="post" encType="multipart/form-data">
+		<input type="file" name="f"><br>
+		<div id="content">
+		
+		</div>
+		<input type="submit" value="上传">
+	</form>
+```
+
+```javascript
 function addFile(){  
     var div=document.getElementById("content");  
-
+    //用子div将上传组件和button成组，方便操作
     div.innerHTML+="<div><input type='file' name='f'><input type='button' value='remove file' onclick='removeFile(this)></div>";  
 }  
 
