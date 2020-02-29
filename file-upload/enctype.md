@@ -1,3 +1,7 @@
+---
+description: 关于设置encType = "multipart/form-data" 的效果
+---
+
 # enctype详解
 
 ## 关于设置encType = "multipart/form-data" 的效果
