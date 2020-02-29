@@ -4,9 +4,10 @@
 
 什么是文件上传？为什么使用文件上传? 就是将客户端资源，通过网络传递到服务器端。因为数据比较大，我们必须通过文件上传才可以完成将数据保存到服务器端操作。 文件上传的本质:就是IO流的操作。
 
-## 演示:文件上传操作
+## 演示分析:文件上传操作
 
-浏览器端:
+
+浏览器端
 
 1. method=post 只有post才可以携带大数据
 2. 必须使用&lt;input type='file' name='f'&gt; 要有name属性
@@ -18,89 +19,134 @@
 
 * [enctype详解](enctype.md)
 
-```text
-    服务器端:
-        request对象是用于获取请求信息。
-        它有一个方法  getInputStream(); 可以获取一个字节输入流，通过这个流，可以读取到
-        所有的请求正文信息.
+**服务器端**
 
-    文件上传原理:
-        浏览器端注意上述三件事，在服务器端通过流将数据读取到，在对数据进行解析.
-        将上传文件内容得到，保存在服务器端，就完成了文件上传。
+request对象是用于获取请求信息。它有一个方法  getInputStream(); 可以获取一个字节输入流，通过这个流，可以读取到所有的请求正文信息.
 
-在实际开发中，不需要我们进行数据解析，完成文件上传。因为我们会使用文件上传的工具，它们已经封装好的，
-提供API,只要调用它们的API就可以完成文件上传操作.
-
-我们使用的commons-fileupload,它是apache提供的一套开源免费的文件上传工具。
+```java
+public void doGet(HttpServletRequest request,HttpServletResponse response)
+throws ServletException, IOException {
+//通过request获取一个字节输入流，将所有的请求正文信息读取到，打印到控制台。
+    InputStream is=request.getInputStream();
+    byte[] b=new byte[1024];
+    int len=-1;
+    while((len=is.read(b))!=-1){
+        System.out.print(new String(b,0,len));
+    }
+    is.close();
+}
 ```
 
-```text
-使用commons-fileupload
-1.导入jar包
-    commons-fileupload-1.2.1.jar  文件上传
-    commons-io-1.4.jar 它是提供的io工具.
-    介绍commons-fileupload
-        它有三个核心
-            1.DiskFileItemFactory类
-            2.ServletFileUpload类
-            3.FileItem
+**文件上传原理**
 
-2.快速入门:
-        1.创建upload2.jsp页面
-            <form action="${pageContext.request.contextPath}/upload2" method="post" encType="multipart/form-data">
-                <input type="file" name="f"><br>
-                <input type="submit" value="上传">
-            </form>
-        2.创建Upload2Servlet
-            1.创建一个DiskFileItemFactory
-                DiskFileItemFactory factory=new DiskFileItemFactory();
-            2.创建ServletFileUpload类                    
-                ServletFileUpload upload=new ServletFileUpload(factory);                    
-            3.解析所有上传数据
-                List<FileItem> items = upload.parseRequest(request);
+浏览器端注意上述三件事，在服务器端通过流将数据读取到，再对数据进行解析。将上传文件内容得到，保存在服务器端，就完成了文件上传。
 
-        3.了遍历items集合，集合中的每一项，就是一个上传数据.
-            1.isFormField();
+{% hint style="info" %}
+而在实际开发中，不需要我们进行数据解析，完成文件上传。因为我们会使用文件上传的工具，它们已经封装好的，提供API,只要调用它们的API就可以完成文件上传操作.
+{% endhint %}
 
-            2.getFieldName();
-                返回值String,得到组件名称  <input name="">
-            3.getName();
-                返回值是String,得到的是上传文件的名称.
-                注意:浏览器不同，它们得到的效果不一样。
-                    1.包含全路径名称  例如: C:\Users\Administrator\Desktop\a.txt
-                    2.只包含上传文件名称 例如:a.txt
+我们使用的**commons-fileupload**,它是apache提供的一套开源免费的文件上传工具。
 
-            4.getString();
-                这个方法可以获取非上传组件的内容,相当于  getParameter方法作用。
+## 使用commons-fileupload
 
-                如果是上传组件，上传的文件是文本文件，可以获取到文件文件的内容。
-                但是如果不是文件文件，例如：是一张图片，这样获取合适吗?
+### 导入jar包
 
-            5.获取上传文件的内容,保存到服务器端.
-                item.getInputStream();它是用于读取上传文件内容的输入流.
-                使用文件复制操作就可以完成文件上传。
+commons-fileupload-1.2.1.jar  文件上传
 
-                IOUtils.copy(item.getInputStream(), fos);
+commons-io-1.4.jar 它是提供的io工具.
 
-----------------------------------------------------------------------------------------
-核心API介绍
-    1.DiskFileItemFactory
-        作用:可以设置缓存大小以及临时文件保存位置.            
-        默认缓存大小是  10240(10k).
-        临时文件默认存储在系统的临时文件目录下.（可以在环境变量中查看）
+commons-fileupload有三个核心:
 
-        1.new DiskFileItemFactory();
-            缓存大小与临时文件存储位置使用默认的.
+1. DiskFileItemFactory类
+2. ServletFileUpload类
+3. FileItem
 
-        2.DiskFileItemFactory(int sizeThreshold, File repository) 
-            sizeThreshold :缓存大小
-            repository:临时文件存储位置
+### 快速入门
 
-        注意，对于无参数构造，也可以设置缓存大小以及临时文件存储位置.    
-         setSizeThreshold(int sizeThreshold)
-         setRepository(File repository)
+#### 创建upload2.jsp页面
 
-    2.ServletFileUpload
+```markdown
+<form action="${pageContext.request.contextPath}/upload2" method="post" encType="multipart/form-data">
+    <input type="file" name="f"><br>
+    <input type="submit" value="上传">
+</form>
+````
+
+#### 创建Upload2Servlet
+
+* 创建一个DiskFileItemFactory
+
+```java
+DiskFileItemFactory factory=new DiskFileItemFactory();
+```
+
+* 创建ServletFileUpload类
+
+```java
+ServletFileUpload upload=new ServletFileUpload(factory);
+```
+
+* 解析所有上传数据 parseRequest 方法
+
+```java
+List<FileItem> items = upload.parseRequest(request);
+```
+
+![FileItem API](2020-02-29-19-33-52.png)
+
+* 了遍历items集合，集合中的每一项，就是一个上传数据
+
+```markdown
+    1.isFormField();
+        返回值是布尔类型，判断是否是上传组件，true代表不是。
+
+    2.getFieldName();
+        返回值String,得到组件名称  <input name="">。
+
+    3.getName();
+        返回值是String,得到的是【上传文件】的名称.
+        注意:浏览器不同，它们得到的效果不一样。
+            1.包含全路径名称  例如:
+                C :\Users\Administrator\Desktop\a.txt
+            2.只包含上传文件名称 例如:a.txt
+
+    4.getString();
+        这个方法可以获取非上传组件的内容,相当于getParameter方法作用。
+
+        如果是上传组件，上传的文件是文本文件，可以获取到文件文件的内容。
+        但是如果不是文件文件，例如：是一张图片，就不能这么用。
+
+    5.获取上传文件的内容,保存到服务器端.
+        item.getInputStream(); 它是用于读取上传文件内容的输入流.
+
+        使用文件复制操作就可以完成文件上传。
+        IOUtils.copy(item.getInputStream(), fos);
+```
+
+### 核心API介绍
+
+* DiskFileItemFactory
+
+    作用:可以设置缓存大小以及临时文件保存位置.
+    * 默认缓存大小是  10240(10k)。
+    * 临时文件默认存储在系统的临时文件目录下.（可以在环境变量中查看）
+
+```markdown
+    1.new DiskFileItemFactory();
+        缓存大小与临时文件存储位置使用默认的.
+
+    2.DiskFileItemFactory(int sizeThreshold, File repository)
+        sizeThreshold :缓存大小
+        repository:临时文件存储位置
+
+        注意，对于无参数构造，也可以设置缓存大小以及临时文件存储位置.
+        setSizeThreshold(int sizeThreshold)
+        setRepository(File repository)
+```
+
+* ServletFileUpload
+
+```markdown
         1.ServletFileUpload upload=new ServletFileUpload(factory);
          创建一个上传工具，指定使用缓存区与临时文件存储位置.
 
@@ -118,9 +164,11 @@
         5.解决上传文件中文名称乱码
             setHeaderEncoding("utf-8");
             注意:如果使用reqeust.setCharacterEncoding("utf-8")也可以，但不建议使用。
+```
 
+* FileItem
 
-    3.FileItem
+```java
         1.isFormField
             用于判断是否是上传组件.
             如果是<input type="file">返回的就是false,否则返回true.
@@ -147,22 +195,22 @@
 
         6.删除临时文件
             item.delete();
-
-    ------------------------------------------------------------
-    总结:关于文件上传时的乱码问题:
-        1.上传文件名称乱码
-            ServletFileUpload.setHeaderEncoding("utf-8");                
-        2.非上传组件内容乱码
-            FileItem.getString("utf-8");
-
-        3.思考:上传文件信息是否会乱码，需要解决吗?
-            不需要解决，因为我们在上传时，使用的字节流来进行复制。
 ```
 
-=====================================================================================================  
-多文件上传
+### 总结:关于文件上传时的乱码问题
 
-  
+* 上传文件名称乱码
+            ServletFileUpload.setHeaderEncoding("utf-8");                
+* 非上传组件内容乱码
+            FileItem.getString("utf-8");
+
+* 思考:上传文件信息是否会乱码，需要解决吗?
+            不需要解决，因为我们在上传时，使用的字节流来进行复制。
+
+
+## 多文件上传
+
+```java  
   
                 function addFile\(\){  
                     var div=document.getElementById\("content"\);  
@@ -175,13 +223,11 @@
                     document.getElementById\("content"\).removeChild\(btn.parentNode\);  
   
                 }  
-            
-
-```text
-        服务器端代码不需要改变.
 ```
 
-关于文件上传的注意事项:
+ 服务器端代码不需要改变.
+
+## 关于文件上传的注意事项:
 
 ```text
     1.上传文件在服务器端保存位置问题
@@ -223,4 +269,3 @@
                 return "/" + d2 + "/" + d1;// 共有256目录l
             }
 ```
-
