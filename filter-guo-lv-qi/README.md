@@ -134,7 +134,7 @@ public void doFilter(ServletRequest request, ServletResponse response,FilterChai
 * 完全匹配 必须以“/”开始
 * 可以使用\*通配符
 
-```markup
+```text
     1. 目录匹配 /a/*  /* 要求必须“/”开始
     2. 扩展名匹配
         *.do *.action 要求，不能以“/”开始，以“.xxx”结束。

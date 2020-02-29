@@ -15,28 +15,34 @@
 6. 对象的属性变化
 7. session绑定javaBean
 
-   在javaweb中servlet规范中定义了三种技术 servlet Listener Filter
+**在javaweb中servlet规范中定义了三种技术 servlet、Listener 、Filter**
 
-### 对应的监听器接口
+{% hint style="info" %}
+servlet有初始化参数 
+
+Filter有初始化参数
+
+ Listener没有初始化参数,要使用，在开发中一般使用servletContext的初始化参数对应的监听器接口
+{% endhint %}
 
 #### 1.监听创建与销毁
 
 HttpServletRequest
 
 ```text
-    监听器:**ServletRequestListener**可以监听request对象的创建与销毁.
+    监听器SevletRequestListene可监听request对象的创建与销毁.
 ```
 
 HttpSession
 
 ```text
-     监听器:**HttpSessionListener**可以监听session对象的创建与销毁.
+     监听器HttpSessionListener可以监听session对象的创建与销毁.
 ```
 
 ServletContext
 
 ```text
-      监听器:**ServletContextListener**可以监听application对象的创建与销毁。
+      监听器ServletContextListener可以监听application对象的创建与销毁。
 ```
 
 #### 2.监听web对象的属性变化
@@ -44,19 +50,19 @@ ServletContext
 HttpServletRequest属性变化
 
 ```text
-      监听器:**ServletRequestAttributeListener**监听request对象的属性变化
+      监听器ServletRequestAttributeListener监听request对象的属性变化
 ```
 
 HttpSession属性变化
 
 ```text
-      监听器:**HttpSessionAttributeListener** 监听session对象的属性变化
+      监听器HttpSessionAttributeListener监听session对象的属性变化
 ```
 
 ServletContext属性变化
 
 ```text
-       监听器:**ServletContextAttributeListener**监听application对象的属性变化。
+       监听器ServletContextAttributeListener监听application对象的属性变化。
 ```
 
 ## web中监听器怎样使用？
@@ -121,9 +127,9 @@ public class MyServletContextListener implements ServletContextListener {
 
     2.设置session超时时间
 
-        setMaxInactiveInterval\(int interval\)
+        setMaxInactiveInterval(int interval)
 
-    3.invalidate\(\)手动销毁.
+    3.invalidate()手动销毁.
 
     4.关闭服务器
    ```
