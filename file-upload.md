@@ -6,14 +6,13 @@
 
 ## 演示分析:文件上传操作
 
-
 浏览器端
 
 1. method=post 只有post才可以携带大数据
 2. 必须使用&lt;input type='file' name='f'&gt; 要有name属性
 3. encType = "multipart/form-data"
 
-```text
+```markup
 <form action="${ pageContext.request.contextPath}/upload" method="post" encType = "multipart/form-data">
 ```
 
@@ -21,7 +20,7 @@
 
 **服务器端**
 
-request对象是用于获取请求信息。它有一个方法  getInputStream(); 可以获取一个字节输入流，通过这个流，可以读取到所有的请求正文信息.
+request对象是用于获取请求信息。它有一个方法 getInputStream\(\); 可以获取一个字节输入流，通过这个流，可以读取到所有的请求正文信息.
 
 ```java
 public void doGet(HttpServletRequest request,HttpServletResponse response)
@@ -51,7 +50,7 @@ throws ServletException, IOException {
 
 ### 导入jar包
 
-commons-fileupload-1.2.1.jar  文件上传
+commons-fileupload-1.2.1.jar 文件上传
 
 commons-io-1.4.jar 它是提供的io工具.
 
@@ -65,12 +64,13 @@ commons-fileupload有三个核心:
 
 #### 创建upload2.jsp页面
 
-```markdown
+```text
 <form action="${pageContext.request.contextPath}/upload2" method="post" encType="multipart/form-data">
     <input type="file" name="f"><br>
     <input type="submit" value="上传">
 </form>
-````
+`
+```
 
 #### 创建Upload2Servlet
 
@@ -92,11 +92,11 @@ ServletFileUpload upload=new ServletFileUpload(factory);
 List<FileItem> items = upload.parseRequest(request);
 ```
 
-![FileItem API](2020-02-29-19-33-52.png)
+![FileItem API](.gitbook/assets/2020-02-29-19-33-52.png)
 
 * 了遍历items集合，集合中的每一项，就是一个上传数据
 
-```markdown
+```text
     1.isFormField();
         返回值是布尔类型，判断是否是上传组件，true代表不是。
 
@@ -127,11 +127,12 @@ List<FileItem> items = upload.parseRequest(request);
 
 * DiskFileItemFactory
 
-    作用:可以设置缓存大小以及临时文件保存位置.
-    * 默认缓存大小是  10240(10k)。
-    * 临时文件默认存储在系统的临时文件目录下.（可以在环境变量中查看）
+  作用:可以设置缓存大小以及临时文件保存位置.
 
-```markdown
+  * 默认缓存大小是  10240\(10k\)。
+  * 临时文件默认存储在系统的临时文件目录下.（可以在环境变量中查看）
+
+```text
     1.new DiskFileItemFactory();
         缓存大小与临时文件存储位置使用默认的.
 
@@ -146,7 +147,7 @@ List<FileItem> items = upload.parseRequest(request);
 
 * ServletFileUpload
 
-```markdown
+```text
         1.ServletFileUpload upload=new ServletFileUpload(factory);
          创建一个上传工具，指定使用缓存区与临时文件存储位置.
 
@@ -168,7 +169,7 @@ List<FileItem> items = upload.parseRequest(request);
 
 * FileItem
 
-```java
+```text
         1.isFormField
             用于判断是否是上传组件.
             如果是<input type="file">返回的就是false,否则返回true.
@@ -200,32 +201,31 @@ List<FileItem> items = upload.parseRequest(request);
 ### 总结:关于文件上传时的乱码问题
 
 * 上传文件名称乱码
-            ServletFileUpload.setHeaderEncoding("utf-8");                
-* 非上传组件内容乱码
-            FileItem.getString("utf-8");
 
-* 思考:上传文件信息是否会乱码，需要解决吗?
-            不需要解决，因为我们在上传时，使用的字节流来进行复制。
+  ```text
+        ServletFileUpload.setHeaderEncoding("utf-8");                
+  ```
 
+* 非上传组件内容乱码 FileItem.getString\("utf-8"\);
+* 思考:上传文件信息是否会乱码，需要解决吗? 不需要解决，因为我们在上传时，使用的字节流来进行复制。
 
 ## 多文件上传
 
-```java  
-  
+```java
                 function addFile\(\){  
                     var div=document.getElementById\("content"\);  
-  
+
                     div.innerHTML+="&lt;div&gt;&lt;input type='file' name='f'&gt;&lt;input type='button' value='remove file' onclick='removeFile\(this\)'&gt;&lt;/div&gt;";  
                 }  
-  
+
                 function removeFile\(btn\){  
-  
+
                     document.getElementById\("content"\).removeChild\(btn.parentNode\);  
-  
-                }  
+
+                }
 ```
 
- 服务器端代码不需要改变.
+服务器端代码不需要改变.
 
 ## 关于文件上传的注意事项:
 
@@ -269,3 +269,4 @@ List<FileItem> items = upload.parseRequest(request);
                 return "/" + d2 + "/" + d1;// 共有256目录l
             }
 ```
+
