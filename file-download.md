@@ -2,10 +2,10 @@
 
 文件下载的方式
 
-1. 超连接下载
+1. 超链接下载
 2. 服务器端通过流下载\(服务器端编程\)
 
-## 超连接下载
+## 超链接下载
 
 download1.jsp
 
@@ -101,7 +101,7 @@ response.setHeader("content-disposition","attachment;filename=下载文件名称
 
 ## 文件下载时的乱码问题
 
-### 关于下载时中文名称资源查找不到
+### 下载时中文名称资源查找不到
 
 原因: 超链接默认get请求，中文参数传递到服务器端是乱码
 
@@ -152,4 +152,3 @@ filename = new String(fileName.getBytes(“UTF-8”), “ISO8859-1”);
 response.setHeader("content-disposition", "attachment;filename="+filename);
  ...
 ```
-
