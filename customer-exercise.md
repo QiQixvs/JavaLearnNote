@@ -7,8 +7,7 @@
 1. 在showCustomer.jsp页面上添加一个连接，可以直接访问到添加页面 add.jsp
 2. 创建add.jsp
 
-问题:id是varchar类型，它的获取问题?
-UUID工具类来获取.
+问题:id是varchar类型，它的获取问题? UUID工具类来获取.
 
 ### 关于生日的日历组件
 
@@ -33,7 +32,7 @@ My97DatePickerBeta
 
 使用UUID获取 生成随机不重复字符串类型ID
 
-UUID.randomUUID()作用是生成随机字符串。
+UUID.randomUUID\(\)作用是生成随机字符串。
 
 ```java
 import java.util.UUID;
@@ -50,7 +49,7 @@ public class IdUtils {
 
 * 创建CustomerAddServlet完成添加操作
 
-```markdown
+```text
 1.得到所有请求参数封装到Customer对象
 
     注意:1.编码问题
@@ -296,7 +295,7 @@ if (_pageNum != null) {
 <c:if test="${pb.pageNum!=1}">
        <a href="/day20_1/findAllByPage?pageNum=${pb.pageNum-1}">上一页</a>&nbsp;&nbsp;&nbsp;
 </c:if>
-       
+
 <c:if test="${pb.pageNum==pb.totalPage}">
        下一页&nbsp;&nbsp;&nbsp;
 </c:if>
@@ -324,9 +323,8 @@ function changeCurrentPage(value){
 
 ```markup
 <c:forEach begin="1" end="${pb.totalPage}" var="n" step="1">
-	<a href="/day20_1/findAllByPage?pageNum=${n}&currentPage=${pb.currentPage}">第${n}页</a>&nbsp;&nbsp;
+    <a href="/day20_1/findAllByPage?pageNum=${n}&currentPage=${pb.currentPage}">第${n}页</a>&nbsp;&nbsp;
 </c:forEach>
-
 ```
 
 问题:如果页码比较多怎样处理?
@@ -343,4 +341,5 @@ function changeCurrentPage(value){
 
 用java编写页码判断
 
-![](.gitbook/assets/12.png)
+![](https://github.com/QiQixvs/JavaLearnNote/tree/316f7d8d4ab642a7b8351e47ce1b8d636e5a541e/.gitbook/assets/12.png)
+
