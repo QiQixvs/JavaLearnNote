@@ -27,6 +27,7 @@
 message_zh_CN.properties
 message_en_US.properteis
 ```
+
 * [国际化资源命名规范](https://blog.csdn.net/qq_34419607/article/details/100114102)
 
 ## 编码演示
@@ -39,11 +40,11 @@ IntelliJ IDEA 中修改properties的默认编码，统一为UTF-8。
 
 Setting -> File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 UTF-8 ，然后再把底部的 Transparent native-to-ascii conversion 打上勾
 
-![](.gitbook\assets\2020-03-02-19-03-41.png)
+![](.gitbook/assets/2020-03-02-19-03-41.png)
 
 中文生效的messages_zh_CN.properties中输入中文msg=你好世界，显示中文，不出现乱码。当使用记事本打开时，显示内容为msg=\u4F60\u597D\u4E16\u754C。
 
-![](.gitbook\assets\2020-03-02-19-13-04.png)
+![](.gitbook/assets/2020-03-02-19-13-04.png)
 
 * 在src新建一个名叫“i18n”的包，用来存放国际化配置
 
@@ -57,20 +58,19 @@ Setting -> File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 UTF
 
 * 点击下边如图所示的Resource Bundle的按钮，切换编辑模式
 
-![](.gitbook\assets\2020-03-02-19-20-50.png)
+![](.gitbook/assets/2020-03-02-19-20-50.png)
 
 ### ResourceBundle使用
 
 ```java
 //创建:
-ResourceBundle bundle = ResourceBundle.getBundle("message");		
+ResourceBundle bundle = ResourceBundle.getBundle("message");
 ResourceBundle bundle = ResourceBundle.getBundle("message",Locale.US);
 //获取:
 bundle.getString(String name);
 ```
 
-![](.gitbook\assets\2020-03-02-19-30-50.png)
-
+![](.gitbook/assets/2020-03-02-19-30-50.png)
 
 ### 扩展:关于properties文件中中文问题处理
 
@@ -89,14 +89,78 @@ native2ascii  源文件路径   目录文件路径
 
 ## 国际化的登录页面
 
+### jsp脚本语言
+
 1. 创建登录页面
 2. 创建配置文件
 3. 在登录页面上根据不同的国家获取ResourceBundle
-4. 在页面上需要国际化的位置，通过ResourceBundle.getString()来获取信息.
+4. 在页面上需要国际化的位置，通过ResourceBundle.getString()来获取信息
 
-问题:在页面上使用了jsp脚本.解决方案:使用标签 。
-在jstl标签库中提供了国际化标签.
+```java
+<!--将语言选项提交到本页面-->
+<script type="text/javascript">
+    function sendForm() {
+        document.getElementById("f").submit();
+    }
+</script>
+<form id="f" action="${pageContext.request.contextPath}/login.jsp"
+method="post">
+<select name="locale" onchange="sendForm()">
+    <option>--请选择国家--</option>
+    <option value="china">中国</option>
+    <option value="us">US</option>
+    </select>
+</form>
+```
 
+```java
+<!--根据语言获得bundle-->
+<%
+    String country = request.getParameter("locale");
+    ResourceBundle bundle = null;
+    if("us".equals(country)){
+        bundle=ResourceBundle.getBundle("message",Locale.US);
+    }else{
+        bundle=ResourceBundle.getBundle("message",Locale.CHINA);
+    }
+%>
+```
+
+```java
+<!--在页面上需要国际化的位置，通过ResourceBundle.getString()来获取信息.-->
+<form>
+    <%=bundle.getString("username") %>:<input type="text" name="username"><br>
+    <%=bundle.getString("password") %>:<input type="password" name="password"><br>
+    <input type="submit" value="<%=bundle.getString("submit")%>">
+</form>
+```
+
+### jstl标签库中的国际化标签
+
+* 导入标签库
+
+```java
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+```
+
+```java
+<fmt:setLocale value="${param.locale}" />
+<!-- 相当于new Local() 生成了locale对象-->
+
+<fmt:setBundle basename="message" var="bundle" scope="page" />
+<!-- 相当于ResourceBundle bundle=ResourceBundle.getBundle("message",local) -->
+
+<fmt:message bundle="${bundle }" key="title" />
+<!-- 相当于bundle.getString(title) -->
+
+<fmt:message bundle="${bundle }" key="username" />
+<input type="text" name="username"><br>
+
+<fmt:message bundle="${bundle }" key="password" />
+<input type="text" name="password"><br>
+
+<input type="submit" value="<fmt:message bundle="${bundle }" key="submit" />">
+````
 
 关于日期国际化
 DateFormat类.
