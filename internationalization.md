@@ -4,9 +4,9 @@
 
 **i18n**：internationalization
 
-对于程序中固定使用的文本元素，例如菜单栏、导航条等中使用的文本元素、或错误提示信息，状态信息等，需要根据来访者的地区和国家，选择不同语言的文本为之服务。
+* 对于程序中**固定使用**的文本元素，例如菜单栏、导航条等中使用的文本元素、或错误提示信息，状态信息等，需要根据来访者的地区和国家，选择不同语言的文本为之服务。
 
-对于程序动态产生的数据，例如(日期，货币等)，软件应能根据当前所在的国家或地区的文化习惯进行显示。
+* 对于程序**动态产生**的数据，例如(日期，货币等)，软件应能根据当前所在的国家或地区的文化习惯进行显示。
 
 ## 配置文件
 
@@ -40,11 +40,11 @@ IntelliJ IDEA 中修改properties的默认编码，统一为UTF-8。
 
 Setting -> File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 UTF-8 ，然后再把底部的 Transparent native-to-ascii conversion 打上勾
 
-![](.gitbook/assets/2020-03-02-19-03-41.png)
+![系统设置encoding](.gitbook/assets/2020-03-02-19-03-41.png)
 
 中文生效的messages_zh_CN.properties中输入中文msg=你好世界，显示中文，不出现乱码。当使用记事本打开时，显示内容为msg=\u4F60\u597D\u4E16\u754C。
 
-![](.gitbook/assets/2020-03-02-19-13-04.png)
+![ResourceBundle](.gitbook/assets/2020-03-02-19-13-04.png)
 
 * 在src新建一个名叫“i18n”的包，用来存放国际化配置
 
@@ -58,7 +58,7 @@ Setting -> File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 UTF
 
 * 点击下边如图所示的Resource Bundle的按钮，切换编辑模式
 
-![](.gitbook/assets/2020-03-02-19-20-50.png)
+![ResourceBundle2](.gitbook/assets/2020-03-02-19-20-50.png)
 
 ### ResourceBundle使用
 
@@ -70,7 +70,7 @@ ResourceBundle bundle = ResourceBundle.getBundle("message",Locale.US);
 bundle.getString(String name);
 ```
 
-![](.gitbook/assets/2020-03-02-19-30-50.png)
+![Locale常量](.gitbook/assets/2020-03-02-19-30-50.png)
 
 ### 扩展:关于properties文件中中文问题处理
 
@@ -160,56 +160,147 @@ method="post">
 <input type="text" name="password"><br>
 
 <input type="submit" value="<fmt:message bundle="${bundle }" key="submit" />">
-````
+```
 
-关于日期国际化
-DateFormat类.
+## 关于日期国际化
+
+**DateFormat类**
+
 作用:
-1.可以将一个Date对象格式化成指定效果的String     format方法
-2.可以将一个String解析成Date对象     parse方法
 
-1.DateFormat对象创建
+1. 可以将一个Date对象格式化成指定效果的String----->format方法
+2. 可以将一个String解析成Date对象----->parse方法
+
+* 无参构造
+
+```java
 DateFormat df1 = DateFormat.getDateInstance(); // 只有年月日
 DateFormat df2 = DateFormat.getTimeInstance(); // 只有小时分钟秒
 DateFormat df3 = DateFormat.getDateTimeInstance();// 两个都有
+```
 
-DateFormat df1 = DateFormat.getDateInstance(DateFormat.FULL); // 只有年月日
-DateFormat df2 = DateFormat.getTimeInstance(DateFormat.MEDIUM); // 只有小时分钟秒
+* 有参数构造，指定样式
+
+```java
+DateFormat df1 = DateFormat.getDateInstance(DateFormat.FULL);
+// 只有年月日
+DateFormat df2 = DateFormat.getTimeInstance(DateFormat.MEDIUM);
+// 只有小时分钟秒
 DateFormat df3 = DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.SHORT);// 两个都有
+```
 
+* 国际化的格式
+
+```java
 DateFormat df1 = DateFormat.getDateInstance(DateFormat.FULL,Locale.US); // 只有年月日
 DateFormat df2 = DateFormat.getTimeInstance(DateFormat.MEDIUM,Locale.US); // 只有小时分钟秒
 DateFormat df3 = DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.SHORT,Locale.US);// 两个都有
+```
 
-关于货币国际化
-NumberFormat类
-1.对数值进行格式化
+* 将一个Date对象格式化成指定效果的String
+
+```java
+Date date =new Date();
+df1.formate(date);
+```
+
+* 将一个String解析成Date对象
+
+```java
+String st ="2020-02-02 20:02:02";//要和指定样式匹配
+Date d = df3.parse(st);
+```
+
+### 日期转换练习
+
+```java
+String st = "09-11-28 上午10时25分39秒 CST";
+DateFormat df = new SimpleDateFormat("yy-MM-dd ah时m分s秒 z",Locale.CHINA);
+df.parse(st); // Sat Nov 28 17:25:39 CET 2009
+```
+
+## 关于货币国际化
+
+**NumberFormat类**
+
+方法：format和parse
+
+* 对数值进行格式化
+
+```java
 NumberFormat nf = NumberFormat.getIntegerInstance();
-2.对数值进行百分比
+String s = nf.format(19.98765);//20
+```
+
+* 对数值进行百分比
+
+```java
 NumberFormat nf = NumberFormat.getPercentInstance(Locale.FRANCE);
-3.对数值进行以货币显示
+String s = nf.format(0.98);//98 %
+
+nf.setMinimumFractionDigits(2);//保留两位小数
+```
+
+* 对数值进行以货币显示
+
+```java
 NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+String s = nf.format(1090);//¥1,090.00
+```
 
+## 动态文件格式化
 
-MessageFormat
-动态文件格式化.
+**MessageFormat**
 
-MessageForamt可以对一个模板中的信息进行动态赋值.
+MessageForamt可以对一个**模板**中的信息进行动态赋值.
 
-1.MessageFormat使用
+* 例子：
+
+配置文件 message_en_US.properties中：
+
+login.error={0} is required {1}
+
+```java
+ResourceBundle bundle = ResourceBundle.getBundle("message",Locale.US);
+String pattern = bundle.getString("login.error");
+MassageFormate.formate(pattern,"username","ok")
+//username is required ok
+```
+
+* MessageFormat使用
+
 MessageForamt.format(String pattern,Object... params);
 
-2.说明一下关于动态文本中的占位符?
-例如:{0} is required 
+* 说明一下动态文本中的占位符
 
-1.注意占位符只能使用{0}---{9}之间的数值.
-2.关于占们符的格式
+例如:{0} is required
+
+1. 注意占位符只能使用{0}---{9}之间的数值.
+2. 关于占们符的格式
+
 {argumentIndex}: 0-9 之间的数字，表示要格式化对象数据在参数数组中的索引号
 {argumentIndex,formatType}: 参数的格式化类型
 {argumentIndex,formatType,FormatStyle}: 格式化的样式，它的值必须是与格式化类型相匹配的合法模式、或表示合法模式的字符串。
 
 formatType可以取的值有:number date time
-formatStyle可以取的值有
-number类型可以取:integer currency  percent 
-date类型可以取的:short medium  full long
-time类型可以取的:short medium  full long
+
+* number类型可以取:integer currency  percent
+* date类型可以取的:short medium  full long
+* time类型可以取的:short medium  full long
+
+### 案例
+
+```java
+//At 12:30 pm on jul 3,1998, a hurricance destroyed 99 houses and caused $1000000 of damage
+
+String msg = "At {0,time,short} on {0,date,long}, a hurricance destroyed {1,number,integer} houses and caused {2,number,currency} of damage";
+
+Calendar c = Calendar.getInstance();
+c.set(1998, 6, 3, 12, 30,0);
+
+Date date = c.getTime();
+
+MessageFormat mf = new MessageFormat(msg, Locale.US);
+
+String value = mf.format(new Object[] { date, 99, 1000000 });
+```
