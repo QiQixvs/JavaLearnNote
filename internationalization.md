@@ -27,23 +27,57 @@
 message_zh_CN.properties
 message_en_US.properteis
 ```
+* [国际化资源命名规范](https://blog.csdn.net/qq_34419607/article/details/100114102)
 
 ## 编码演示
 
-properties文件操作以及通过ResourceBundler来获取资源包中信息.
+### properties文件相关操作
 
-1.资源包文件一般都放置在classpath下
+IntelliJ IDEA 中修改properties的默认编码，统一为UTF-8。
 
-2.关于ResourceBundle使用
-创建:
+* 中文乱码问题
+
+Setting -> File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 UTF-8 ，然后再把底部的 Transparent native-to-ascii conversion 打上勾
+
+![](.gitbook\assets\2020-03-02-19-03-41.png)
+
+中文生效的messages_zh_CN.properties中输入中文msg=你好世界，显示中文，不出现乱码。当使用记事本打开时，显示内容为msg=\u4F60\u597D\u4E16\u754C。
+
+![](.gitbook\assets\2020-03-02-19-13-04.png)
+
+* 在src新建一个名叫“i18n”的包，用来存放国际化配置
+
+默认生效的messages.properties **当需要的语言对应的配置，就会选这个**
+
+中文生效的messages_zh_CN.properties；
+
+英文生效的messages_en_US.properties；
+
+德语生效的messages_de_DE.properties；
+
+* 点击下边如图所示的Resource Bundle的按钮，切换编辑模式
+
+![](.gitbook\assets\2020-03-02-19-20-50.png)
+
+### ResourceBundle使用
+
+```java
+//创建:
 ResourceBundle bundle = ResourceBundle.getBundle("message");		
 ResourceBundle bundle = ResourceBundle.getBundle("message",Locale.US);
-获取:
+//获取:
 bundle.getString(String name);
+```
 
-扩展:关于properties文件中中文问题处理?
-在jdk中有一个命令native2ascii.exe。
+![](.gitbook\assets\2020-03-02-19-30-50.png)
 
+
+### 扩展:关于properties文件中中文问题处理
+
+在jdk中有一个命令native2ascii.exe
+
+```markdown
+cmd中
 1.进行一次翻译
 native2ascii 回车
 中文  回车
@@ -51,12 +85,14 @@ native2ascii 回车
 2.批量翻译
 native2ascii  源文件路径   目录文件路径
 例如: native2ascii d:/a.txt  d:/a.properties
+```
 
-国际化的登录页面
-1.创建登录页面
-2.创建配置文件
-3.在登录页面上根据不同的国家获取ResourceBundle
-4.在页面上需要国际化的位置，通过ResourceBundle.getString()来获取信息.
+## 国际化的登录页面
+
+1. 创建登录页面
+2. 创建配置文件
+3. 在登录页面上根据不同的国家获取ResourceBundle
+4. 在页面上需要国际化的位置，通过ResourceBundle.getString()来获取信息.
 
 问题:在页面上使用了jsp脚本.解决方案:使用标签 。
 在jstl标签库中提供了国际化标签.
