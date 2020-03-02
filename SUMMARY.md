@@ -12,4 +12,4 @@
 * [国际化](internationalization.md)
 * [ajax](ajax.md)
 * [enctype详解](enctype.md)
-* [IDEA采坑记录](idea.md)
+* [IDEA踩坑记录](idea.md)

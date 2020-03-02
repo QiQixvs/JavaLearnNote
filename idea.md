@@ -1,4 +1,4 @@
-# IDEA采坑记录
+# IDEA踩坑记录
 
 ## Tomcat 部署时 war exploded的问题
 
