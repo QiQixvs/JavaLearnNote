@@ -5,6 +5,7 @@
 war exploded模式是直接把文件夹、jsp页面 、classes等等移到Tomcat 部署文件夹里面，进行加载部署。
 
 ![](.gitbook/assets/image7.png)
+![](.gitbook/assets/Capture.png)
 
 用于获取上下文环境绝对路径的代码：
 
