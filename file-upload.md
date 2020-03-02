@@ -96,7 +96,7 @@ List<FileItem> items = upload.parseRequest(request);
 
 * 遍历items集合，集合中的每一项，就是一个上传数据
 
-![FiledItem API](https://github.com/QiQixvs/JavaLearnNote/tree/316f7d8d4ab642a7b8351e47ce1b8d636e5a541e/.gitbook/assets/2020-02-29-20-16-16.png)
+![FiledItem API](.gitbook/assets/2020-02-29-20-16-16.png)
 
 1. isFormField\(\);
 2. getFieldName\(\);
@@ -259,7 +259,7 @@ if (flag) {
 
 ## 多文件上传
 
-![&#x591A;&#x6587;&#x4EF6;&#x4E0A;&#x4F20;&#x9875;&#x9762;](.gitbook/assets/image%20%288%29.png)
+![&#x591A;&#x6587;&#x4EF6;&#x4E0A;&#x4F20;&#x9875;&#x9762;](.gitbook/assets/image5.png)
 
 ```markup
 <input type="button" value="add File" onclick="addFile();">

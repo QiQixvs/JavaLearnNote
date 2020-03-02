@@ -146,7 +146,8 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 
 问题:在监听器中是否可以得到属性值?
 
-![](.gitbook/assets/image%20%284%29.png)
+![](.gitbook/assets/image2.png)
+![](.gitbook/assets/image3.png)
 
 {% hint style="success" %}
 在java的监听机制中，是可以在监听器中获取事件源的我们在开发中，如果有到了事件触发机制，那么一般情况下，都可以使用方法的参数\(事件对象\)来获取想要的信息.

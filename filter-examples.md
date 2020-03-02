@@ -127,7 +127,7 @@ response.setDateHeader("expires", System.currentTimeMillis()
     3. 做一个Filter，它拦截所有请求，当访问资源时，我们从cookie中获取用户名和密码，进行登录操作。
 ```
 
-![](https://github.com/QiQixvs/JavaLearnNote/tree/69e9dac4467d13d1f0b9545874d7f9a678515a3a/.gitbook/assets/2020-02-28-18-19-52.png)
+![](.gitbook/assets/2020-02-28-18-19-52.png)
 
 * 首先要有登录功能
 

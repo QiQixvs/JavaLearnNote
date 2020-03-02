@@ -9,5 +9,7 @@
 * [文件的下载](file-download.md)
 * [文件的上传下载练习](file-updown-exercise.md)
 * [扩展-队列](file-download-extension.md)
+* [国际化](internationalization.md)
+* [ajax](ajax.md)
 * [enctype详解](enctype.md)
 * [IDEA采坑记录](idea.md)
