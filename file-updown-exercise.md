@@ -41,6 +41,19 @@ beanutils collections logging
 <a href='${pageContext.request.contextPath}/upload.jsp'>上传</a>
 ```
 
+* JavaBean
+
+```java
+private int id;
+private String uuidname;
+private String realname;
+private String savepath;
+private Timestamp uploadtime;
+private String description;
+
+...getter and setter...
+```
+
 * 创建upload.jsp页面
 
 上传操作浏览器端三个注意事项:
@@ -83,6 +96,23 @@ beanutils collections logging
         BeanUtils.populate(r,map);
 ```
 
+* 在数据库添加信息
+
+id 由数据库控制自动增加。
+
+TIMESTAMP 时间戳，数据库自动生成。
+
+```java
+public void save(Resource r) throws SQLException {
+
+    String sql = "insert into resources values(null,?,?,?,null,?)";
+    QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
+
+    runner.update(sql, r.getUuidname(), r.getRealname(), r.getSavepath(),
+    r.getDescription());
+}
+```
+
 ## 编码实现下载
 
 * index.jsp页面代码
@@ -93,16 +123,56 @@ beanutils collections logging
 
 * 创建ShowDownloadServlet
 
-  在这个servlet中，查看db,得到所有可以下载的信息.
+在这个servlet中，查看db,得到所有可以下载的信息.
 
-  List&lt;Resource&gt; rs = service.findAll();
-					
+```java
+List<Resource> rs = service.findAll();
+request.setAttribute("rs",rs);
+````
+
 * 创建一个download.jsp页面，展示所有可以下载的信息.
-				
-			2.在download.jsp，点击下载时，传递的是要下载文件的id。
-				<a href='${pageContext.request.contextPath}/download?id=${r.id}'>下载</a>
-				
-				1.创建一个DownloadServlet
-					1.查询数据库，得到要下载的文件的相关信息
-					2.下载操作
 
+```java
+<c:forEach items="${rs}" var="r">
+    <tr>
+        <td>${r.realname}</td>
+        <td>${r.description }</td>
+        <td><a href=''>下载</a></td>
+    </tr>
+</c:forEach>
+```
+
+在download.jsp，点击下载时，传递的是要下载文件的id。
+
+```java
+<a href='${pageContext.request.contextPath}/download?id=${r.id}'>下载</a>
+```
+
+* 创建一个DownloadServlet
+
+1. 根据request.getParamter("id") 查询数据库，得到要下载的文件的相关信息
+2. 下载操作
+
+设置mimeType  
+
+```java
+response.setContentType(getServletContext.getMimeType(String filename));
+```
+
+设置响应头，目的是永远是下载操作
+
+```java
+//下载时中文文件名
+//filename根据user-agent encode
+response.setHeader("content-disposition", "attachment;filename="+filename);
+...
+```
+
+参考[根据浏览器编码文件名](file-download.md)
+
+将下载的文件通过resposne.getOutputStream\(\)流写回到浏览器端。
+
+```java
+byte[] b = FileUtils.readFileToByteArray(file); // 将指定文件读取到byte[]数组中.
+response.getOutputStream().write(b);
+```
