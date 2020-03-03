@@ -392,7 +392,10 @@ xs.alias("person", Person.class);
 @XStreamAsAttribute  设置变量生成属性
 @XStreamOmitField  设置变量 不生成到XML
 @XStreamImplicit(itemFieldName = “hobbies”) 设置集合类型变量 别名
+```
 
-//使注解生效
-xStream.autodetectAnnotations(true);
+使注解生效
+
+```java
+xs.autodetectAnnotations(true);
 ```
