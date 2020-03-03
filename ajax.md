@@ -1,5 +1,7 @@
 # ajax
 
+## 概念
+
 Asynchronous Javascript And XML”（异步JavaScript和XML）
 
 一种创建交互式网页应用的网页开发技术
@@ -8,152 +10,260 @@ AJAX = 异步 JavaScript和XML（标准通用标记语言的子集）
 
 是一种用于创建快速动态网页的技术，目的是为了提高用户的感受
 
-## 异步
+### 异步
 
 ![AJAX交互模型](.gitbook/assets/2020-03-02-22-54-19.png)
 
 ![同步](.gitbook/assets/2020-03-02-22-58-34.png)
-
+同步交互模式，客户端提交请求，等待，在响应回到客户端前，客户端无法进行其他操作
 ![异步](.gitbook/assets/2020-03-02-23-02-12.png)
+异步交互模型，客户端将请求提交给Ajax引擎，客户端可以继续操作，由Ajax引擎来完成与服务武器端通信
 
+* 传统web交互模型，浏览器直接将请求发送给服务器，服务器回送响应，直接发给浏览器。
 
-传统web交互模型，浏览器直接将请求发送给服务器，服务器回送响应，直接发给浏览器， 
-Ajax交互模型，浏览器首先将请求 发送 Ajax引擎（以XMLHttpRequest为核心），AJax引擎再将请求发送给 服务器，服务器回送响应先发给Ajax引擎，再由引擎传给浏览器显示 
+* Ajax交互模型，浏览器首先将请求发送Ajax引擎（XMLHttpRequest为核心），AJax引擎再将请求发送给服务器，服务器回送响应先发给Ajax引擎，再由引擎传给浏览器显示 。
 
-1、同步交互模式，客户端提交请求，等待，在响应回到客户端前，客户端无法进行其他操作 
-2、异步交互模型，客户端将请求提交给Ajax引擎，客户端可以继续操作，由Ajax引擎来完成与服务武器端通信，
-当响应回来后，Ajax引擎会更新客户页面，在客户端提交请求后，用户可以继续操作，而无需等待 。 
+## ajax开发步骤
 
-Google ： suggest建议、邮件定时保存、map地图
-----------------------------------------------------------	
-ajax开发步骤:
-ajax核心就是XMLHttpRequest对象.
+ajax核心就是**XMLHttpRequest**对象.
 
-1.得到XMLHttpRequest对象.(js对象)
-在w3school文档中的 xmldom文档中就可以查找到  dom XMLHttpRequest对象.
-var xmlhttp=null;
-if (window.XMLHttpRequest)
-{// code for all new browsers
-xmlhttp=new XMLHttpRequest();
+查xmldom文档--> dom --> XMLHttpRequest对象
+
+1. 得到XMLHttpRequest对象.(js对象)
+2. 注册回调函数onreadystatechange
+3. open--->只是用于设置请求方式 以及url,它不发送请求.
+4. send--->它是用于发送请求的。send(null);null代表没有参数。如果有参数可以写成:"username=tom&password=123"
+5. 在回调函数中处理数据
+
+### 代码实现
+
+```java
+<script type="text/javascript">
+  //1.得到XMLHttpRequest对象.
+  var xmlhttp = null;
+
+  if (window.XMLHttpRequest) {
+  xmlhttp = new XMLHttpRequest(); //针对于现在的浏览器包括IE7以上版本
+  } else{
+  //针对于IE5,IE6版本
+  xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  //2.设置回调函数
+  xmlhttp.onreadystatechange=function(){
+  //5.处理响应数据  当信息全部返回，并且是成功
+    if(xmlhttp.readyState==4 && xmlhttp.status==200){
+      alert(xmlhttp.responseText);//获取服务器返回的数据
+    }
+  };
+
+  //3.open
+  xmlhttp.open("GET","http://localhost/day23_3/ajax1");
+  //4.发送请求 send
+  xmlhttp.send(null);
+</script>
+```
+
+### XMLHttpRequest对象属性
+
+```java
+if(xmlhttp.readyState==4 && xmlhttp.status==200){
+  //...
 }
-else if (window.ActiveXObject)
-{// code for IE5 and IE6
-xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-}
-2.注册回调函数
-xmlhttp.onreadystatechange=function(){		
+```
 
-};
-3.open
-只是用于设置请求方式 以及url,它不发送请求.
+#### readyState
 
-4.send
-它是用于发送请求的。
-send(null);null代表没有参数  如果有参数可以写成:"username=tom&password=123"
-
-
-5.在回调函数中处理数据
-
-1.XMLHttpRequest对象有一个属性  readyState
 它代表的是XMLHttpRequest对象的状态。
 
-0.代表XMLHttpRequest对象创建
-1.open操作
-2.send操作
-3.接收到了响应数据，但是只有响应头，正文还没有接收。
-4.所有http响应接收完成。		
+| 状态 | 名称| 描述 |
+| :-----| :-----| :----- |
+| 0 | Uninitialized | 代表XMLHttpRequest对象创建 |
+| 1 | Open | open()已调用，但send()未调用。请求还没有被发送 |
+| 2 | Sent | send操作，请求已发送到web服务器，为接收到响应|
+| 3 | Receiving | 接收到了响应数据，但是只有响应头，正文还没有接收 |
+| 4 | Loaded | 所有http响应接收完成。|
 
-2.status
+#### status
+
 由服务器返回的 HTTP 状态代码，如 200 表示成功
 
-3.在回调函数中可以通过以下方式获取服务器返回的数据
-1.responseText
-2.responseXML
+### 回调函数
 
---------------------------------------------------------------------------
-关于ajax操作中请求参数的设置问题:
+在回调函数中可以通过以下方式获取服务器返回的数据
 
-1.对于get请求方式，参数设置
+1. responseText
+2. responseXML
+
+## ajax操作中请求参数的设置问题
+
+语法
+open(method,url,async(true异步可以省略),username,password)；
+
+```java
+xmlhttp.open("GET","http://localhost/day23_3/ajax1");
+
+xmlhttp.open("GET","${paegContext.request.contentPath}/day23_3/ajax1");
+//只能在jsp里这么写
+```
+
+### get请求方式参数设置
+
 直接在url后面拼接
-例如:"${pageContext.request.contextPath}/ajax2?name=tom"
-
-2.对于post请求方式，参数设置
-
-xmlhttp.open("POST","${pageContext.request.contextPath}/ajax2");
-xmlhttp.send("name=tom");
-
-注意:如果是post请求方式，还需要设置一个http请求头。
-xmlhttp.setRequestHeader("","");
 
 例如:
-xmlhttp.open("POST","${pageContext.request.contextPath}/ajax2");	
-xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");	
+
+```java
+"${pageContext.request.contextPath}/ajax2?name=tom"
+```
+
+### post请求方式参数设置
+
+注意: 如果是post请求方式，还需要设置一个**http请求头**。xmlhttp.setRequestHeader("","");
+
+例如:
+
+```java
+xmlhttp.open("POST","${pageContext.request.contextPath}/ajax2");
+xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
 xmlhttp.send("name=tom");
+```
 
-------------------------------------------------------------------------
-ajax案例1--验证用户名是否可以使用
+{% hint style="danger" %}
+注意顺序，open-serRequestHeader-send
+{% endhint %}
 
--------------------------------------------------------------------------
-ajax案例2--显示商品信息
-第一个版本:
-1.创建一个Product类
-private int id;
-private String name;
-private double price;
+## ajax案例
 
-2.创建ajax4.jsp
+### 验证用户名是否可以使用
+
+* 抽取创建XMLHttpRequest对象的部分到js
+
+function getXmlHttpRequest(){}
+
+* 引入js文件
+
+```java
+<script type="text/javascript" src="${pageContext.request.contextPath}/my.js"></script>
+```
+
+* 发送用户名，获取msg
+
+```java
+<script type="text/javascript">
+function checkName(txt) {
+  //获取文本框中的信息
+  var value=txt.value;
+  //1.得到XMLHttpRequest对象.
+  var xmlhttp=getXmlHttpRequest();
+  //2.设置回调函数
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+       var msg=xmlhttp.responseText;
+       document.getElementById("span").innerHTML=msg;
+    }
+  };
+//post请求方式，参数设置
+  xmlhttp.open("POST", "${pageContext.request.contextPath}/ajax3");
+  xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+  xmlhttp.send("username="+value);
+};
+```
+
+### 显示商品信息
+
+#### 第一个版本
+
+* 创建一个Product类 --> int id; String name; double price;
+
+* 创建ajax.jsp
+
+```java
 <a href="javascript:void(0)" id="p">显示商品信息</a>
 <div id="d"></div>
+```
 
-在回调函数中得到服务器返回的信息innerHTML到div中.
+```java
+//javascript
+document.getElementById("p").onclick=function(){
+  ...xmlhttp...
+}
+```
 
-3.在Ajax4Servlet中
-将List<Product>中的数据，手动拼接成了html代码，写回到浏览器端.
+在回调函数中得到服务器返回的信息innerHTML到div中。
+
+* 在AjaxServlet中
+
+将List&lt;Product&gt;中的数据，手动拼接成了html代码，写回到浏览器端.
+
+```java
+StringBuilder builder = new StringBuilder();
 
 builder.append("<table border='1'><tr><td>商品编号</td><td>商品名称</td><td>商品价格</td></tr>");
+
 for (Product p : ps) {
-builder.append("<tr><td>" + p.getId() + "</td><td>" + p.getName()
+  builder.append("<tr><td>" + p.getId() + "</td><td>" + p.getName()
 + "</td><td>" + p.getPrice() + "</td></tr>");
 }
+
 builder.append("</table>");
 
-------------------------
-第二个版本
-创建一个product.jsp页面，在页面上去组装table,直接将数据返回了.
+PrintWriter out = response.getWriter();
+out.print(builder.toString());
+out.flush();
+out.close();
+```
 
-步骤
-1.在Ajax4Servlet中
+#### 第二个版本
+
+创建一个product.jsp页面，在页面上去组装table, 其本质还是Out.write(),直接将数据返回到ajax.jsp中div位置了。
+
+![由product.jsp返回response](.gitbook/assets/2020-03-03-17-09-39.png)
+
+* 在AjaxServlet中
+
+```java
 request.setAttribute("ps", ps);
 request.getRequestDispatcher("/product.jsp").forward(request, response);
-2.在product.jsp页面上
+```
+
+* 在product.jsp页面上
+
+不需要&lt;html&gt;&lt;body&gt;标签
+
+```java
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <table border='1'>
-<tr>
-<td>商品编号</td>
-<td>商品名称</td>
-<td>商品价格</td>
-</tr>
-<c:forEach items="${ps}" var="p">
-<tr>
-<td>${p.id }</td>
-<td>${p.name }</td>
-<td>${p.price }</td>
-</tr>
-</c:forEach>
+  <tr>
+    <td>商品编号</td>
+    <td>商品名称</td>
+    <td>商品价格</td>
+  </tr>
+  <c:forEach items="${ps}" var="p">
+    <tr>
+      <td>${p.id }</td>
+      <td>${p.name }</td>
+      <td>${p.price }</td>
+    </tr>
+  </c:forEach>
 </table>
-------------------------------------------
-第三个版本	
-在服务器端得到数据，只将要显示的内容返回，而不返回html代码
-而html代码的拼接，在浏览器端完成。
+```
+
+#### 第三个版本
+
+在服务器端得到数据，只将要显示的内容返回，而不返回html代码。而html代码的拼接，在浏览器端完成。
 
 问题:服务器返回什么样的数据格式?
+
 json:它是一种轻量级的数据交换格式。
 
 [{'id':'1','name':'洗衣机','price':'1800'},{'id':'2','name':'电视机','price':'3800'}]
 在js中{name:value,name1:valu1}这就是一个js对象.
 [{},{}]这代表有两个对象装入到了一个数组中。
 
------------------------------------------------------------------------
-关于json插件使用:
+## 关于json插件使用
+
 在java中，可以通过jsonlib插件，在java对象与json之间做转换。
 
 关于jsonlib插件使用:
@@ -180,7 +290,7 @@ config.setExcludes(new String[] { "type" });
 JSONArray.fromObject(ps, config).toString();
 上述代码就是在生成json时，不将type属性包含.
 
--------------------------------------------------------------------------------------------------
+
 ajax操作中服务器端返回xml处理
 XMHttpRequest.resposneXML;----->得到的是一个Document对象.
 
@@ -211,7 +321,6 @@ xs.alias("person", Person.class);
 使注解生效 
 xStream.autodetectAnnotations(true);
 
---------------------------------------------------------------------------
 作业:
 1.通过返回xml来完成省市联动.
 2.通过返回json来完成省市联动。
