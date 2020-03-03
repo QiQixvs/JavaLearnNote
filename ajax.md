@@ -147,7 +147,7 @@ function getXmlHttpRequest(){}
 <script type="text/javascript" src="${pageContext.request.contextPath}/my.js"></script>
 ```
 
-* 发送用户名，获取msg
+* 失去焦点onclur触发Ajax请求发送用户名，获取msg
 
 ```java
 <script type="text/javascript">
@@ -256,71 +256,143 @@ request.getRequestDispatcher("/product.jsp").forward(request, response);
 
 问题:服务器返回什么样的数据格式?
 
-json:它是一种轻量级的数据交换格式。
+**json**:它是一种轻量级的数据交换格式。
 
 [{'id':'1','name':'洗衣机','price':'1800'},{'id':'2','name':'电视机','price':'3800'}]
+
 在js中{name:value,name1:valu1}这就是一个js对象.
+
 [{},{}]这代表有两个对象装入到了一个数组中。
+
+```java
+  //将服务器返回的字符串数据变成js对象
+  var json = eval(xmlhttp.responseText);
+
+  var msg="<table border='1'><tr><td>商品编号</td><td>商品名称</td><td>商品价格</td></tr>";
+
+  //按对象操作获取数据值
+  for(var i=0;i<json.length;i++){
+    msg+="<tr><td>"+json[i].id+"</td><td>"+json[i].name+"</td><td>"+json[i].price+"</td></tr>";
+  }
+  msg+="</table>";
+
+  document.getElementById("d").innerHTML=msg;
+```
 
 ## 关于json插件使用
 
-在java中，可以通过jsonlib插件，在java对象与json之间做转换。
+在java中，可以通过**jsonlib**插件，在java对象与json之间做转换。
 
-关于jsonlib插件使用:
-1.导包(6个包)
+1. 导包(6个包)
+2. 将java对象转换成json
 
-2.将java对象转换成json
+```text
+  commons-beanutils-1.8.3.jar
+  commons-collections-3.2.1.jar
+  commons-lang-2.6.jar
+  commons-logging-1.1.1.jar
+  ezmorph-1.0.6.jar
+  json-lib-2.4-jdk15.jar
+```
 
-1.对于数组，List集合，要想转换成json
-JSONArray.fromObject(java对象); ["value1","value2"]
+* 数组，List集合转换成json
 
-2.对于javaBean，Map
-JSONObject.fromObject(javaBean对象); {name1:value1,name2:value2}
+```java
+JSONArray.fromObject(java对象);
+//["value1","value2"]
+```
+
+* javaBean，Map转换成json
+
+```java
+JSONObject.fromObject(javaBean对象);
+//{name1:value1,name2:value2}
+```
 
 对于json数据，它只有两种格式
-1.[值1,值2,...]  ------>这就是javascript中的数组
-2.{name:value,....} ---->就是javascript中的对象。
-但是这两种格式可以嵌套.
-[{},{},{}]
-{name:[],name:[]}
 
-3.如果javaBean中有一个属性，不想生成在json中，怎样处理?
+1. [值1,值2,...]  ------> 这就是javascript中的数组
+2. {name:value,....} ----> 就是javascript中的对象。
+
+但是这两种格式可以嵌套。
+如：[{},{},{}]或者{name:[],name:[]}
+
+```java
+List<Product> ps = new ArrayList<Product>();
+ps.add(new Product(1, "洗衣机", 1800));
+ps.add(new Product(2, "电视机", 3800));
+ps.add(new Product(3, "空调", 5800));
+
+PrintWriter out = response.getWriter();
+
+String json = JSONArray.fromObject(ps).toString();
+out.print(json);
+out.flush();
+out.close();
+//[{'id':'1','name':'洗衣机','price':'1800'},{'id':'2','name':'电视机','price':'3800'}]
+```
+
+* 如果javaBean中有一个属性，不想生成在json中，怎样处理?
+
+```java
 JsonConfig config = new JsonConfig();
 config.setExcludes(new String[] { "type" });
 JSONArray.fromObject(ps, config).toString();
+```
+
 上述代码就是在生成json时，不将type属性包含.
 
+## ajax操作中服务器端返回xml处理
 
-ajax操作中服务器端返回xml处理
-XMHttpRequest.resposneXML;----->得到的是一个Document对象.
+**XMHttpRequest.responseXML**;----->得到的是一个Document对象.
 
-操作：可以自己将xml文件中的内容取出来，写回到浏览器端。也可以请求转发到一个xml文件，将这个文件信息写回到
-浏览器端.注意   response.setContextType("text/xml;charset=utf-8");
+操作：可以自己将xml文件中的内容取出来，写回到浏览器端。也可以请求转发到一个xml文件，将这个文件信息写回到浏览器端.
 
-问题:如果没有xml文件，我们的数据是从数据库中查找到了，想要将其以xml格式返回怎样处理?
+问题: 如果没有xml文件，我们的数据是从数据库中查找到了，想要将其以xml格式返回怎样处理?
 
-可以使用xml插件处理  xstream，它可以在java对象与xml之间做转换.
+可以使用xml插件处理 xstream，它可以在java对象与xml之间做转换.
 
-xstream使用:
-1.导包
-2个.
-2.使用
-1.将java对象转换成xml
+### xstream使用
+
+* 导包
+
+如果实现 对象 --- xml  只需要 xstream-1.3.1.jar
+
+如果实现 xml ---- 对象 需要 xstream-1.3.1.jar 、xpp3_min-1.1.4c.jar
+
+* 核心方法
+
+```java
+xSteam.alias(name,Class); 将类型解析或者序列化 定义一个别名
+
+toXML(obj) 将对象序列化XML
+
+fromXML(inputStream/xml片段)  将xml信息解析对象 
+```
+
+将java对象转换成xml
+
+```java
 XStream xs=new XStream();
 String xml=xs.toXML(java对象);
-问题:生成的xml中的名称是类的全名.
+````
+
+问题: 生成的xml中的名称是类的全名.
+
 两种方式:
-1.编码实现
+
+* 编码实现
+
 xs.alias("person", Person.class);
-2.使用注解(Annotation)
+
+* 使用注解(Annotation)
+
+```java
 @XStreamAlias(别名) 对类和变量设置别名
 @XStreamAsAttribute  设置变量生成属性
 @XStreamOmitField  设置变量 不生成到XML
 @XStreamImplicit(itemFieldName = “hobbies”) 设置集合类型变量 别名
 
-使注解生效 
+//使注解生效
 xStream.autodetectAnnotations(true);
-
-作业:
-1.通过返回xml来完成省市联动.
-2.通过返回json来完成省市联动。
+```

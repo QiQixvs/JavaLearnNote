@@ -11,5 +11,6 @@
 * [扩展-队列](file-download-extension.md)
 * [国际化](internationalization.md)
 * [ajax](ajax.md)
+* [ajax练习](ajax-exercise.md)
 * [enctype详解](enctype.md)
 * [IDEA踩坑记录](idea.md)
