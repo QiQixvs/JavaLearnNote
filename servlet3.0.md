@@ -87,37 +87,106 @@ public class MyServlet extends HttpServlet {
 
 servlet3.0完成。
 
-1.要在servlet上添加注解@MultipartConfig  
-表示Servlet接收multipart/form-data 请求
-2.在servlet中要想得到上传信息，通过request对象获取一个Part对象。
-Part part=request.getPart();
+* 1.要在servlet上添加注解@MultipartConfig  表示Servlet接收multipart/form-data 请求
+* 2.在servlet中要想得到上传信息，通过request对象获取一个Part对象。
 
-part.write(String filename);
+```java
+    Part part=request.getPart("f");
+    part.write(String filename);
+```
 
 问题:
-1.关于上传文件中文名称乱码问题
-因为上传是post请求，直接使用post乱码解决方案就可以  request.setCharacterEncoding("utf-8");
-2.关于获取上传文件名称 
+
+* 1.关于上传文件中文名称乱码问题
+
+因为上传是post请求，直接使用post乱码解决方案就可以  
+
+```java
+request.setCharacterEncoding("utf-8");
+```
+
+* 2.关于获取上传文件名称
+
 通过Part获取一个header
+```java
 String cd = part.getHeader("Content-Disposition");
-在这个header中包含了上传文件名称，直接截取出来就可以。							
+```
+
+在这个header中包含了上传文件名称，直接截取出来就可以
+
+```java
 String filename = cd.substring(cd.lastIndexOf("\\") + 1,cd.length() - 1);
-3.如果多文件上传怎样处理?
+```
+
+{% hint style="danger" %}
+不同浏览器获得得cd不同，chrome得到的filename是”bb.txt“,Edge得到的是文件完整路径。需要根据情况截取。
+{% endhint %}
+
+* 3.如果多文件上传怎样处理
+
+```java
 request.getParts();
+```
 
 ### 3. 异步处理
 
 本质就是在服务器端开启一个线程，来完成其它的操作。
 
-1.必须在注解添加一项
+#### 1.必须在注解添加一项
+
+```java
 @WebServlet(value = "/reg", asyncSupported = true)
-asyncSupported=true,代表当前servlet支持异步操作.
+```
 
-2.需要一个异步 上下文对象，通过这个对象，可以获取request,response对象.
+asyncSupported=true, 代表当前servlet支持异步操作.
 
-AsyncContext context = req.startAsync();	
+#### 2.需要一个异步 上下文对象 AsyncContext
 
-还可以对异步上下文进行监听，在它的监听器方法中有一个onComplete,可以用于判断结束。
+通过这个对象，可以获取request, response对象
+
+```java
+AsyncContext context = req.startAsync();
+```
+
+还可以对异步上下文进行监听，在它的监听器AsyncListener方法中有一个onComplete, 可以用于判断结束。
+
+```java
+@WebServlet(value = "/reg", asyncSupported = true)
+public class RegistServlet extends HttpServlet {
+    @Override
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
+        // 1.注册操作
+         ...
+        // 注册结束
+
+        // 开启线程。进行发邮件操作.
+        AsyncContext context = req.startAsync();// 获取一个异步 上下文对象.
+
+        context.addListener(new AsyncListener() {//对异步上下文进行监听
+            ...
+            @Override
+            public void onComplete(AsyncEvent event) throws IOException {
+                // 监听到线程结束。
+                // 清理关闭操作
+            }
+        });
+
+        new Thread(new SendEmail(context)).start();
+
+    }
+...
+}
+class SendEmail implements Runnable {
+
+    private AsyncContext context;
+
+    public SendEmail(AsyncContext context) {
+        this.context = context;
+    }
+    @Override
+    public void run() {...发邮件操作}
+}
+```
 
 ## Servlet4.0
 
