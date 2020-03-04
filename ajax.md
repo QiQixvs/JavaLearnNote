@@ -15,8 +15,10 @@ AJAX = 异步 JavaScript和XML（标准通用标记语言的子集）
 ![AJAX交互模型](.gitbook/assets/2020-03-02-22-54-19.png)
 
 ![同步](.gitbook/assets/2020-03-02-22-58-34.png)
+
 同步交互模式，客户端提交请求，等待，在响应回到客户端前，客户端无法进行其他操作
 ![异步](.gitbook/assets/2020-03-02-23-02-12.png)
+
 异步交互模型，客户端将请求提交给Ajax引擎，客户端可以继续操作，由Ajax引擎来完成与服务武器端通信
 
 * 传统web交互模型，浏览器直接将请求发送给服务器，服务器回送响应，直接发给浏览器。
@@ -130,7 +132,7 @@ xmlhttp.send("name=tom");
 ```
 
 {% hint style="danger" %}
-注意顺序，open-serRequestHeader-send
+注意顺序，open-setRequestHeader-send
 {% endhint %}
 
 ## ajax案例
@@ -392,6 +394,24 @@ xs.alias("person", Person.class);
 @XStreamAsAttribute  设置变量生成属性
 @XStreamOmitField  设置变量 不生成到XML
 @XStreamImplicit(itemFieldName = “hobbies”) 设置集合类型变量 别名
+```
+
+例:
+
+```java
+@XStreamAlias("city")
+public class City {
+
+  private String name;
+
+  public String getName() {
+    return name;
+  }
+  public void setName(String name) {
+    this.name = name;
+  }
+}
+
 ```
 
 使注解生效
