@@ -65,7 +65,7 @@ ServletContext属性变化
        监听器ServletContextAttributeListener监听application对象的属性变化。
 ```
 
-## web中监听器怎样使用？
+## web中监听器怎样使用
 
 创建监听器步骤:
 
@@ -74,6 +74,7 @@ ServletContext属性变化
 3. 在web.xml文件中配置注册监听
 
 ```java
+@WebListener//注解方式
 public class MyServletContextListener implements ServletContextListener {
 
     public void contextDestroyed(ServletContextEvent sce) {
