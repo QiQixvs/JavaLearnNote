@@ -367,7 +367,7 @@ xSteam.alias(name,Class); 将类型解析或者序列化 定义一个别名
 
 toXML(obj) 将对象序列化XML
 
-fromXML(inputStream/xml片段)  将xml信息解析对象 
+fromXML(inputStream/xml片段)  将xml信息解析对象
 ```
 
 将java对象转换成xml
@@ -399,3 +399,7 @@ xs.alias("person", Person.class);
 ```java
 xs.autodetectAnnotations(true);
 ```
+
+{% hint style="danger" %}
+response.setContentType("text/xml;charset=utf-8");
+{% endhint %}
