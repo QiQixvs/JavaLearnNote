@@ -13,6 +13,8 @@
 2. 在代理类中持有被代理对象.
 3. 在代理类中调用被代理的行为。
 
+和装饰类似，但是作用完全不同。
+
 **AOP**：面向方面的编程。
 AOP的底层实现就是通过动态代理来做到的。
 
@@ -31,37 +33,64 @@ AOP的底层实现就是通过动态代理来做到的。
 2. 通过cglib来实现。
 它不要求实现接口。
 
-### 代码实现
-
 Proxy类中有一个方法
-newProxyInstance(ClassLoader loader,Class[] interfaces,InvocationHandler h);
 
-参数:
-loader:
-要求，传递的是被代理类的类加载器ClassLoader.
+```java
+newProxyInstance(ClassLoader loader,Class[] interfaces,InvocationHandler h);
+````
+
+* loader  
+
+要求: 传递的是被代理类的类加载器ClassLoader.
 
 类加载器怎样获取:
 得到其Class对象。在Class类中提供一个方法  getClassLoader();
 
-interfaces:
-要求:得到被代理对象所实现的接口的所有Class对象。
+* interfaces
+
+要求: 得到被代理对象所实现的接口的所有Class对象。
+
 怎样获取所有实现接口的Class对象?
 得到其Class对象，在Class类中提供一个方法  getInterfaces();
 它返回的是Class[],就代表所实现接口的所有Class对象。
 
-h:
-它的类型是InvocationHandler，这是一个接口。
+* h  它的类型是InvocationHandler，这是一个接口。
+
 InvocationHandler 是代理实例的调用处理程序 实现的接口。
 
-InvocationHandler接口中有一个方法invoke;
-// 参数 proxy就是代理对象
-// 参数method就是调用方法
-// 参数args就是调用的方法的参数
-// 返回值,就是真实行为执行后返回的结果，会传递给代理对象调用的方法.
-public Object invoke(Object proxy, Method method, Object[] args);
+InvocationHandler接口中有一个方法invoke,return被代理对象的真实行为。
 
-## 3. 动态代理案例1---实现编码过滤
+```java
+public class StudentProxyTest {
+    public static void main(String[] args) {
+    // 做Person接口实现类Student的动态代理。
 
+    // 1.创建一个Student 被代理
+    final Person s = new Student();
+
+    // 2.得到s的代理对象.
+    Person sproxy = (Person) Proxy.newProxyInstance(s.getClass().getClassLoader(), s.getClass().getInterfaces(),new InvocationHandler() {
+    // 参数 proxy就是代理对象
+    // 参数method就是调用方法
+    // 参数args就是调用的方法的参数
+    // 返回值,就是真实行为执行后返回的结果，会传递给代理对象调用的方法.
+        public Object invoke(Object proxy, Method method,Object[] args) throws Throwable {
+            return method.invoke(s, args); // s.say("james");
+        }
+    });
+    String message = sproxy.say("james"); // 这个是代理对象调用say方法.
+    System.out.println(message);
+    }
+}
+```
+
+![InvocationHandler接口](.gitbook/assets/2020-03-05-12-57-32.png)
+
+## 3. 案例1---实现编码过滤
+
+* EncodingFilter中
+
+```java
 final HttpServletRequest req = (HttpServletRequest) request;
 HttpServletResponse resp = (HttpServletResponse) response;
 
@@ -71,27 +100,30 @@ HttpServletRequest reqProxy = (HttpServletRequest) Proxy
 .newProxyInstance(req.getClass().getClassLoader(), req
 .getClass().getInterfaces(), new InvocationHandler() {
 
-public Object invoke(Object proxy, Method method,
-Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method,Object[] args) throws Throwable {
 
-// 1.得到方法名称
-String methodName = method.getName();
-if ("getParameter".equals(methodName)) {
-String param = req.getParameter((String) (args[0]));
+        // 1.得到方法名称
+        String methodName = method.getName();
+        if ("getParameter".equals(methodName)) {
+            String param = req.getParameter((String) (args[0]));
+        //编码操作
+        return new String(param.getBytes("iso8859-1")，"utf-8");
 
-return new String(param.getBytes("iso8859-1"),
-"utf-8");
-
-} else {
-// 不是getParameter方法，就执行其原来操作.
-return method.invoke(req, args);
-}
+        } else {
+        // 不是getParameter方法，就执行其原来操作.
+            return method.invoke(req, args);
+        }
 }
 });
 // 3.放行
 chain.doFilter(reqProxy, resp);
+```
 
-案例--动态代理+注解实现的细粒度的权限控制.
+## 4. 案例--动态代理+注解实现的细粒度的权限控制
+
+### 4.1 数据库准备
+
+```text
 create table users(
 id int primary key auto_increment,
 username varchar(40),
@@ -115,7 +147,7 @@ insert into privileges values(null,'删除图书');
 
 多对多表关系
 create table userprivilege(
-user_id int ,
+user_id  int ,
 privilege_id int,
 foreign key(user_id) references users(id),
 foreign key(privilege_id) references privileges(id),
@@ -123,41 +155,48 @@ primary key(user_id,privilege_id)
 );
 
 insert into userprivilege values(1,1);
+```
 
+### 4.2 代码实现
 
-代码实现:
-1.完成登录操作，将user存储到session中.
-login.jsp  LoginServlet  UserService  UserDao.
+#### 1.  完成登录操作，将user存储到session中
 
-2.登录成功，跳转到book.jsp页面。
-在这个页面上有四个超连接，访问的是同一个servlet（BookServlet）
+login.jsp-->LoginServlet-->UserService-->UserDao.
+
+#### 2. 登录成功，跳转到book.jsp页面
+
+在这个页面上有四个超链接，访问的是同一个servlet（BookServlet）
 
 问题:怎样让一个servlet处理多个请求？
 可以通过在请求，携带参数来判断要做什么操作.
 
+```java
 <a href="${pageContext.request.contextPath}/book?method=add">book add</a>
 <br>
 <a href="${pageContext.request.contextPath}/book?method=update">book update</a>
 <br>
 <a href="${pageContext.request.contextPath}/book?method=delete">book delete</a>
 <br>
-<a href="${pageContext.request.contextPath}/book?method=search">book search</a>	
-
+<a href="${pageContext.request.contextPath}/book?method=search">book search</a>
+```
 
 在servlet中判断method值是什么，调用不同的请求处理方法.
 
-这种方式下，在做权限控制时，如果使用url级别权限控制，就不能通过判断请求的资源路径来处理。
+这种方式下，在做权限控制时，如果使用[url级别权限控制](filter-examples.md)，就不能通过判断请求的资源路径来处理。
 
-可以使用细粒度权限控制:
-实现原理:使用注解+动态代理来完成。
+可以使用**细粒度权限控制**。
 
-注解:它用于定义当前行为的访问需要什么权限.
-动态代理帮助我们完成控制拦截。简单说，就是在代理中，会判断当前用户是否具有访问该行为的权限	
+### 4.3 细粒度实现权限控制
+
+实现原理: 使用注解+动态代理来完成。
+
+```java
+注解用于定义当前行为的访问需要什么权限.
+动态代理帮助我们完成控制拦截。简单说，就是在代理中，会判断当前用户是否具有访问该行为的权限.
 如果有，会调用被代理的行为，如果没有，不调用行为，直接抛出权限不足。
+```
 
-3.实现权限控制
-
-1.创建一个BookInfo注解，它是用于描述行为访问时，需要什么权限的.
+#### 1. 创建一个BookInfo注解，它是用于描述行为访问时，需要什么权限的
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
@@ -166,7 +205,8 @@ public @interface BookInfo {
 
 String value(); //这就是权限名称
 }
-2.在BookServiceFactory中进行权限控制
+
+#### 2. 在BookServiceFactory中进行权限控制
 
 1.得到当前行为访问需要的权限名称
 BookInfo bif = method.getAnnotation(BookInfo.class);
@@ -190,6 +230,3 @@ AND
 privileges.id=userprivilege.privilege_id 
 AND 
 users.id=?";
-
-
-
