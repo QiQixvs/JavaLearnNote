@@ -145,7 +145,7 @@ insert into privileges values(null,'修改图书');
 insert into privileges values(null,'查看图书');
 insert into privileges values(null,'删除图书');
 
-多对多表关系
+// 多对多表关系
 create table userprivilege(
 user_id  int ,
 privilege_id int,
@@ -161,7 +161,7 @@ insert into userprivilege values(1,1);
 
 #### 1.  完成登录操作，将user存储到session中
 
-login.jsp-->LoginServlet-->UserService-->UserDao.
+login.jsp --> LoginServlet --> UserService --> UserDao.
 
 #### 2. 登录成功，跳转到book.jsp页面
 
@@ -196,37 +196,94 @@ login.jsp-->LoginServlet-->UserService-->UserDao.
 如果有，会调用被代理的行为，如果没有，不调用行为，直接抛出权限不足。
 ```
 
+![注解+动态代理实现细粒度权限控制](.gitbook/assets/2020-03-06-11-03-23.png)
+
 #### 1. 创建一个BookInfo注解，它是用于描述行为访问时，需要什么权限的
 
+```java
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Inherited
 public @interface BookInfo {
 
-String value(); //这就是权限名称
+  String value(); //这就是权限名称
 }
+```
+
+在被代理类所实现的接口上使用注释
+
+```java
+public interface BookService {
+
+    @BookInfo("添加图书")
+    public void addBook(User user) throws Exception;
+    ...
+}
+
+```
 
 #### 2. 在BookServiceFactory中进行权限控制
 
-1.得到当前行为访问需要的权限名称
+在这个类中生成的是代理类的实例对象。
+
+```java
+public class BookServiceFactory {
+
+    private static BookService service = new BookServiceImpl();
+
+    public static BookService getInstance() {
+
+        BookService proxy =...
+        return proxy;
+    }
+}
+```
+
+* 得到当前行为访问需要的权限名称
+
+```java
 BookInfo bif = method.getAnnotation(BookInfo.class);
 String pname = bif.value();
+```
 
-2.得到当前登录的用户
+* 得到当前登录的用户
+
 我们在所有的service的方法上添加了一个User参数。
 那么我们获取时，就可以直接通过invoke方法的args参数获取.
+
+```java
 User user = (User) args[0];
+```
 
-1.首先判断用户是否存在，也就是判断它是否登录了。
+首先判断用户是否存在，也就是判断它是否登录了。if(user == null){}
 
-2.如果登录了，根据用户查询数据库，得到这个用户所具有的所有权限名称
+如果登录了，根据用户查询数据库，得到这个用户所具有的所有权限名称
+
+```java
+//sql语句
 SELECT 
-privileges.name 
-FROM 
-users,PRIVILEGES,userprivilege 
+privileges.name
+FROM
+users,PRIVILEGES,userprivilege
 WHERE 
-users.id=userprivilege.user_id 
-AND 
-privileges.id=userprivilege.privilege_id 
-AND 
+users.id=userprivilege.user_id
+AND
+privileges.id=userprivilege.privilege_id
+AND
 users.id=?";
+```
+
+#### 3. 判断用户是否有相应权限
+
+```java
+//查数据库得到用户拥有的权限集合
+List<Object> pnames = runner.query(sql,new ColumnListHandler(), user.getId());
+
+if (pnames.contains(method.getAnnotation(BookInfo.class).value())) {//判断权限
+    //真实行为
+    Object obj = method.invoke(service, args);
+    return obj;
+} else {
+    throw new RuntimeException("权限不足");
+}
+```
