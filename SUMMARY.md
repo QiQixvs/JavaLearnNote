@@ -16,4 +16,5 @@
 * [注解](annotation.md)
 * [Servlet](Servlet3.0.md)
 * [动态代理](dynamic-proxy.md)
+* [类加载器](classloader.md)
 * [IDEA踩坑记录](idea.md)
