@@ -426,3 +426,4 @@ public Map getParameterMap() {
 }
 ```
 
+如果是post请求，只需要request.setCharacterEncoding("utf-8")，也不需要flag;但是get方式的处理方式都适用。
