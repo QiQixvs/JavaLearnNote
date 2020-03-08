@@ -67,7 +67,7 @@ create table roleprivilege(
    privilege_id int not null,
    foreign key(role_id) references roles(id),
    foreign key(privilege_id) references privileges(id),
-   primary key(role_id,privilege_id)
+   primary key(role_id,privilege_id)//联合主键
 );
 
 create table userrole(
@@ -79,6 +79,10 @@ create table userrole(
 );
 ```
 
+{% hint style="info" %}
+联合主键，都相同才算重复。
+{% endhint %}
+
 ### 3.2 web工程环境搭建
 
 建立工程包结构
@@ -87,25 +91,25 @@ create table userrole(
 
 实体类 --- 每个表对应一个实体类
 
-### 3.3 系统功能实现
+## 4. 系统功能实现
 
-#### 实现系统功能  ----- 权限管理
+### 实现系统功能  ----- 权限管理
 
 1) 权限添加 --- insert 操作
 2) 权限查看 --- select 操作
 
-#### 实现系统功能 ---- 角色管理
+### 实现系统功能 ---- 角色管理
 
 1) 角色添加 ---- insert操作
 2) 角色查看 ---- select操作
 
-#### 实现系统功能 --- 用户管理
+### 实现系统功能 --- 用户管理
 
 1) 创建用户 ---- insert 操作
 2) 查看用户 ---- select操作
 alter table users modify password varchar(40) not null;
 
-#### 实现系统功能 --- 将权限授予角色、将角色授予用户
+### 实现系统功能 --- 将权限授予角色、将角色授予用户
 
 在角色权限表 和 用户角色表中，设置联合主键，目的防止对用户和角色 重复授权
 
@@ -118,7 +122,7 @@ alter table users modify password varchar(40) not null;
 查询用户角色时，同时查询出角色名称
 select * from userrole,roles where userrole.role_id = roles.id and userrole.user_id = ?; 
 
-#### 实现系统功能 --- 用户登录，为用户添加权限控制
+### 实现系统功能 --- 用户登录，为用户添加权限控制
 
 1) 用户登录
 在登陆后，用户信息保存Session中，通过Session中用户信息，控制菜单的显示 
