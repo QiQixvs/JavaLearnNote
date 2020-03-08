@@ -51,6 +51,7 @@ response.setHeader("refresh","3;url=http://www.estore.com");
 <meta http-equiv="refresh" content="3;url=http://www.estore.com"/>
 </head>
 ```
+
 写法一：
 
 ```java
@@ -85,10 +86,72 @@ response.setHeader("refresh","3;url=http://www.estore.com");
     }
     document.getElementById("timeid").innerHTML=(time-1);
 }
-</script> 
+</script>
 ```
 
 ### 全局编码过滤
 
 * [Filter案例](filter-examples.md)
 
+### Exception自定义异常
+
+#### 1. 继承Exception
+
+```java
+public class RegistException extends Exception{}
+...
+```
+
+```java
+//在service中抛出自定义异常
+}catch(SQLException e){
+    throw new RegistException("注册失败")
+}...
+```
+
+```java
+//在servlet中catch自定义异常，获得异常信息。
+}catch(RegistException){
+    request.setAttribute("regist.msg",e.getMessage());
+    ...
+}
+```
+
+#### 2. 继承RuntimeException
+
+```java
+public class RegistException extends RuntimeException{}
+```
+
+在web.xml文件中配置全局异常处理，指向自定义错误页面。
+
+```java
+<error-page>
+    <exception-type>cn.itcast.estore.exception.RegistException</exception-type>
+    <location>/error/registerror.jsp</location>
+</error-page>
+```
+
+### 一次性验证码
+
+在所有操作前，通过requst获取请求中的验证码，与session中存储的验证码进行对比。
+从session中获取完成后，马上删除。
+
+```java
+request.getSession().setAttribute("checkcode_session", word);
+```
+
+```java
+String checkCode = request.getParameter("checkcode");
+
+String _checkCode = (String) request.getSession().getAttribute(
+    "checkcode_session");
+request.getSession().removeAttribute("checkcode_session");//从session中删除。
+
+if (!checkCode.equals(_checkCode)) {
+    request.setAttribute("regist.message", "验证码不正确");
+    request.getRequestDispatcher("/regist.jsp").forward(request,
+        response);
+    return;
+}
+```
