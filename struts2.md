@@ -70,7 +70,7 @@ xwork-core struts2底层使用了xwork,xwork的源代码
 </filter-mapping>
 ```
 
-#### 2. 创建一个struts.xml配置文件 ,这个是struts2框架配置文件。
+#### 2. 创建一个struts.xml配置文件 ,这个是struts2框架配置文件
 
 目的:是为了struts2框架流程可以执行。
 
@@ -100,183 +100,197 @@ public String say(){
 
 ### 2.6 在index.jsp中添加连接，测试
 
-```java
+```markdown
 <a href="${pageContext.request.contextPath}/hello">第一次使用struts2</a>
 ```
 
-在地址栏中输入:http://localhost/struts2_day01/index.jsp  访问连接，就可以看到
-HelloAction类中的say方法执行了，也跳转到了hello.jsp.
+访问连接，就可以看到HelloAction类中的say方法执行了，也跳转到了hello.jsp.
 
-## 3. 对入门程序进行流程分析
+### 2.7. 对入门程序进行流程分析
 
-1.创建一个Filter----StrutsFilter
-2.在web.xml文件中配置StrutsFilter
-<filter>
-<filter-name>struts</filter-name>
-<filter-class>cn.itcast.filter.StrutsFilter</filter-class>
-</filter>
+![流程分析](.gitbook/assets/2020-03-09-19-51-54.png)
 
-<filter-mapping>
-<filter-name>struts</filter-name>
-<url-pattern>/*</url-pattern>
-</filter-mapping>
-3.在StrutsFilter中完成拦截操作，并访问Action中的方法，跳转到hello.jsp页面操作.
+### 2.8. 自建Filter模仿struts2的流程
 
-// 2.1 得到请求资源路径
+1. 创建一个Filter----StrutsFilter
+2. 在web.xml文件中配置StrutsFilter
+3. 在StrutsFilter中完成拦截操作，并访问Action中的方法，跳转到hello.jsp页面操作.
+
+```JAVA
+// 1. 得到请求资源路径
 String uri = request.getRequestURI();
 String contextPath = request.getContextPath();
 String path = uri.substring(contextPath.length() + 1);
 
-// System.out.println(path); // hello
+// System.out.println(path); // path = hello
 
-// 2.2 使用path去struts.xml文件中查找某一个<action name=path>这个标签
+// 2. 使用path去struts.xml文件中查找某一个<action name=path>这个标签
 SAXReader reader = new SAXReader();
-// 得到struts.xml文件的document对象。
-Document document = reader.read(new File(this.getClass()
-.getResource("/struts.xml").getPath()));
-
-Element actionElement = (Element) document
-.selectSingleNode("//action[@name='" + path + "']"); // 查找<action
-    // name='hello'>这样的标签
+Document document = reader.read(new File(this.getClass().getResource("/struts.xml").getPath()));
+Element actionElement = (Element) document.selectSingleNode("//action[@name='" + path + "']");
+// xpath 查找<action name='hello'>这样的标签
 
 if (actionElement != null) {
-// 得到<action>标签上的class属性以及method属性
-String className = actionElement.attributeValue("class"); // 得到了action类的名称
-String methodName = actionElement.attributeValue("method");// 得到action类中的方法名称。
+    // 得到<action>标签上的class属性以及method属性
+    String className = actionElement.attributeValue("class"); // 得到了action类的名称
+    String methodName = actionElement.attributeValue("method");// 得到action类中的方法名称。
 
-// 2.3通过反射，得到Class对象，得到Method对象
-Class actionClass = Class.forName(className);
-Method method = actionClass.getDeclaredMethod(methodName);
+    //3. 通过反射，得到Class对象，得到Method对象
+    Class actionClass = Class.forName(className);
+    Method method = actionClass.getDeclaredMethod(methodName);
 
-// 2.4 让method执行.
-String returnValue = (String) method.invoke(actionClass
-.newInstance()); // 是让action类中的方法执行，并获取方法的返回值。
+    //4. 让method执行.
+    String returnValue = (String) method.invoke(actionClass.newInstance());
+    //是让action类中的方法执行，并获取方法的返回值。
 
-// 2.5
-// 使用returnValue去action下查找其子元素result的name属性值，与returnValue做对比。
-Element resultElement = actionElement.element("result");
-String nameValue = resultElement.attributeValue("name");
+    // 5.使用returnValue去action下查找其子元素result的name属性值，与returnValue做对比。
+    Element resultElement = actionElement.element("result");
+    String nameValue = resultElement.attributeValue("name");
 
-if (returnValue.equals(nameValue)) {
-// 2.6得到了要跳转的路径。
-String skipPath = resultElement.getText();
-
-// System.out.println(skipPath);
-
-request.getRequestDispatcher(skipPath).forward(request,
-response);
-return;
+    if (returnValue.equals(nameValue)) {
+        // 6. 得到了要跳转的路径。
+        String skipPath = resultElement.getText();
+        request.getRequestDispatcher(skipPath).forward(request,response);
+        return;
+    }
 }
-}
+```
 
-## struts2的流程分析以及工具配置
+## 3. struts2的流程分析以及工具配置
 
-1.流程分析
-请求 ---- StrutsPrepareAndExecuteFilter 核心控制器 ----- Interceptors 拦截器（实现代码功能 ） ----- Action 的execute --- 结果页面 Result 
+### 3.1 运行流程分析
+
+请求 ----> StrutsPrepareAndExecuteFilter 核心控制器 -----> Interceptors 拦截器（实现代码功能 ）
+ -----> Action 的execute ---> 结果页面 Result
+
+![运行流程](.gitbook/assets/2020-03-09-20-30-19.png)
+
 * 拦截器 在 struts-default.xml定义
-* 执行拦截器 是 defaultStack 中引用拦截器 
+* 执行拦截器 是 defaultStack 中引用拦截器
 
----- 通过源代码级别断点调试，证明拦截器是执行 
+### 3.2 关于手动配置struts.xml文件中提示操作
 
+struts.xml提示来自于DTD约束
 
-2.关于手动配置struts.xml文件中提示操作
-
-如果安装Aptana编辑器 ，请不要用Aptana自带xml编辑器 编写struts2配置文件 
-struts.xml提示来自于 DTD约束， 
+```markdown
 <!DOCTYPE struts PUBLIC
 "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
 "http://struts.apache.org/dtds/struts-2.3.dtd">
-如果可以上网，自动缓存dtd，提供提示功能
-如果不能上网，也可以配置本地DTD提示 
+```
 
-*** 导入DTD时，应该和配置DTD版本一致 
+### 3.3 关联struts2源文件
 
-3.关联struts2源文件
 如果是com.opensymphony.xxx   在xwork-core下
 如果是org.apache.struts2     在core下
+idea用maven下载
 
+### 3.4 使用插件 struts2-config-browser-plugin-2.3.15.1
 
-4.使用插件  struts2-config-browser-plugin-2.3.15.1
-提供在浏览器中查看 struts2 配置加载情况 
+提供在浏览器中查看 struts2 配置加载情况
 
-将解压struts2/lib/struts2-config-browser-plugin-2.3.7.jar 复制WEB-INF/lib下 
+将struts2/lib/struts2-config-browser-plugin-2.3.7.jar 复制WEB-INF/lib下
 
-访问 http://localhost/struts2_day01/config-browser/index.action 查看 struts2配置加载情况
+访问 <http://localhost/struts2_day01/config-browser/index.action> 查看 struts2配置加载情况
 
-struts2配置(重点)
-1.struts2配置文件加载顺序
+## 4. struts2配置(重点)
+
+### 4.1 struts2配置文件加载顺序
+
 struts2框架要能执行，必须先加载StrutsPrepareAndExecuteFilter.
 
-在StrutsPrepareAndExecuteFilter的init方法中对Dispatcher进行了初始化.
+在StrutsPrepareAndExecuteFilter的init方法中对Dispatcher进行了初始化，
 在Dispatcher类中定义的init方法内就描述了struts2配置文件加载的顺序
 
-init_DefaultProperties(); // [1]   ----------  org/apache/struts2/default.properties 
+```java
+init_DefaultProperties(); // [1]   ----------  org/apache/struts2/default.properties
 init_TraditionalXmlConfigurations(); // [2]  --- struts-default.xml,struts-plugin.xml,struts.xml
-init_LegacyStrutsProperties(); // [3] --- 自定义struts.properties 
+init_LegacyStrutsProperties(); // [3] --- 自定义struts.properties
 init_CustomConfigurationProviders(); // [5]  ----- 自定义配置提供
-init_FilterInitParameters() ; // [6] ----- web.xml 
-init_AliasStandardObjects() ; // [7] ---- Bean加载 
+init_FilterInitParameters() ; // [6] ----- web.xml
+init_AliasStandardObjects() ; // [7] ---- Bean加载
+```
 
-1.default.properties文件
-作用:定义了struts2框架中所有常量
-位置: org/apache/struts2/default.properties 
+* default.properties文件
 
-2.struts-default.xml
+作用:定义了struts2框架中所有**常量**
+位置: org/apache/struts2/default.properties
+
+* struts-default.xml
+
 作用:配置了bean,interceptor,result等。
 位置:在struts的core核心jar包.
 
-struts-plugin.xml
+* struts-plugin.xml
+
 它是struts2框架中所使用的插件的配置文件。
-struts.xml			  
+
+* struts.xml
+
 我们使struts2所使用的配置文件。
 
-3.自定义的struts.properties
+* *自定义的struts.properties
+
 就是可以自定义常量。
 
-4.web.xml
+* web.xml
 
+{% hint style="info" %}
 在开发中，后加载文件中的配置会将先加载文件中的配置覆盖。
+{% endhint %}
 
+```MARKDOWN
+记住顺序：
 default.properties
 struts-default.xml
 struts.xml
+```
 
------------------------------------------------------------------------			
-2.关于Action的配置
+### 4.2 关于Action的配置
 
-1.<package>  作用:是用于声明一个包。用于管理action。
-1.name     它用于声明一个包名，包名不能重复，也就是它是唯一的。 
-2.namespace  它与action标签的name属性合并确定了一个唯一访问action的路径。
-3.extends  它代表继承的包名。
-4.abstrace 它可以取值为true/false,如果为true,代表这个包是用于被继承的。
-2<action>  用于声明 一个action
-1.name  就是action的一个名称，它是唯一的(在同包内) 它与package中的namespace确定了访问action的路径。
-2.class Action类的全名
-3.method 要访问的Action类中的方法的名称,方法无参数 ，返回值为String.
-3.<result> 用于确定返回结果类型
-1.name  它与action中的方法返回值做对比，确定跳转路径。
+#### 1. &lt;package&gt; 声明一个包, 用于管理action
 
-关于action配置其它细节：
-1.关于默认值问题
+1. name     它用于声明一个包名，包名不能重复，也就是它是唯一的。
+2. namespace  它与action标签的name属性合并确定了一个唯一访问action的路径。
+3. extends  它代表继承的包名。
+4. abstrace 它可以取值为true/false,如果为true,代表这个包是用于被继承的。
+
+#### 2. &lt;action&gt; 声明 一个action
+
+1. name  就是action的一个名称，它是唯一的(在同包内) 它与package中的namespace确定了访问action的路径。
+2. class Action类的全名
+3. method 要访问的Action类中的方法的名称,方法无参数 ，返回值为String.
+
+#### 3. &lt;result&gt; 确定返回结果类型
+
+1. name  它与action中的方法返回值做对比，确定跳转路径。
+
+#### 关于action配置其它细节
+
+##### 1. 关于默认值问题
+
+```markdown
 <package namespace="默认值"> namespace的默认值是""
-<action class="默认值"  method="默认值">
-class的默认值是  com.opensymphony.xwork2.ActionSupport
+    <action class="默认值"  method="默认值">
+    class的默认值是  com.opensymphony.xwork2.ActionSupport
+    method的默认值是  execute
+        <result name="默认值"> name的默认值是 "success"
+```
 
-method的默认值是  execute
-<result\d	X name="默认值"> name的默认值是 "success"  		
+##### 2. 关于访问action的路径问题
 
-2.关于访问action的路径问题	
 现在的action的配置是:
+
+```markdown
 <package name="default" namespace="/" extends="struts-default">
-<action name="hello" class="cn.itcast.action.DefaultAction">
-<result>/hello.jsp</result>
-</action>
+    <action name="hello" class="cn.itcast.action.DefaultAction">
+        <result>/hello.jsp</result>
+    </action>
 </package>
+```
 
-当我们输入:
-http://localhost/struts2_day01_2/a/b/c/hello
-也访问到了action。
+当我们输入:<http://localhost/struts2_day01_2/a/b/c/hello>也访问到了action。
 
+```markdown
 原因:struts2中的action被访问时，它会首先查找
 1.namespace="/a/b/c"  action的name=hello  没有.
 2.namespace="/a/b     action的name=hello  没有
@@ -284,8 +298,10 @@ http://localhost/struts2_day01_2/a/b/c/hello
 4.namespace="/"        action的name=hello  查找到了.
 
 如果最后也查找不到，会报404错误.
+```
 
-3.默认的action。
+##### 3. 默认的action
+
 作用:处理其它action处理不了的路径。
 
 <default-action-ref name="action的名称" />
@@ -297,7 +313,7 @@ http://localhost/struts2_day01_2/a/b/c/hello
 <default-class-ref class="cn.itcast.action.DefaultAction"/>
 如果设置了，那么在当前包下，默认处理action请的的处理类就为class指定的类。
 
-----------------------------------------------------------------------------------------
+
 关于常量配置
 default.properties 它声明了struts中的常量。
 
@@ -324,13 +340,13 @@ false不缓存，true浏览器会缓存静态内容，产品环境设置true、�
 
 <constant name="struts.devMode" value="true" />  
 提供详细报错页面，修改struts.xml后不需要重启服务器 （要求）
-----------------------------------------------------------------------------------
+
 struts.xml文件的分离:
 
 目的:就是为了阅读方便。可以让一个模块一个配置文件，在struts.xml文件中通过
 <include file="test.xml"/>导入其它的配置文件。
 
-======================================================================================================		
+
 Action
 
 1.关于Action类的创建方式介绍:
@@ -410,8 +426,8 @@ product.jsp
 注意：struts2框架支持动态方法调用，是因为在default.properties配置文件中设置了
 动态方法调用为true.
 
-struts.enable.DynamicMethodInvocation = true	
-====================================================================================================				
+struts.enable.DynamicMethodInvocation = true
+
 在struts2框架中获取servlet api
 
 对于struts2框架，不建议直接使用servlet api;
@@ -457,7 +473,7 @@ HttpServletRequest request = (HttpServletRequest) context.get(HTTP_REQUEST); //�
 getRequest();
 getResposne();
 getPageContext();
--------------------------------------------------------------------------------
+
 Result结果类型
 
 <result>标签
@@ -491,7 +507,7 @@ stream:代表的是服务器端返回的是一个流，一般用于下载。
 
 了解: freemarker  velocity
 
-----------------------------------------------------
+
 局部结果页面与全局结果页面
 局部结果页面 和 全局结果页面 
 <action name="result" class="cn.itcast.struts2.demo6.ResultAction">
@@ -503,8 +519,3 @@ stream:代表的是服务器端返回的是一个流，一般用于下载。
 <!-- 全局结果 当前包中 所有Action都可以用-->
 <result name="success">/demo6/result.jsp</result>
 </global-results>
-
-
-
-
-
