@@ -15,3 +15,23 @@ String contextPath = request.getSession().getServletContext().getRealPath();
 ```
 
 war exploded模式最终没有部署在Tomcat的位置，而是项目本身所在位置的指定目录下。
+
+## Struts2 struts.xml extends="struts-default"报错
+
+```markdown
+<struts>
+    <package name="default" namespace="/" extends="struts-default">
+        <action name="hello" class="test.HelloAction" method="say">
+            <result name="good">/hello.jsp</result>
+        </action>
+    </package>
+</struts>
+```
+
+错误原因：新建项目后手动新建lib目录导致struts-default引用错误
+
+解决方法：
+
+File --> Project Structure --> Facets --> Struts2
+
+![struts-default](.gitbook/assets/2020-03-09-15-34-09.png)
