@@ -12,29 +12,27 @@ AJAX = 异步 JavaScript和XML（标准通用标记语言的子集）
 
 ### 异步
 
-![AJAX交互模型](.gitbook/assets/2020-03-02-22-54-19.png)
+![AJAX&#x4EA4;&#x4E92;&#x6A21;&#x578B;](../.gitbook/assets/2020-03-02-22-54-19.png)
 
-![同步](.gitbook/assets/2020-03-02-22-58-34.png)
+![&#x540C;&#x6B65;](../.gitbook/assets/2020-03-02-22-58-34.png)
 
-同步交互模式，客户端提交请求，等待，在响应回到客户端前，客户端无法进行其他操作
-![异步](.gitbook/assets/2020-03-02-23-02-12.png)
+同步交互模式，客户端提交请求，等待，在响应回到客户端前，客户端无法进行其他操作 ![&#x5F02;&#x6B65;](../.gitbook/assets/2020-03-02-23-02-12.png)
 
 异步交互模型，客户端将请求提交给Ajax引擎，客户端可以继续操作，由Ajax引擎来完成与服务武器端通信
 
 * 传统web交互模型，浏览器直接将请求发送给服务器，服务器回送响应，直接发给浏览器。
-
 * Ajax交互模型，浏览器首先将请求发送Ajax引擎（XMLHttpRequest为核心），AJax引擎再将请求发送给服务器，服务器回送响应先发给Ajax引擎，再由引擎传给浏览器显示 。
 
 ## ajax开发步骤
 
 ajax核心就是**XMLHttpRequest**对象.
 
-查xmldom文档--> dom --> XMLHttpRequest对象
+查xmldom文档--&gt; dom --&gt; XMLHttpRequest对象
 
-1. 得到XMLHttpRequest对象.(js对象)
+1. 得到XMLHttpRequest对象.\(js对象\)
 2. 注册回调函数onreadystatechange
-3. open--->只是用于设置请求方式 以及url,它不发送请求.
-4. send--->它是用于发送请求的。send(null);null代表没有参数。如果有参数可以写成:"username=tom&password=123"
+3. open---&gt;只是用于设置请求方式 以及url,它不发送请求.
+4. send---&gt;它是用于发送请求的。send\(null\);null代表没有参数。如果有参数可以写成:"username=tom&password=123"
 5. 在回调函数中处理数据
 
 ### 代码实现
@@ -78,13 +76,13 @@ if(xmlhttp.readyState==4 && xmlhttp.status==200){
 
 它代表的是XMLHttpRequest对象的状态。
 
-| 状态 | 名称| 描述 |
-| :-----| :-----| :----- |
+| 状态 | 名称 | 描述 |
+| :--- | :--- | :--- |
 | 0 | Uninitialized | 代表XMLHttpRequest对象创建 |
-| 1 | Open | open()已调用，但send()未调用。请求还没有被发送 |
-| 2 | Sent | send操作，请求已发送到web服务器，为接收到响应|
+| 1 | Open | open\(\)已调用，但send\(\)未调用。请求还没有被发送 |
+| 2 | Sent | send操作，请求已发送到web服务器，为接收到响应 |
 | 3 | Receiving | 接收到了响应数据，但是只有响应头，正文还没有接收 |
-| 4 | Loaded | 所有http响应接收完成。|
+| 4 | Loaded | 所有http响应接收完成。 |
 
 #### status
 
@@ -99,8 +97,7 @@ if(xmlhttp.readyState==4 && xmlhttp.status==200){
 
 ## ajax操作中请求参数的设置问题
 
-语法
-open(method,url,async(true异步可以省略),username,password)；
+语法 open\(method,url,async\(true异步可以省略\),username,password\)；
 
 ```java
 xmlhttp.open("GET","http://localhost/day23_3/ajax1");
@@ -121,7 +118,7 @@ xmlhttp.open("GET","${paegContext.request.contentPath}/day23_3/ajax1");
 
 ### post请求方式参数设置
 
-注意: 如果是post请求方式，还需要设置一个**http请求头**。xmlhttp.setRequestHeader("","");
+注意: 如果是post请求方式，还需要设置一个**http请求头**。xmlhttp.setRequestHeader\("",""\);
 
 例如:
 
@@ -141,7 +138,7 @@ xmlhttp.send("name=tom");
 
 * 抽取创建XMLHttpRequest对象的部分到js
 
-function getXmlHttpRequest(){}
+function getXmlHttpRequest\(\){}
 
 * 引入js文件
 
@@ -176,8 +173,7 @@ function checkName(txt) {
 
 #### 第一个版本
 
-* 创建一个Product类 --> int id; String name; double price;
-
+* 创建一个Product类 --&gt; int id; String name; double price;
 * 创建ajax.jsp
 
 ```java
@@ -218,9 +214,9 @@ out.close();
 
 #### 第二个版本
 
-创建一个product.jsp页面，在页面上去组装table, 其本质还是Out.write(),直接将数据返回到ajax.jsp中div位置了。
+创建一个product.jsp页面，在页面上去组装table, 其本质还是Out.write\(\),直接将数据返回到ajax.jsp中div位置了。
 
-![由product.jsp返回response](.gitbook/assets/2020-03-03-17-09-39.png)
+![&#x7531;product.jsp&#x8FD4;&#x56DE;response](../.gitbook/assets/2020-03-03-17-09-39.png)
 
 * 在AjaxServlet中
 
@@ -260,11 +256,11 @@ request.getRequestDispatcher("/product.jsp").forward(request, response);
 
 **json**:它是一种轻量级的数据交换格式。
 
-[{'id':'1','name':'洗衣机','price':'1800'},{'id':'2','name':'电视机','price':'3800'}]
+\[{'id':'1','name':'洗衣机','price':'1800'},{'id':'2','name':'电视机','price':'3800'}\]
 
 在js中{name:value,name1:valu1}这就是一个js对象.
 
-[{},{}]这代表有两个对象装入到了一个数组中。
+\[{},{}\]这代表有两个对象装入到了一个数组中。
 
 ```java
   //将服务器返回的字符串数据变成js对象
@@ -285,7 +281,7 @@ request.getRequestDispatcher("/product.jsp").forward(request, response);
 
 在java中，可以通过**jsonlib**插件，在java对象与json之间做转换。
 
-1. 导包(6个包)
+1. 导包\(6个包\)
 2. 将java对象转换成json
 
 ```text
@@ -313,11 +309,10 @@ JSONObject.fromObject(javaBean对象);
 
 对于json数据，它只有两种格式
 
-1. [值1,值2,...]  ------> 这就是javascript中的数组
-2. {name:value,....} ----> 就是javascript中的对象。
+1. \[值1,值2,...\]  ------&gt; 这就是javascript中的数组
+2. {name:value,....} ----&gt; 就是javascript中的对象。
 
-但是这两种格式可以嵌套。
-如：[{},{},{}]或者{name:[],name:[]}
+但是这两种格式可以嵌套。 如：\[{},{},{}\]或者{name:\[\],name:\[\]}
 
 ```java
 List<Product> ps = new ArrayList<Product>();
@@ -346,7 +341,7 @@ JSONArray.fromObject(ps, config).toString();
 
 ## ajax操作中服务器端返回xml处理
 
-**XMHttpRequest.responseXML**;----->得到的是一个Document对象.
+**XMHttpRequest.responseXML**;-----&gt;得到的是一个Document对象.
 
 操作：可以自己将xml文件中的内容取出来，写回到浏览器端。也可以请求转发到一个xml文件，将这个文件信息写回到浏览器端.
 
@@ -358,9 +353,9 @@ JSONArray.fromObject(ps, config).toString();
 
 * 导包
 
-如果实现 对象 --- xml  只需要 xstream-1.3.1.jar
+如果实现 对象 --- xml 只需要 xstream-1.3.1.jar
 
-如果实现 xml ---- 对象 需要 xstream-1.3.1.jar 、xpp3_min-1.1.4c.jar
+如果实现 xml ---- 对象 需要 xstream-1.3.1.jar 、xpp3\_min-1.1.4c.jar
 
 * 核心方法
 
@@ -377,7 +372,8 @@ fromXML(inputStream/xml片段)  将xml信息解析对象
 ```java
 XStream xs=new XStream();
 String xml=xs.toXML(java对象);
-````
+`
+```
 
 问题: 生成的xml中的名称是类的全名.
 
@@ -385,9 +381,9 @@ String xml=xs.toXML(java对象);
 
 * 编码实现
 
-xs.alias("person", Person.class);
+xs.alias\("person", Person.class\);
 
-* 使用注解(Annotation)
+* 使用注解\(Annotation\)
 
 ```java
 @XStreamAlias(别名) 对类和变量设置别名
@@ -411,7 +407,6 @@ public class City {
     this.name = name;
   }
 }
-
 ```
 
 使注解生效
@@ -421,5 +416,6 @@ xs.autodetectAnnotations(true);
 ```
 
 {% hint style="danger" %}
-response.setContentType("text/xml;charset=utf-8");
+response.setContentType\("text/xml;charset=utf-8"\);
 {% endhint %}
+

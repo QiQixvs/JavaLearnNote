@@ -18,11 +18,11 @@
 **在javaweb中servlet规范中定义了三种技术 servlet、Listener 、Filter**
 
 {% hint style="info" %}
-servlet有初始化参数 
+servlet有初始化参数
 
 Filter有初始化参数
 
- Listener没有初始化参数,要使用，在开发中一般使用servletContext的初始化参数对应的监听器接口
+Listener没有初始化参数,要使用，在开发中一般使用servletContext的初始化参数对应的监听器接口
 {% endhint %}
 
 #### 1.监听创建与销毁
@@ -147,8 +147,7 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 
 问题:在监听器中是否可以得到属性值?
 
-![](.gitbook/assets/image2.png)
-![](.gitbook/assets/image3.png)
+![](../.gitbook/assets/image2.png) ![](../.gitbook/assets/image3.png)
 
 {% hint style="success" %}
 在java的监听机制中，是可以在监听器中获取事件源的我们在开发中，如果有到了事件触发机制，那么一般情况下，都可以使用方法的参数\(事件对象\)来获取想要的信息.

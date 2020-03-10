@@ -2,13 +2,13 @@
 
 ## 1. 概念
 
-类加载器的作用就是将java中的字节码文件(.class文件)转换成java.lang.Class对象。
+类加载器的作用就是将java中的字节码文件\(.class文件\)转换成java.lang.Class对象。
 
 当 JVM 启动时，会形成由三个类加载器组成的初始类加载器层次结构：
 
 1. 引导类加载器 **BootStrap classloader**    jre/lib/rt.jar
-2. 扩展类加载器  **ExtClassLoader**   JRE/lib/ext/*.jar
-3. 应用类加载器(系统类加载器) **AppClassLoader SystemClassLoader**   CLASSPATH指定的所有jar或目录
+2. 扩展类加载器  **ExtClassLoader**   JRE/lib/ext/\*.jar
+3. 应用类加载器\(系统类加载器\) **AppClassLoader SystemClassLoader**   CLASSPATH指定的所有jar或目录
 
 在java中 ClassLoader 代表类加载器，所有的类加载器都是 ClassLoader 的子类.
 
@@ -16,7 +16,7 @@
 
 问题:类加载器如果获取?
 
-在Class类中有一个方法 getClassLoader()它返回的就是一个类加载器.
+在Class类中有一个方法 getClassLoader\(\)它返回的就是一个类加载器.
 
 ### 2.1 获取引导类加载器
 
@@ -46,15 +46,12 @@ System.out.println(cl); //sun.misc.Launcher$AppClassLoader@164dbd5
 ## 3. 全盘负责委托机制
 
 * **全盘负责**：即是当一个classloader加载一个Class的时候，这个Class所依赖的和引用的其它Class通常也由这个classloader负责载入。
-
 * **委托机制**：先让parent（父）类加载器 寻找，只有在parent找不到的时候才从自己的类路径中去寻找。
-
 * 类加载还采用了cache机制：如果 cache中保存了这个Class就直接返回它，如果没有才从文件中读取和转换成Class，并存入cache，这就是为什么修改了Class但是必须重新启动JVM才能生效,并且类只加载一次的原因。
 
 ## 4. 自定义类加载器
 
-问题：创建了一个类  javax.activation.MimeType，在这个类中有一个方法show();
-当jvm加载这个类时，因为在rt.jar包下也存在一个MimeType类，并且包名都一样，这时jvm就会使用引导类加载器加载这个类，而我们想得到的其实是应该由应用类加载器加载的Class。
+问题：创建了一个类 javax.activation.MimeType，在这个类中有一个方法show\(\); 当jvm加载这个类时，因为在rt.jar包下也存在一个MimeType类，并且包名都一样，这时jvm就会使用引导类加载器加载这个类，而我们想得到的其实是应该由应用类加载器加载的Class。
 
 解决方案:
 
@@ -115,3 +112,4 @@ Class clazz = mcl.findClass("javax.activation.MimeType");
 
 clazz.getDeclaredMethod("show").invoke(clazz.newInstance());
 ```
+

@@ -18,8 +18,7 @@ jdk中自带三个注解:
 是给编译器使用，用于描述当前的方法是一个重写的方法。
 
 {% hint style="info" %}
-jdk1.5中@Override它只能描述继承中的重写.
-jdk1.6中@Override它不仅能描述继承中的重写，还可以描述实现中的重写.
+jdk1.5中@Override它只能描述继承中的重写. jdk1.6中@Override它不仅能描述继承中的重写，还可以描述实现中的重写.
 {% endhint %}
 
 ### 1.2 @Deprecated
@@ -35,11 +34,11 @@ jdk1.6中@Override它不仅能描述继承中的重写，还可以描述实现�
 
 去除程序中的警告信息
 
-例：@SuppressWarning("all")
+例：@SuppressWarning\("all"\)
 
 * unused 变量未使用
 * deprecation 使用了不赞成使用的类或方法时的警告
-* unchecked 执行了未检查的转换时的警告，例如当使用集合时没有用泛型 (Generics) 来指定集合保存的类型。
+* unchecked 执行了未检查的转换时的警告，例如当使用集合时没有用泛型 \(Generics\) 来指定集合保存的类型。
 * fallthrough 当 Switch 程序块直接通往下一种情况而没有 Break 时的警告。
 * path 在类路径、源文件路径等中有不存在的路径时的警告。
 * serial 当在可序列化的类上缺少 serialVersionUID 定义时的警告 。
@@ -52,10 +51,9 @@ jdk1.6中@Override它不仅能描述继承中的重写，还可以描述实现�
 @interface 名称 {}
 ```
 
-就定义了一个注解，要想使用  在类，方法，属性上直接  @名称.
+就定义了一个注解，要想使用 在类，方法，属性上直接 @名称.
 
-@interface MyAnnotation{}
-它的本质是一个接口,继承了Annotation接口,所的的注解都实现了这个接口，但是，不能手动实现。
+@interface MyAnnotation{} 它的本质是一个接口,继承了Annotation接口,所的的注解都实现了这个接口，但是，不能手动实现。
 
 ```java
 import java.lang.annotation.Annotation;
@@ -71,8 +69,7 @@ interface MyAnnotation extends Annotation
 
 接口中的成员:
 
-属性: public static final
-方法: public abstract
+属性: public static final 方法: public abstract
 
 注解成员:
 
@@ -92,7 +89,7 @@ interface MyAnnotation extends Annotation
 5. Annotation
 6. 以上类型的一维数组。
 
-![注解中的属性](.gitbook/assets/2020-03-04-14-37-41.png)
+![&#x6CE8;&#x89E3;&#x4E2D;&#x7684;&#x5C5E;&#x6027;](.gitbook/assets/2020-03-04-14-37-41.png)
 
 ### 3.2 属性的使用问题
 
@@ -100,10 +97,8 @@ interface MyAnnotation extends Annotation
 
 **属性赋值方式**
 
-* 默认值问题   String st() default "abc";
-
-* 如果是单值   注解(属性名称=值) 例如:@MyAnnotation3(i=1)
-
+* 默认值问题 String st\(\) default "abc";
+* 如果是单值 注解\(属性名称=值\) 例如:@MyAnnotation3\(i=1\)
 * 如果是数组
 
 ```text
@@ -159,9 +154,7 @@ String value() default "hello";
 * @Documented    作用: 是通过javadoc生成的文档中是否抽取注解描述.
 * @Inherited    作用: 是描述当前注解是否具有继承性
 
-想要开发有功能的注解，对于程序员，一定会使用的元注解是:
-@Retention
-@Target
+想要开发有功能的注解，对于程序员，一定会使用的元注解是: @Retention @Target
 
 ## 5. 注解案例1---银行最大转账金额
 
@@ -185,7 +178,7 @@ int maxMoney();
 
 #### 1. 获取当前方法的Method对象
 
-```markdown
+```text
 1.得到Class对象 三种方式：
     (a) 类名.class
     (b) 对象.getClass()
@@ -196,7 +189,7 @@ Class.getDeclaredMethod(String methodName,Class...paramClass);
 
 #### 2. 获取注解Annotation对象
 
-在Method类中有一个 getAnnotation(Class annotationClass)，可以获取一个注解对象
+在Method类中有一个 getAnnotation\(Class annotationClass\)，可以获取一个注解对象
 
 #### 3. 通过注解对象来调用其属性
 
@@ -265,3 +258,4 @@ public static Connection getConnectionByAnnotation() throws Exception {
 return con;
 }
 ```
+

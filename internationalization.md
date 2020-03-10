@@ -1,29 +1,24 @@
-# Internationalization
+# 国际化
 
 ## 概念
 
 **i18n**：internationalization
 
 * 对于程序中**固定使用**的文本元素，例如菜单栏、导航条等中使用的文本元素、或错误提示信息，状态信息等，需要根据来访者的地区和国家，选择不同语言的文本为之服务。
-
-* 对于程序**动态产生**的数据，例如(日期，货币等)，软件应能根据当前所在的国家或地区的文化习惯进行显示。
+* 对于程序**动态产生**的数据，例如\(日期，货币等\)，软件应能根据当前所在的国家或地区的文化习惯进行显示。
 
 ## 配置文件
 
-针对于不同的国家与地区要显示的信息，都配置到配置文件中，
-根据当前访问者的国家或语言来从不同的配置文件中获取信息，
-展示在页面上。
+针对于不同的国家与地区要显示的信息，都配置到配置文件中， 根据当前访问者的国家或语言来从不同的配置文件中获取信息， 展示在页面上。
 
 ### 相关的概念
 
-对于软件中的菜单栏、导航条、错误提示信息，状态信息等这些固定不变的文本信息，可以把它们写在一个properties文件中，
-并根据不同的国家编写不同的properties文件。这一组properties文件称之为一个资源包。
+对于软件中的菜单栏、导航条、错误提示信息，状态信息等这些固定不变的文本信息，可以把它们写在一个properties文件中， 并根据不同的国家编写不同的properties文件。这一组properties文件称之为一个资源包。
 
 * ResourceBundler，它是用于从资源包中获取数据的。
+* 关于资源文件\(properties\)命名: 基名_语言_国家.properties
 
-* 关于资源文件(properties)命名: 基名_语言_国家.properties
-
-```markdown
+```text
 message_zh_CN.properties
 message_en_US.properteis
 ```
@@ -38,11 +33,11 @@ IntelliJ IDEA 中修改properties的默认编码，统一为UTF-8。
 
 * 中文乱码问题
 
-Setting -> File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 UTF-8 ，然后再把底部的 Transparent native-to-ascii conversion 打上勾
+Setting -&gt; File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 UTF-8 ，然后再把底部的 Transparent native-to-ascii conversion 打上勾
 
-![系统设置encoding](.gitbook/assets/2020-03-02-19-03-41.png)
+![&#x7CFB;&#x7EDF;&#x8BBE;&#x7F6E;encoding](.gitbook/assets/2020-03-02-19-03-41.png)
 
-中文生效的messages_zh_CN.properties中输入中文msg=你好世界，显示中文，不出现乱码。当使用记事本打开时，显示内容为msg=\u4F60\u597D\u4E16\u754C。
+中文生效的messages\_zh\_CN.properties中输入中文msg=你好世界，显示中文，不出现乱码。当使用记事本打开时，显示内容为msg=\u4F60\u597D\u4E16\u754C。
 
 ![ResourceBundle](.gitbook/assets/2020-03-02-19-13-04.png)
 
@@ -50,11 +45,11 @@ Setting -> File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 UTF
 
 默认生效的messages.properties **当需要的语言对应的配置，就会选这个**
 
-中文生效的messages_zh_CN.properties；
+中文生效的messages\_zh\_CN.properties；
 
-英文生效的messages_en_US.properties；
+英文生效的messages\_en\_US.properties；
 
-德语生效的messages_de_DE.properties；
+德语生效的messages\_de\_DE.properties；
 
 * 点击下边如图所示的Resource Bundle的按钮，切换编辑模式
 
@@ -70,13 +65,13 @@ ResourceBundle bundle = ResourceBundle.getBundle("message",Locale.US);
 bundle.getString(String name);
 ```
 
-![Locale常量](.gitbook/assets/2020-03-02-19-30-50.png)
+![Locale&#x5E38;&#x91CF;](.gitbook/assets/2020-03-02-19-30-50.png)
 
 ### 扩展:关于properties文件中中文问题处理
 
 在jdk中有一个命令native2ascii.exe
 
-```markdown
+```text
 cmd中
 1.进行一次翻译
 native2ascii 回车
@@ -94,7 +89,7 @@ native2ascii  源文件路径   目录文件路径
 1. 创建登录页面
 2. 创建配置文件
 3. 在登录页面上根据不同的国家获取ResourceBundle
-4. 在页面上需要国际化的位置，通过ResourceBundle.getString()来获取信息
+4. 在页面上需要国际化的位置，通过ResourceBundle.getString\(\)来获取信息
 
 ```java
 <!--将语言选项提交到本页面-->
@@ -168,10 +163,9 @@ method="post">
 
 作用:
 
-1. 可以将一个Date对象格式化成指定效果的String----->format方法
-2. 可以将一个String解析成Date对象----->parse方法
-
-* 无参构造
+1. 可以将一个Date对象格式化成指定效果的String-----&gt;format方法
+2. 可以将一个String解析成Date对象-----&gt;parse方法
+3. 无参构造
 
 ```java
 DateFormat df1 = DateFormat.getDateInstance(); // 只有年月日
@@ -256,7 +250,7 @@ MessageForamt可以对一个**模板**中的信息进行动态赋值.
 
 * 例子：
 
-配置文件 message_en_US.properties中：
+配置文件 message\_en\_US.properties中：
 
 login.error={0} is required {1}
 
@@ -269,7 +263,7 @@ MassageFormate.formate(pattern,"username","ok")
 
 * MessageFormat使用
 
-MessageForamt.format(String pattern,Object... params);
+MessageForamt.format\(String pattern,Object... params\);
 
 * 说明一下动态文本中的占位符
 
@@ -278,9 +272,7 @@ MessageForamt.format(String pattern,Object... params);
 1. 注意占位符只能使用{0}---{9}之间的数值.
 2. 关于占们符的格式
 
-{argumentIndex}: 0-9 之间的数字，表示要格式化对象数据在参数数组中的索引号
-{argumentIndex,formatType}: 参数的格式化类型
-{argumentIndex,formatType,FormatStyle}: 格式化的样式，它的值必须是与格式化类型相匹配的合法模式、或表示合法模式的字符串。
+{argumentIndex}: 0-9 之间的数字，表示要格式化对象数据在参数数组中的索引号 {argumentIndex,formatType}: 参数的格式化类型 {argumentIndex,formatType,FormatStyle}: 格式化的样式，它的值必须是与格式化类型相匹配的合法模式、或表示合法模式的字符串。
 
 formatType可以取的值有:number date time
 
@@ -304,3 +296,4 @@ MessageFormat mf = new MessageFormat(msg, Locale.US);
 
 String value = mf.format(new Object[] { date, 99, 1000000 });
 ```
+

@@ -1,8 +1,12 @@
+---
+description: web项目servlet应用综合练习
+---
+
 # 商城项目练习笔记
 
 ## UML用例图（系统需求分析）
 
-![UML用例图](.gitbook/assets/2020-03-06-20-30-49.png)
+![UML&#x7528;&#x4F8B;&#x56FE;](.gitbook/assets/2020-03-06-20-30-49.png)
 
 ## E-R图（数据库设计）
 
@@ -91,7 +95,7 @@ response.setHeader("refresh","3;url=http://www.estore.com");
 
 ### 全局编码过滤
 
-* [Filter案例](filter-examples.md)
+* [Filter案例](filter-listener/filter-examples.md)
 
 ### Exception自定义异常
 
@@ -134,8 +138,7 @@ public class RegistException extends RuntimeException{}
 
 ### 一次性验证码
 
-在所有操作前，通过requst获取请求中的验证码，与session中存储的验证码进行对比。
-从session中获取完成后，马上删除。
+在所有操作前，通过requst获取请求中的验证码，与session中存储的验证码进行对比。 从session中获取完成后，马上删除。
 
 ```java
 request.getSession().setAttribute("checkcode_session", word);
@@ -155,3 +158,4 @@ if (!checkCode.equals(_checkCode)) {
     return;
 }
 ```
+

@@ -1,7 +1,6 @@
 # 泛型反射
 
-问题:
-BaseDaoImpl中，需要得到当前这个类上的泛型的Class对象，直接通过T.class这是不对的.
+问题: BaseDaoImpl中，需要得到当前这个类上的泛型的Class对象，直接通过T.class这是不对的.
 
 ```java
 public class BaseDaoImpl<T> implements BaseDao<T> {
@@ -18,7 +17,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 怎样得到当前这个类上的泛型的Class?
 
-![泛型反射](.gitbook/assets/2020-03-06-18-49-27.png)
+![&#x6CDB;&#x578B;&#x53CD;&#x5C04;](.gitbook/assets/2020-03-06-18-49-27.png)
 
 ```java
 private Class clazz;
@@ -31,3 +30,4 @@ public BaseDaoImpl(){}
     clazz = (Class) params[0];
 }
 ```
+

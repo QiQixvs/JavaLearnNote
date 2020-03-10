@@ -127,7 +127,7 @@ response.setDateHeader("expires", System.currentTimeMillis()
     3. 做一个Filter，它拦截所有请求，当访问资源时，我们从cookie中获取用户名和密码，进行登录操作。
 ```
 
-![](.gitbook/assets/2020-02-28-18-19-52.png)
+![](../.gitbook/assets/2020-02-28-18-19-52.png)
 
 * 首先要有登录功能
 
@@ -364,7 +364,7 @@ if (admins.contains(path) || users.contains(path))
 
 ## 全局编码过滤（通过get和post乱码过滤器）
 
-![request&#x3001;response&#x521B;&#x5EFA;&#x4E0E;&#x9500;&#x6BC1;](.gitbook/assets/2020-02-28-23-32-19.png)
+![request&#x3001;response&#x521B;&#x5EFA;&#x4E0E;&#x9500;&#x6BC1;](../.gitbook/assets/2020-02-28-23-32-19%20%281%29.png)
 
 用装饰模式类对request进行增强，解决编码问题。被装饰类是由服务器实现的request。
 
@@ -426,4 +426,5 @@ public Map getParameterMap() {
 }
 ```
 
-如果是post请求，只需要request.setCharacterEncoding("utf-8")，也不需要flag;但是get方式的处理方式都适用。
+如果是post请求，只需要request.setCharacterEncoding\("utf-8"\)，也不需要flag;但是get方式的处理方式都适用。
+

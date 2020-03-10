@@ -2,7 +2,7 @@
 
 网盘系统
 
-![](.gitbook/assets/2020-03-01-15-47-27.png)
+![](../.gitbook/assets/2020-03-01-15-47-27.png)
 
 ## 准备数据库
 
@@ -23,7 +23,7 @@
 
 c3p0 c3p0-config.xml
 
-dbutils  mysql驱动
+dbutils mysql驱动
 
 commons-fileupload-1.2.1.jar 文件上传
 
@@ -71,9 +71,8 @@ private String description;
 ```
 
 * 创建UploadServlet
-
-1. 完成上传操作
-2. 将数据封装，存储到数据库。
+* 完成上传操作
+* 将数据封装，存储到数据库。
 
 ```text
   1.上传操作
@@ -88,7 +87,7 @@ private String description;
   2.生成UUID文件名和多级存储目录结构 mkdirs
 
   3.IOUtils.copy(item.getInputStream(), new FileOutputStream(new File(目录，uuid文件名)));
-  
+
   4.将数据封装，存储到数据库.
     问题:怎样将数据封装到javaBean？
         手动创建一个Map<String,String[]>将数据封装到map集合，通过BeanUtils完成数据封装.
@@ -128,7 +127,8 @@ public void save(Resource r) throws SQLException {
 ```java
 List<Resource> rs = service.findAll();
 request.setAttribute("rs",rs);
-````
+`
+```
 
 * 创建一个download.jsp页面，展示所有可以下载的信息.
 
@@ -149,11 +149,10 @@ request.setAttribute("rs",rs);
 ```
 
 * 创建一个DownloadServlet
+* 根据request.getParamter\("id"\) 查询数据库，得到要下载的文件的相关信息
+* 下载操作
 
-1. 根据request.getParamter("id") 查询数据库，得到要下载的文件的相关信息
-2. 下载操作
-
-设置mimeType  
+设置mimeType
 
 ```java
 response.setContentType(getServletContext.getMimeType(String filename));
@@ -176,3 +175,4 @@ response.setHeader("content-disposition", "attachment;filename="+filename);
 byte[] b = FileUtils.readFileToByteArray(file); // 将指定文件读取到byte[]数组中.
 response.getOutputStream().write(b);
 ```
+

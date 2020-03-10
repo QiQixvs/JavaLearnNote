@@ -1,6 +1,14 @@
 # Java Learn Day to Day
 
-## 第一个30天
+{% page-ref page="internationalization.md" %}
 
-## 第二个30天
+{% page-ref page="annotation.md" %}
+
+{% page-ref page="dynamic-proxy.md" %}
+
+{% page-ref page="classloader.md" %}
+
+{% page-ref page="generic-type-reflection.md" %}
+
+
 

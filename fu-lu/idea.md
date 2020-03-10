@@ -4,13 +4,11 @@
 
 war exploded模式是直接把文件夹、jsp页面 、classes等等移到Tomcat 部署文件夹里面，进行加载部署。
 
-![](.gitbook/assets/image7.png)
-![](.gitbook/assets/Capture.png)
+![](../.gitbook/assets/image7.png) ![](../.gitbook/assets/capture.png)
 
 用于获取上下文环境绝对路径的代码：
 
 ```text
-
 String contextPath = request.getSession().getServletContext().getRealPath();
 ```
 
@@ -18,7 +16,7 @@ war exploded模式最终没有部署在Tomcat的位置，而是项目本身所�
 
 ## Struts2 struts.xml extends="struts-default"报错
 
-```markdown
+```text
 <struts>
     <package name="default" namespace="/" extends="struts-default">
         <action name="hello" class="test.HelloAction" method="say">
@@ -32,6 +30,7 @@ war exploded模式最终没有部署在Tomcat的位置，而是项目本身所�
 
 解决方法：
 
-File --> Project Structure --> Facets --> Struts2
+File --&gt; Project Structure --&gt; Facets --&gt; Struts2
 
-![struts-default](.gitbook/assets/2020-03-09-15-34-09.png)
+![struts-default](../.gitbook/assets/2020-03-09-15-34-09.png)
+
