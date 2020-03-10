@@ -1,4 +1,4 @@
-# struts2框架
+# struts2框架-1
 
 ## 1. 介绍
 
@@ -180,7 +180,7 @@ struts.xml提示来自于DTD约束
 
 ### 3.3 关联struts2源文件
 
-如果是com.opensymphony.xxx   在xwork-core下
+如果是 com.opensymphony.xxx   在xwork-core下
 如果是org.apache.struts2     在core下
 idea用maven下载
 
@@ -247,6 +247,14 @@ struts.xml
 
 ### 4.2 关于Action的配置
 
+```MARKDOWN
+ <package name="default" namespace="/" extends="struts-default">
+        <action name="hello" class="test.HelloAction" method="say">
+            <result name="good">/hello.jsp</result>
+        </action>
+</package>
+```
+
 #### 1. &lt;package&gt; 声明一个包, 用于管理action
 
 1. name     它用于声明一个包名，包名不能重复，也就是它是唯一的。
@@ -258,7 +266,7 @@ struts.xml
 
 1. name  就是action的一个名称，它是唯一的(在同包内) 它与package中的namespace确定了访问action的路径。
 2. class Action类的全名
-3. method 要访问的Action类中的方法的名称,方法无参数 ，返回值为String.
+3. method 要访问的Action类中的方法的名称, 方法无参数 ，返回值为String.
 
 #### 3. &lt;result&gt; 确定返回结果类型
 
@@ -302,188 +310,286 @@ struts.xml
 
 ##### 3. 默认的action
 
-作用:处理其它action处理不了的路径。
+在&lt;package&gt;下配置指定某个为该包的默认action，作用: 处理其它action处理不了的路径。
 
+```MARKDOWN
 <default-action-ref name="action的名称" />
+```
+
 配置了这个，当访问的路径，其它的action处理不了时，就会执行name指定的名称的action。
 
-4.action的默认处理类
+##### 4. action的默认处理类
+
 在action配置时，如果class不写。默认情况下是 com.opensymphony.xwork2.ActionSupport。
 
+也可以自己设置默认处理类
+
+```MARKDOWN
 <default-class-ref class="cn.itcast.action.DefaultAction"/>
-如果设置了，那么在当前包下，默认处理action请的的处理类就为class指定的类。
+```
 
+如果设置了，那么在当前包下，默认处理action请求的处理类就为class指定的类。
 
-关于常量配置
+### 4.3 关于常量配置
+
 default.properties 它声明了struts中的常量。
 
-问题:人为设置常量，可以在哪些位置设置 ？
-1.struts.xml(应用最多)
+#### 人为可以设置常量的位置
+
+* struts.xml(应用最多)
+
+```markdown
 <constant name="常量名称" value="常量值"></constant>
-2.struts.properties（基本不使用）			
-3.web.xml(了解)
+```
+
+* struts.properties（基本不使用）
+* web.xml(了解)
+
 配置常量，是使用StrutsPrepareAndExecuteFilter的初始化参数来配置的.
+
+```markdown
 <init-param>
 <param-name>struts.action.extension</param-name>
 <param-value>do,,</param-value>
 </init-param>
+```
 
-常用常量
-struts.action.extension=action,, 
+#### 常用常量
+
+```markdown
+struts.action.extension = action,,
 这个常量用于指定strus2框架默认拦截的后缀名.
 
 <constant name="struts.i18n.encoding" value="UTF-8"/>  
-相当于request.setCharacterEncoding("UTF-8"); 解决post请求乱码 
+相当于request.setCharacterEncoding("UTF-8"); 解决post请求乱码
 
-<constant name="struts.serve.static.browserCache" value="false"/> 
-false不缓存，true浏览器会缓存静态内容，产品环境设置true、开发环境设置false 	
+<constant name="struts.serve.static.browserCache" value="false"/>
+false不缓存，true浏览器会缓存静态内容，产品环境设置true、开发环境设置false
 
 <constant name="struts.devMode" value="true" />  
 提供详细报错页面，修改struts.xml后不需要重启服务器 （要求）
+```
 
-struts.xml文件的分离:
+#### struts.xml文件的分离
 
-目的:就是为了阅读方便。可以让一个模块一个配置文件，在struts.xml文件中通过
-<include file="test.xml"/>导入其它的配置文件。
+目的: 就是为了阅读方便。可以让一个模块一个配置文件，在struts.xml文件中通过
+&lt;include file="test.xml"/&gt;导入其它的配置文件。
 
+## 5. Action
 
-Action
+### 5.1 关于Action类的创建方式介绍
 
-1.关于Action类的创建方式介绍:
-有三种方式
-1.创建一个POJO类.
-简单的Java对象(Plain Old Java Objects)
-指的是没有实现任何接口，没有继承任何父类(除了Object)
+有三种方式。
 
-优点:无耦合。
+#### 1. 创建一个POJO类
+
+简单的Java对象(**Plain Old Java Objects**)，指的是没有实现任何接口，没有继承任何父类(除了Object)
+
+优点: 无耦合。
+
 缺点：所以工作都要自己实现。
 
 在struts2框架底层是通过反射来操作:
-* struts2框架 读取struts.xml 获得 完整Action类名 
+
+* struts2框架 读取struts.xml 获得 完整Action类名
 * obj = Class.forName("完整类名").newInstance();
 * Method m = Class.forName("完整类名").getMethod("execute");  m.invoke(obj); 通过反射 执行 execute方法
 
-2.创建一个类，实现Action接口.  com.opensymphony.xwork2.Action
+#### 2. 创建一个类，实现Action接口  
+
+com.opensymphony.xwork2.Action
 
 优点:耦合低。提供了五种结果视图，定义了一个行为方法。
+
 缺点:所以工作都要自己实现。
 
+五种逻辑视图，解决Action处理数据后，跳转页面。
+
+```JAVA
 public static final String SUCCESS = "success";  // 数据处理成功 （成功页面）
 public static final String NONE = "none";  // 页面不跳转  return null; 效果一样
 public static final String ERROR = "error";  // 数据处理发送错误 (错误页面)
 public static final String INPUT = "input"; // 用户输入数据有误，通常用于表单数据校验 （输入页面）
 public static final String LOGIN = "login"; // 主要权限认证 (登陆页面)
+```
 
-3.创建一个类，继承自ActionSupport类.  com.opensymphony.xwork2.ActionSupport
+#### 3. 创建一个类，继承自ActionSupport类
+
+com.opensymphony.xwork2.ActionSupport
+
 ActionSupport类实现了Action接口。
 
-优点:表单校验、错误信息设置、读取国际化信息 三个功能都支持.
+优点:**表单校验、错误信息设置、读取国际化信息** 三个功能都支持.
+
 缺点:耦合度高。
 
 在开发中，第三种会使用的比较多.
 
-关于action的访问:
+### 5.2 关于action的访问
 
-1.通过设置method的值，来确定访问action类中的哪一个方法.
-<action name="book_add" class="cn.itcast.action.BookAction"	method="add"></action>
-当访问的是book_add,这时就会调用BookAction类中的add方法。			
-<action name="book_update" class="cn.itcast.action.BookAction"	method="update"></action>
+#### 1. 通过设置method的值，来确定访问action类中的哪一个方法
+
+```MARKDOWN
+<action name="book_add" class="cn.itcast.action.BookAction" method="add"></action>
+当访问的是book_add,这时就会调用BookAction类中的add方法。
+
+<action name="book_update" class="cn.itcast.action.BookAction" method="update"></action>
 当访问的是book_update,这时就会调用BookAction类中的update方法。
+```
 
-2.使用通配符来简化配置
-1.在struts.xml文件中
-<action name="*_*" class="cn.itcast.action.{1}Action" method="{2}"></action>
-2.在jsp页面上
+#### 2. 使用通配符来简化配置
+
+在jsp页面上
+
 book.jsp
+
+```markdown
 <a href="${pageContext.request.contextPath}/Book_add">book add</a><br>
 <a href="${pageContext.request.contextPath}/Book_update">book update</a><br>
 <a href="${pageContext.request.contextPath}/Book_delete">book delete</a><br>
 <a href="${pageContext.request.contextPath}/Book_search">book search</a><br>
+```
+
 product.jsp
+
+```markdown
 <a href="${pageContext.request.contextPath}/Product_add">product add</a><br>
 <a href="${pageContext.request.contextPath}/Product_update">product update</a><br>
 <a href="${pageContext.request.contextPath}/Product_delete">product delete</a><br>
 <a href="${pageContext.request.contextPath}/Product_search">product search</a><br>
+```
 
-当访问book add时，这时的路径是  Book_add,那么对于struts.xml文件中.
-第一个星就是   Book
-第二个星就是   add
-对于{1}Action---->BookAction
-对于method={2}--->method=add
+在struts.xml文件中
+
+```MARKDOWN
+<action name="*_*" class="cn.itcast.action.{1}Action" method="{2}"></action>
+```
+
+当访问book add时，这时的路径是  Book_add, 那么对于struts.xml文件中.
+
+* 第一个星就是   Book
+* 第二个星就是   add
+* 对于{1}Action---->BookAction
+* 对于method={2}--->method=add
 
 使用通配符来配置注意事项:
-1.必须定义一个统一的命名规范。
-2.不建议使用过多的通配符，阅读不方便。
 
-3.动态方法调用	(了解)
-在struts.xml文件中
+1. 必须定义一个统一的命名规范。
+2. 不建议使用过多的通配符，阅读不方便。
+
+#### 3. 动态方法调用(了解)
+
+在struts.xml文件中没有指定method
+
+```MARKDOWN
 <action name="book" class="cn.itcast.action.BookAction"></action>
-访问时路径: http://localhost/struts2_day01_2/book!add
-就访问到了BookAction类中的add方法。
+```
 
-对于book!add 这就是动态方法调用。
+访问时路径: <http://localhost/struts2_day01_2/book!add>,就访问到了BookAction类中的add方法，对于book!add 这就是动态方法调用。
 
 注意：struts2框架支持动态方法调用，是因为在default.properties配置文件中设置了
-动态方法调用为true.
+动态方法struts.enable.DynamicMethodInvocation调用为true. 也可以在struts.xml中配置覆盖。
 
+```JAVA
 struts.enable.DynamicMethodInvocation = true
+```
 
-在struts2框架中获取servlet api
+## 6. 在struts2框架中获取servlet api
 
-对于struts2框架，不建议直接使用servlet api;
+{% hint style="info" %}
+对于struts2框架，不建议直接使用servlet api
+{% endhint %}
 
-在struts2中获取servlet api有三种方式:
-1.通过ActionContext来获取
-1.获取一个ActionContext对象。
-ActionContext context=ActionContext.getContext();
-2.获取servlet api
-注意:通过ActionContext获取的不是真正的Servlet api,而是一个Map集合。
+在struts2中获取servlet api有三种方式：
 
-1.context.getApplication()
-2.context.getSession()
-3.context.getParameter();---得到的就相当于request.getParameterMap()
-4.context.put(String,Object) 相当于request.setAttribute(String,String);
+* 通过ActionContext获取
+* 注入方式获取
+* 通过ServletActionContext获取
 
+### 6.1 通过ActionContext来获取
 
-2.注入方式获取(这种方式是真正的获取到了servlet api)
+#### 1. 获取一个ActionContext对象
 
-1.要求action类必须实现提定接口。
+```JAVA
+ActionContext context = ActionContext.getContext();
+```
+
+#### 2. 获取servlet api
+
+注意:通过ActionContext获取的不是真正的Servlet api, 而是一个Map集合。
+
+```JAVA
+1. context.getApplication()
+2. context.getSession()
+3. context.getParameter();---得到的就相当于request.getParameterMap()
+4. context.put(String,Object) 相当于request.setAttribute(String,String);
+```
+
+### 6.2 注入方式获取(这种方式是真正的获取到了servlet api)
+
+#### 1. 要求action类必须实现指定接口
+
 ServletContextAware ： 注入ServletContext对象
 ServletRequestAware ：注入 request对象
 ServletResponseAware ： 注入response对象
 
-2.重定接口中的方法。				
-private HttpServletRequest request;
-3.声明一个web对象，使用接口中的方法的参数对声明的web对象赋值.	
-public void setServletRequest(HttpServletRequest request) {
-this.request = request;
-}
+#### 2. 重定接口中的方法
 
-扩展:分析其实现：
-是使用struts2中的一个interceptor完成的.
+#### 3. 声明一个web对象，使用接口中的方法的参数对声明的web对象赋值
+
+```JAVA
+public class DemoAction extends ActionSupport implements ServletRequestAware{
+
+    private HttpServletRequest request;
+    //重写接口中的方法
+    public void setServletRequest(HttpServletRequest request) {
+        this.request = request;//注入request对象
+    }
+    @Override
+    public String execute() throws Exception{
+       requst.getParameter(...)
+        ...
+    }
+}
+```
+
+#### 扩展:分析其实现
+
+是使用struts2中的一个interceptor完成的.在struts-default.xml中配置
+
+```markdown
 <interceptor name="servletConfig" class="org.apache.struts2.interceptor.ServletConfigInterceptor"/>
+```
 
+```java
 if (action instanceof ServletRequestAware) { //判断action是否实现了ServletRequestAware接口
-HttpServletRequest request = (HttpServletRequest) context.get(HTTP_REQUEST); //得到request对象.
-((ServletRequestAware) action).setServletRequest(request);//将request对象通过action中重写的方法注入。
+    HttpServletRequest request = (HttpServletRequest) context.get(HTTP_REQUEST); //得到request对象.
+    ((ServletRequestAware) action).setServletRequest(request);//将request对象通过action中重写的方法注入。
 }
+```
 
-3.通过ServletActionContext获取.
-在ServletActionContext中方法都是static。			
+### 6.3 通过ServletActionContext获取
+
+在ServletActionContext中方法都是static。
+
+```JAVA
 getRequest();
 getResposne();
 getPageContext();
+```
 
-Result结果类型
+## 7. Result结果类型
 
-<result>标签
-1.name  与action中的method的返回值匹配，进行跳转.
+&lt;result&gt;标签
 
-2.type  作用:是用于定义跳转方式
+1. name  与action中的method的返回值匹配，进行跳转.
+
+2. type  作用:是用于定义跳转方式
 
 对于type属性它的值有以下几种:
-在struts-default.xml文件中定义了type可以取的值
+在**struts-default.xml**文件中定义了type可以取的值
 
+```MARKDOWN
 <result-type name="chain" class="com.opensymphony.xwork2.ActionChainResult"/>
 <result-type name="dispatcher" class="org.apache.struts2.dispatcher.ServletDispatcherResult" default="true"/>
 <result-type name="freemarker" class="org.apache.struts2.views.freemarker.FreemarkerResult"/>
@@ -494,22 +600,23 @@ Result结果类型
 <result-type name="velocity" class="org.apache.struts2.dispatcher.VelocityResult"/>
 <result-type name="xslt" class="org.apache.struts2.views.xslt.XSLTResult"/>
 <result-type name="plainText" class="org.apache.struts2.dispatcher.PlainTextResult" />
+```
 
-必会: chain  dispatcher  redirect redirectAction  stream
+必会: **chain  dispatcher  redirect redirectAction  stream**
 
-dispatcher:它代表的是请求转发，也是默认值。它一般用于从action跳转到页面。
-chain:它也相当于请求转发。它一般情况下用于从一个action跳转到另一个action。
+* dispatcher:它代表的是请求转发，也是默认值。它一般用于从action跳转到页面。
+* chain:它也相当于请求转发。它一般情况下用于从一个action跳转到另一个action。
 
-redirect:它代表的是重定向  它一般用于从action跳转到页面
-redirectAction: 它代表的是重定向  它一般用于从action跳转另一个action。
+* redirect:它代表的是重定向  它一般用于从action跳转到页面
+* redirectAction: 它代表的是重定向  它一般用于从action跳转另一个action。
 
-stream:代表的是服务器端返回的是一个流，一般用于下载。
+* stream:代表的是服务器端返回的是一个流，一般用于下载。
 
 了解: freemarker  velocity
 
+## 8. 局部结果页面与全局结果页面
 
-局部结果页面与全局结果页面
-局部结果页面 和 全局结果页面 
+```markdown
 <action name="result" class="cn.itcast.struts2.demo6.ResultAction">
 <!-- 局部结果  当前Action使用 -->
 <result name="success">/demo6/result.jsp</result> 
@@ -519,3 +626,4 @@ stream:代表的是服务器端返回的是一个流，一般用于下载。
 <!-- 全局结果 当前包中 所有Action都可以用-->
 <result name="success">/demo6/result.jsp</result>
 </global-results>
+```
