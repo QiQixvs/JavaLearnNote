@@ -17,7 +17,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 怎样得到当前这个类上的泛型的Class?
 
-![&#x6CDB;&#x578B;&#x53CD;&#x5C04;](.gitbook/assets/2020-03-06-18-49-27.png)
+![&#x6CDB;&#x578B;&#x53CD;&#x5C04;](../.gitbook/assets/2020-03-06-18-49-27.png)
 
 ```java
 private Class clazz;

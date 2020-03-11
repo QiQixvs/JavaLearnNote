@@ -84,7 +84,7 @@ public class StudentProxyTest {
 }
 ```
 
-![InvocationHandler&#x63A5;&#x53E3;](.gitbook/assets/2020-03-05-12-57-32.png)
+![InvocationHandler&#x63A5;&#x53E3;](../.gitbook/assets/2020-03-05-12-57-32.png)
 
 ## 3. 案例1---实现编码过滤
 
@@ -181,7 +181,7 @@ login.jsp --&gt; LoginServlet --&gt; UserService --&gt; UserDao.
 
 在servlet中判断method值是什么，调用不同的请求处理方法.
 
-这种方式下，在做权限控制时，如果使用[url级别权限控制](filter-listener/filter-examples.md)，就不能通过判断请求的资源路径来处理。
+这种方式下，在做权限控制时，如果使用[url级别权限控制](../filter-listener/filter-examples.md)，就不能通过判断请求的资源路径来处理。
 
 可以使用**细粒度权限控制**。
 
@@ -195,7 +195,7 @@ login.jsp --&gt; LoginServlet --&gt; UserService --&gt; UserDao.
 如果有，会调用被代理的行为，如果没有，不调用行为，直接抛出权限不足。
 ```
 
-![&#x6CE8;&#x89E3;+&#x52A8;&#x6001;&#x4EE3;&#x7406;&#x5B9E;&#x73B0;&#x7EC6;&#x7C92;&#x5EA6;&#x6743;&#x9650;&#x63A7;&#x5236;](.gitbook/assets/2020-03-06-11-03-23.png)
+![&#x6CE8;&#x89E3;+&#x52A8;&#x6001;&#x4EE3;&#x7406;&#x5B9E;&#x73B0;&#x7EC6;&#x7C92;&#x5EA6;&#x6743;&#x9650;&#x63A7;&#x5236;](../.gitbook/assets/2020-03-06-11-03-23.png)
 
 #### 1. 创建一个BookInfo注解，它是用于描述行为访问时，需要什么权限的
 

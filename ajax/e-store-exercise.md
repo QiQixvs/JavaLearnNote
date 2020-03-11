@@ -6,15 +6,15 @@ description: web项目servlet应用综合练习
 
 ## UML用例图（系统需求分析）
 
-![UML&#x7528;&#x4F8B;&#x56FE;](.gitbook/assets/2020-03-06-20-30-49.png)
+![UML&#x7528;&#x4F8B;&#x56FE;](../.gitbook/assets/2020-03-06-20-30-49.png)
 
 ## E-R图（数据库设计）
 
-![E-R](.gitbook/assets/2020-03-06-20-26-43.png)
+![E-R](../.gitbook/assets/2020-03-06-20-26-43.png)
 
 ## 时序图
 
-![sequence diagram](.gitbook/assets/2020-03-06-20-28-03.png)
+![sequence diagram](../.gitbook/assets/2020-03-06-20-28-03.png)
 
 ## 记录
 
@@ -95,7 +95,7 @@ response.setHeader("refresh","3;url=http://www.estore.com");
 
 ### 全局编码过滤
 
-* [Filter案例](filter-listener/filter-examples.md)
+* [Filter案例](../filter-listener/filter-examples.md)
 
 ### Exception自定义异常
 

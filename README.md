@@ -1,14 +1,14 @@
 # Java Learn Day to Day
 
-{% page-ref page="internationalization.md" %}
+{% page-ref page="fileupload-filedownload/internationalization.md" %}
 
-{% page-ref page="annotation.md" %}
+{% page-ref page="ajax/annotation.md" %}
 
-{% page-ref page="dynamic-proxy.md" %}
+{% page-ref page="ajax/dynamic-proxy.md" %}
 
-{% page-ref page="classloader.md" %}
+{% page-ref page="ajax/classloader.md" %}
 
-{% page-ref page="generic-type-reflection.md" %}
+{% page-ref page="ajax/generic-type-reflection.md" %}
 
 
 

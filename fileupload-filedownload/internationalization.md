@@ -35,11 +35,11 @@ IntelliJ IDEA 中修改properties的默认编码，统一为UTF-8。
 
 Setting -&gt; File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 UTF-8 ，然后再把底部的 Transparent native-to-ascii conversion 打上勾
 
-![&#x7CFB;&#x7EDF;&#x8BBE;&#x7F6E;encoding](.gitbook/assets/2020-03-02-19-03-41.png)
+![&#x7CFB;&#x7EDF;&#x8BBE;&#x7F6E;encoding](../.gitbook/assets/2020-03-02-19-03-41.png)
 
 中文生效的messages\_zh\_CN.properties中输入中文msg=你好世界，显示中文，不出现乱码。当使用记事本打开时，显示内容为msg=\u4F60\u597D\u4E16\u754C。
 
-![ResourceBundle](.gitbook/assets/2020-03-02-19-13-04.png)
+![ResourceBundle](../.gitbook/assets/2020-03-02-19-13-04.png)
 
 * 在src新建一个名叫“i18n”的包，用来存放国际化配置
 
@@ -53,7 +53,7 @@ Setting -&gt; File Encodings 把 IDE Encoding 和 Project Encoding 都设置成 
 
 * 点击下边如图所示的Resource Bundle的按钮，切换编辑模式
 
-![ResourceBundle2](.gitbook/assets/2020-03-02-19-20-50.png)
+![ResourceBundle2](../.gitbook/assets/2020-03-02-19-20-50.png)
 
 ### ResourceBundle使用
 
@@ -65,7 +65,7 @@ ResourceBundle bundle = ResourceBundle.getBundle("message",Locale.US);
 bundle.getString(String name);
 ```
 
-![Locale&#x5E38;&#x91CF;](.gitbook/assets/2020-03-02-19-30-50.png)
+![Locale&#x5E38;&#x91CF;](../.gitbook/assets/2020-03-02-19-30-50.png)
 
 ### 扩展:关于properties文件中中文问题处理
 
