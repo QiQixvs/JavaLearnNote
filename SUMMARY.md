@@ -32,7 +32,7 @@
 ## Struts2
 
 * [struts2框架-1](struts2/struts2_1.md)
-* [Struts2框架-2](struts2/struts2-kuang-jia-2.md)
+* [Struts2框架-2](struts2/struts2_2.md)
 
 ## 附录
 
