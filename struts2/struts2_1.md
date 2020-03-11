@@ -604,7 +604,7 @@ getPageContext();
 ```text
 <action name="result" class="cn.itcast.struts2.demo6.ResultAction">
 <!-- 局部结果  当前Action使用 -->
-<result name="success">/demo6/result.jsp</result> 
+<result name="success">/demo6/result.jsp</result>
 </action>
 
 <global-results>
@@ -613,3 +613,36 @@ getPageContext();
 </global-results>
 ```
 
+## 9. login练习
+
+```markdown
+<package name="default" namespace="/" extends="struts-default">
+    <action name="login" class="action.LoginAction">
+        <result name="failer">/login.jsp</result>
+        <result type="redirect">/loginsuccess.jsp</result>
+    </action>
+</package>
+```
+
+```java
+public class LoginAction  extends ActionSupport {
+
+    @Override
+    public String execute() throws Exception {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        if(...判断用户名和密码正确...){
+            request.getSession().setAttribute("username",username);
+
+            return SUCCESS;
+        }else {
+            request.setAttribute("login.msg","用户名或密码错误");
+            return "failer";
+        }
+    }
+}
+```
+
+笔记：有两种结果登录成功或者不成功。result标签name的默认值是SUCCESS。 type=dispatcher请求转发是默认值。登录成功后需要重定向到新的页面，type是Redirect。
