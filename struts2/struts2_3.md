@@ -219,30 +219,92 @@ if (interceptors.hasNext()) {//判断是否有下一个拦截器.
 4. 拦截器可以访问Action上下文、值栈里的对象，而过滤器不能。
 5. 在Action的生命周期中，拦截器可以多次调用，而过滤器只能在容器初始化时被调用一次。
 
-### 2.3 案例
+### 2.3 权限控制案例
 
-权限控制:
-1.login.jsp------>LoginAction------------->book.jsp
-登录成功，将用户存储到session。
+#### 1. login.jsp------>LoginAction（登录成功，将用户存储到session）------->book.jsp
 
-2.在book.jsp中提供crud链接。
-每一个连接访问一个BookAction中一个方法。
+```java
+public class LoginAction extends ActionSupport implements ModelDriven<User> {
+    private User user = new User();
+    @Override
+    public User getModel() {
+        return user;
+    }
+    @Override
+    public String execute() throws Exception {
+        System.out.println(user);
+        if(登录成功){
+            ServletActionContext.getRequest().getSession().setAttribute("user",user);
+            return SUCCESS;
+        }else{
+            this.addActionError("用户名或密码错误");  
+            //如果执行Action对应的服务出问题报错，对比addFieldError用法
+            //在jsp页面上显示<s:actionerror/>
+            return INPUT;
+        }
+    }
+}
+```
 
-要求:对于BookAction中的add,update,delete方法要求用户必须登录后才可以访问。search无要求
-
-怎样解决只控制action中某些方法的拦截？
-1.创建类不在实现Interceptor接口，而是继承其下的一个子类.MethodFilterInterceptor
-不用在重写intercept方法，而是重写 doIntercept方法。
-
-2.在struts.xml文件中声明
+#### 2. 在book.jsp中提供crud链接，每一个连接访问一个BookAction中一个方法。
 
 ```markdown
-<interceptors>
-    <intercept name="" class="">
-        <param name="includeMethods">add,update,delete</param>
-        <param name="excludeMethods">search</param>
-    </intercept>
-</interceptors>
+ <a href="${pageContext.request.contextPath}/book_add">book add</a><br>
+ <a href="${pageContext.request.contextPath}/book_update">book update</a><br>
+ <a href="${pageContext.request.contextPath}/book_delete">book delete</a><br>
+ <a href="${pageContext.request.contextPath}/book_search">book search</a>
+```
+
+
+创建类不在实现Interceptor接口，而是继承其下的一个子类.MethodFilterInterceptor
+不用在重写intercept方法，而是重写 doIntercept方法。
+
+```java
+public class BookInterceptor extends MethodFilterInterceptor {
+
+    @Override
+    protected String doIntercept(ActionInvocation actionInvocation) throws Exception {
+        User user = (User) ServletActionContext.getRequest().getSession().getAttribute("user");
+        if(user == null){
+            //通过ActionInvocation的getAction的方法可以获得被拦截的Action对象
+            BookAction action = (BookAction) actionInvocation.getAction();
+            action.addActionError("没有权限，先登录");
+            return Action.LOGIN;
+        }
+        return actionInvocation.invoke();
+    }
+}
+```
+
+要求: 对于BookAction中的add,update,delete方法要求用户必须登录后才可以访问。search无要求
+怎样解决只控制action中某些方法的拦截？
+
+```markdown
+<struts>
+    <package name="default" namespace="/" extends="struts-default">
+        <interceptors>
+            <interceptor name="bookInterceptor" class="intercept.BookInterceptor">
+                <!--通过拦截器参数控制对某些方法的拦截-->
+                <param name="includeMethods">add,delete,update</param>
+                <param name="excludeMethods">search</param>
+            </interceptor>
+            <interceptor-stack name="myStack"><!---组成自定义拦截器栈-->
+                <interceptor-ref name="bookInterceptor"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <global-results> <!--配置全局通用视图-->
+            <result name="login">/login.jsp</result>
+        </global-results>
+        <action name="login" class="action.LoginAction">
+            <result name="input">/login.jsp</result><!---登录失败-->
+            <result>/book.jsp</result><!---登录成功-->
+        </action>
+        <action name="book_*" class="action.BookAction" method="{1}"><!--对action名称用通配符-->
+            <interceptor-ref name="myStack"/><!--引用拦截器--->
+        </action>
+    </package>
+</struts>
 ```
 
 ## 3. struts2中文件上传与下载
@@ -250,51 +312,64 @@ if (interceptors.hasNext()) {//判断是否有下一个拦截器.
 ### 3.1 上传
 
 浏览器端:
-1.method=post
-2.<input type="file" name="xx">
-3.encType="multipart/form-data";
 
-服务器端:
-commons-fileupload组件
-1.DiskFileItemFactory
-2.ServletFileUpload
-3.FileItem
+1. method=post
+2. &lt;input type="file" name="xx"&gt;
+3. encType="multipart/form-data";
+
+服务器端: commons-fileupload组件
 
 struts2中文件上传:
 默认情况下struts2框架使用的就是commons-fileupload组件.
+
 struts2它使用了一个interceptor帮助我们完成文件上传操作。
+
+```markdown
 <interceptor name="fileUpload" class="org.apache.struts2.interceptor.FileUploadInterceptor"/>
+```
 
-在action中怎样处理文件上传?
-页面上组件:<input type="file" name="upload">
+#### 在action中怎样处理文件上传
 
-在action中要有三个属性:
-private File upload;
-private String uploadContentType;
-private String uploadFileName;
+页面上组件:
 
-在execute方法中使用commons-io包下的FileUtils完成文件复制.			
+```markdown
+<input type="file" name="upload">
+```
+
+在action类中中要有三个属性,提供get/set方法
+
+* private File upload; 必须要和页面上的name相同
+* private String uploadContentType; 页面上的组件名+ContentType
+* private String uploadFileName; 页面上的组件名+FileName
+
+在execute方法中使用commons-io包下的FileUtils完成文件复制.
+
+```java
 FileUtils.copyFile(upload, new File("d:/upload",uploadFileName));
-
+```
 
 #### 关于struts2中文件上传细节
 
-1.关于控制文件上传大小
+##### 1.关于控制文件上传大小
+
 在default.properties文件中定义了文件上传大小
+
 struts.multipart.maxSize=2097152 上传文件默认的总大小 2m
 
-2.在struts2中默认使用的是commons-fileupload进行文件上传。
+##### 2.在struts2中默认使用的是commons-fileupload进行文件上传
 
-* /# struts.multipart.parser=cos
-* /# struts.multipart.parser=pell
+ struts.multipart.parser=cos
+ struts.multipart.parser=pell
 
 struts.multipart.parser=jakarta
 
 如果使用pell,cos进行文件上传，必须导入其jar包.
 
-3.如果出现问题，需要配置input视图，在页面上可以通过<s:actionerror>展示错误信息.
+##### 3. 配置input视图，在页面上可以通过<s:actionerror>展示错误信息
+
 问题:在页面上展示的信息，全是英文，要想展示中文，国际化
 
+```MARKDOWN
 struts-messages.properties 文件里预定义 上传错误信息，通过覆盖对应key 显示中文信息
 struts.messages.error.uploading=Error uploading: {0}
 struts.messages.error.file.too.large=The file is to large to be uploaded: {0} "{1}" "{2}" {3}
@@ -311,8 +386,9 @@ struts.messages.error.file.extension.not.allowed=上传文件的后缀名不允�
 {1}:上传文件的真实名称
 {2}:上传文件保存到临时目录的名称
 {3}:上传文件的类型(对struts.messages.error.file.too.large是上传文件的大小)
+```
 
-4.关于多文件上传时的每个上传文件大小控制以及上传文件类型控制.
+##### 4.关于多文件上传时的每个上传文件大小控制以及上传文件类型控制
 
 1.多文件上传
 服务器端:
