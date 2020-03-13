@@ -1,5 +1,5 @@
 ---
-description: 国际化(了解);拦截器(Interceptor)---重点;struts2文件上传与下载(次重点);ognl与valuestack
+description: 国际化(了解);拦截器(Interceptor)---重点;struts2文件上传与下载(次重点);
 ---
 
 # Struts2框架-3
@@ -498,30 +498,3 @@ public String getContentType(){
 ```
 
 action类中获取downloadFileName，中文乱码问题需要判断浏览器 参考* [文件的下载](fileupload-filedownload/file-download.md)
-
-## 4. ognl与valueStack介绍
-
-### 4.1 ognl
-
-OGNL是Object-Graph Navigation Language的缩写，它是一种功能强大的表达式语言.
-
-struts2将ognl表达式语言，集成当sturts2框架中，做为它的默认表达式语言。
-
-OGNL 提供五大类功能
-
-1. 支持对象方法调用，如xxx.doSomeSpecial()；
-2. 支持类静态的方法调用和值访问
-3. 访问OGNL上下文（OGNL context）和ActionContext； （重点 操作ValueStack值栈 ）
-4. 支持赋值操作和表达式串联
-5. 操作集合对象。
-
-* 在jsp 结合 struts2 标签库 使用<s:property value="ognl表达式" />执行 ognl表达式
-* 调用 实例方法 ：对象.方法()  --- <s:property value="'hello,world'.length()"/>
-* 调用 静态方法 ： @[类全名（包括包路径）]@[方法名]  --- <s:property value="@java.lang.String@format('您好,%s','小明')"/>
-* 使用 静态方法调用 必须 设置 struts.ognl.allowStaticMethodAccess=true
-
-OgnlContext对象是一个Map集合，非根中的数据需要使用#获取，根中的数据不需要。
-
-### 4.2 ValueStack值栈
-
-ValueStack 是 struts2 提供一个接口，是一个容器，作用就是将action相关的数据以及web相关的对象携带到页面上。在页面上通过ognl表达式将ValueStack中数据获取出来。
