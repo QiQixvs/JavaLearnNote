@@ -246,7 +246,7 @@ public class LoginAction extends ActionSupport implements ModelDriven<User> {
 }
 ```
 
-#### 2. 在book.jsp中提供crud链接，每一个连接访问一个BookAction中一个方法。
+#### 2. 在book.jsp中提供crud链接，每一个连接访问一个BookAction中一个方法
 
 ```markdown
  <a href="${pageContext.request.contextPath}/book_add">book add</a><br>
@@ -254,7 +254,6 @@ public class LoginAction extends ActionSupport implements ModelDriven<User> {
  <a href="${pageContext.request.contextPath}/book_delete">book delete</a><br>
  <a href="${pageContext.request.contextPath}/book_search">book search</a>
 ```
-
 
 创建类不在实现Interceptor接口，而是继承其下的一个子类.MethodFilterInterceptor
 不用在重写intercept方法，而是重写 doIntercept方法。
@@ -338,9 +337,15 @@ struts2它使用了一个interceptor帮助我们完成文件上传操作。
 
 在action类中中要有三个属性,提供get/set方法
 
-* private File upload; 必须要和页面上的name相同
-* private String uploadContentType; 页面上的组件名+ContentType
-* private String uploadFileName; 页面上的组件名+FileName
+```java
+private File upload; //必须要和页面上的name相同
+private String uploadContentType; //页面上的组件名+ContentType
+private String uploadFileName; //页面上的组件名+FileName
+```
+
+{% hint style="danger" %}
+注意大小写
+{% endhint %}
 
 在execute方法中使用commons-io包下的FileUtils完成文件复制.
 
@@ -350,18 +355,20 @@ FileUtils.copyFile(upload, new File("d:/upload",uploadFileName));
 
 #### 关于struts2中文件上传细节
 
-##### 1.关于控制文件上传大小
+##### 1. 关于控制文件上传大小
 
 在default.properties文件中定义了文件上传大小
 
 struts.multipart.maxSize=2097152 上传文件默认的总大小 2m
 
-##### 2.在struts2中默认使用的是commons-fileupload进行文件上传
+##### 2. 在struts2中默认使用的是commons-fileupload进行文件上传
 
- struts.multipart.parser=cos
- struts.multipart.parser=pell
+```text
+ # struts.multipart.parser=cos
+ # struts.multipart.parser=pell
 
-struts.multipart.parser=jakarta
+ struts.multipart.parser=jakarta
+```
 
 如果使用pell,cos进行文件上传，必须导入其jar包.
 
@@ -369,12 +376,16 @@ struts.multipart.parser=jakarta
 
 问题:在页面上展示的信息，全是英文，要想展示中文，国际化
 
+struts-messages.properties 文件里预定义上传错误信息。
+
+在UploadAction.properties文件中通过覆盖对应key 显示中文信息。
+
 ```MARKDOWN
-struts-messages.properties 文件里预定义 上传错误信息，通过覆盖对应key 显示中文信息
 struts.messages.error.uploading=Error uploading: {0}
 struts.messages.error.file.too.large=The file is to large to be uploaded: {0} "{1}" "{2}" {3}
 struts.messages.error.content.type.not.allowed=Content-Type not allowed: {0} "{1}" "{2}" {3}
 struts.messages.error.file.extension.not.allowed=File extension not allowed: {0} "{1}" "{2}" {3}
+
 
 修改为
 struts.messages.error.uploading=上传错误: {0}
@@ -388,19 +399,23 @@ struts.messages.error.file.extension.not.allowed=上传文件的后缀名不允�
 {3}:上传文件的类型(对struts.messages.error.file.too.large是上传文件的大小)
 ```
 
-##### 4.关于多文件上传时的每个上传文件大小控制以及上传文件类型控制
+##### 4. 关于多文件上传时的每个上传文件大小控制以及上传文件类型控制
 
 1.多文件上传
-服务器端:
-只需要将action属性声明成List集合或数组就可以。
 
+服务器端:只需要将action属性声明成List集合或数组就可以。
+
+```java
 private List<File> upload;
 private List<String> uploadContentType;
 private List<String> uploadFileName;
+```
 
 2.怎样控制每一个上传文件的大小以及上传文件的类型?
+
 在fileupload拦截器中，通过其属性进行控制.
 
+```markdown
 maximumSize---每一个上传文件大小
 allowedTypes--允许上传文件的mimeType类型.
 allowedExtensions--允许上传文件的后缀名.
@@ -408,67 +423,105 @@ allowedExtensions--允许上传文件的后缀名.
 <interceptor-ref name="defaultStack">
 <param name="fileUpload.allowedExtensions">txt,mp3,doc</param>
 </interceptor-ref>
+```
 
 ### 3.2 下载
 
 文件下载方式:
-1.超连接
-2.服务器编码，通过流向客户端写回。
 
-1.通过response设置  response.setContentType(String mimetype);
-2.通过response设置  response.setHeader("Content-disposition;filename=xxx");
-3.通过response获取流，将要下载的信息写出。
+1. 超链接
+2. 服务器编码，通过流向客户端写回。
 
+struts2中文件下载：
 
+通过&lt;result type="stream"&gt;完成。
 
-struts2中文件下载：		
-通过<result type="stream">完成。
-
+```java
 <result-type name="stream" class="org.apache.struts2.dispatcher.StreamResult"/>
-在StreamResult类中有三个属性:
+```
+
+在StreamResult类中有三个属性需要在result配置时设置
+
+```java
 protected String contentType = "text/plain"; //用于设置下载文件的mimeType类型
 protected String contentDisposition = "inline";//用于设置进行下载操作以及下载文件的名称
 protected InputStream inputStream; //用于读取要下载的文件。
+```
 
-在action类中定义一个方法
-public InputStream getInputStream() throws FileNotFoundException {
-FileInputStream fis = new FileInputStream("d:/upload/" + filename);
-return fis;
+```markdown
+<result type="stream">
+    <param name="contentType">text/plain</param>
+    <param name="contentDisposition">attachment;filename=a.txt</param>
+    <param name="inputStream">${inputStream}</param> 会调用当前action中的getInputStream方法。ognl表达式
+</result>
+```
+
+在action类中定义getInputStream方法
+
+```java
+public class DownloadAction extends ActionSupport{
+    private String filename;
+    //...get/set方法..
+    public InputStream getInputStream() throws FileNotFoundException {
+        FileInputStream fis = new FileInputStream("d:/upload/" + filename);
+        return fis;
+    }
+    //execute方法。。。
 }
+```
 
+* &lt;a href="${pageContext.request.contextPath}/download?filename=捕获.png"&gt;捕获.png&lt;/a&gt;下载报错
+
+原因: 超链接是get请求，并且下载的文件是中文名称，乱码。
+
+```java
+filename = new String(filename.getBytes("ios8859-1"),"utf-8");
+```
+
+* ognl表达式配置文件类型和文件名
+
+```markdown
 <result type="stream">
-<param name="contentType">text/plain</param>
-<param name="contentDisposition">attachment;filename=a.txt</param>
-<param name="inputStream">${inputStream}</param> 会调用当前action中的getInputStream方法。
+    <param name="contentType">${contentType}</param> <!-- 调用当前action中的getContentType()方法 -->
+    <param name="contentDisposition">attachment;filename=${downloadFileName}</param>
+    <param name="inputStream">${inputStream}</param><!-- 调用当前action中的getInputStream()方法 -->
 </result>
+```
 
+action类中获取文件类型
 
-问题1:<a href="${pageContext.request.contextPath}/download?filename=捕获.png">捕获.png</a>下载报错
-原因:超连接是get请求，并且下载的文件是中文名称，乱码。
+```java
+public String getContentType(){
+    String mimeType = ServletActionContext.getServletContext().getMimeType(filename);
+    return mimeType;
+}
+```
 
+action类中获取downloadFileName，中文乱码问题需要判断浏览器 参考* [文件的下载](fileupload-filedownload/file-download.md)
 
-问题2:下载捕获文件时，文件名称就是a.txt	,下载文件后缀名是png,而我们在配置文件中规定就是txt?			
-<result type="stream">
-<param name="contentType">${contentType}</param> <!-- 调用当前action中的getContentType()方法 -->
-<param name="contentDisposition">attachment;filename=${downloadFileName}</param>
-<param name="inputStream">${inputStream}</param><!-- 调用当前action中的getInputStream()方法 -->
-</result>
+## 4. ognl与valueStack介绍
 
-在struts2中进行下载时，如果使用<result type="stream">它有缺陷，例如：下载点击后，取消下载，服务器端会产生异常。
-在开发中，解决方案:可以下载一个struts2下载操作的插件，它解决了stream问题。
+### 4.1 ognl
 
-## 4. ognl与valueStack
-
-问题:ognl是什么，它有什么用?
 OGNL是Object-Graph Navigation Language的缩写，它是一种功能强大的表达式语言.
-比el表达式功能强大。
+
 struts2将ognl表达式语言，集成当sturts2框架中，做为它的默认表达式语言。
 
-OGNL 提供五大类功能 
-1、支持对象方法调用，如xxx.doSomeSpecial()； 
-2、支持类静态的方法调用和值访问
-3、访问OGNL上下文（OGNL context）和ActionContext； （重点 操作ValueStack值栈 ）
-4、支持赋值操作和表达式串联
-5、操作集合对象。
+OGNL 提供五大类功能
 
-问题:valueStack是什么，它有什么用?
+1. 支持对象方法调用，如xxx.doSomeSpecial()；
+2. 支持类静态的方法调用和值访问
+3. 访问OGNL上下文（OGNL context）和ActionContext； （重点 操作ValueStack值栈 ）
+4. 支持赋值操作和表达式串联
+5. 操作集合对象。
+
+* 在jsp 结合 struts2 标签库 使用<s:property value="ognl表达式" />执行 ognl表达式
+* 调用 实例方法 ：对象.方法()  --- <s:property value="'hello,world'.length()"/>
+* 调用 静态方法 ： @[类全名（包括包路径）]@[方法名]  --- <s:property value="@java.lang.String@format('您好,%s','小明')"/>
+* 使用 静态方法调用 必须 设置 struts.ognl.allowStaticMethodAccess=true
+
+OgnlContext对象是一个Map集合，非根中的数据需要使用#获取，根中的数据不需要。
+
+### 4.2 ValueStack值栈
+
+ValueStack 是 struts2 提供一个接口，是一个容器，作用就是将action相关的数据以及web相关的对象携带到页面上。在页面上通过ognl表达式将ValueStack中数据获取出来。
