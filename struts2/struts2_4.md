@@ -299,7 +299,7 @@ if (attribute == null) {
 
 ```markdown
 遍历集合只要name属性
-<s:iterator value="products.{name}" var="pname"> 
+<s:iterator value="products.{name}" var="pname">
 <s:property value="#pname"/>
 </s:iterator>
 ```
