@@ -497,4 +497,4 @@ public String getContentType(){
 }
 ```
 
-action类中获取downloadFileName，中文乱码问题需要判断浏览器 参考* [文件的下载](fileupload-filedownload/file-download.md)
+action类中获取downloadFileName，中文乱码问题需要判断浏览器 参考* [文件的下载](../fileupload-filedownload/file-download.md)

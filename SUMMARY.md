@@ -35,9 +35,11 @@
 * [Struts2框架-2](struts2/struts2_2.md)
 * [Struts2框架-3](struts2/struts2_3.md)
 * [Struts2框架-4](struts2/struts2_4.md)
+* [Struts2框架练习笔记](struts2-exercise.md)
 
 ## 附录 <a id="appendix"></a>
 
 * [Tomcat使用相关](appendix/tomcat.md)
 * [IDEA踩坑记录](appendix/idea.md)
 
+* [MySQL数据库操作-DCL](mysql-ddl.md)

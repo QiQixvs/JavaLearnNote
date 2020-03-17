@@ -448,7 +448,7 @@ regist.jsp----->RegistServlet
 
 ### 4.1 struts2中怎样处理异步提交(ajax)
 
-异步提交参考[ajax](ajax/ajax1.md)
+异步提交参考[ajax](../ajax/ajax1.md)
 
 原始的处理方式:
 
@@ -460,7 +460,7 @@ response.getWriter().close();
 
 还可以使用struts2中提供的json插件:
 
-[json数据介绍](ajax/ajax1.md)
+[json数据介绍](../ajax/ajax1.md)
 
 1. 导入json插件包 在struts2的lib包下  struts2-json-plugin-2.3.15.1.jar。
 2. 在struts.xml文件中配置
