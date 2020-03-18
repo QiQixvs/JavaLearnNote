@@ -610,22 +610,28 @@ public String edit(){
 
 [Struts2框架-3 - 2.3 权限控制案例](../struts2/struts2_3.md)
 
-### 10.struts2 提供的异常处理
+### 10. struts2 提供的异常处理
 
-对于action中的操作，出现问题，直接抛出自定义异常。
+对于action中的操作，出现问题，直接抛出自定义异常, 例如new FindByIdException()。
+
 在struts.xml文件中
 
 ```markdown
 <global-exception-mappings>
-<exception-mapping result="login"
-exception="cn.itcast.user.exception.FindByIdException"></exception-mapping>
+    <exception-mapping result="login" exception="user.exception.FindByIdException">
+    <!--一旦捕获这个指定的自定义异常跳到“login”页面-->
+    </exception-mapping>
 </global-exception-mappings>
 ```
 
 这就可以让特定的异常，跳转到自定的页面。
 
 原理:
-struts2,默认加载的18个拦截器的第一个是exception这个拦截器，它没有做任何操作，
-直接放行，，只是它将 invocation.invoke()操作使用try-catch进行了处理。
+struts2,默认加载的18个拦截器的第一个是exception这个拦截器ExceptionMappingInterceptor.class，它没有做任何操作，
+直接放行，只是它将 invocation.invoke()操作使用try-catch进行了处理。
 
 其它的拦截器，或是action只要向外抛出异常，exception拦截器就会将其捕获。
+
+![defaultStack第一个是exception](.gitbook/assets/2020-03-18-19-15-19.png)
+
+![捕获异常跳转指定页面](.gitbook/assets/2020-03-18-19-16-03.png)
