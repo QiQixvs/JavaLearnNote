@@ -14,13 +14,13 @@ struts2中对国际化进行了封装，我们只需要根据其提供的API进�
 
 需要通过一个常量来声明.
 
-```markdown
+```text
 struts.custom.i18n.resources=testmessages,testmessages2
 ```
 
 在struts.xml中配置常量：
 
-```markdown
+```text
 <constant name="struts.custom.i18n.resources" value="message">
 代表message.properties在src下 此处value就是配置文件的基名。
 
@@ -32,7 +32,7 @@ properties 配置文件可以放置在任意位置
 
 #### 2. 局部
 
-##### a. 针对于action类
+**a. 针对于action类**
 
 位置: 与action类在同一个包下.
 
@@ -40,24 +40,22 @@ properties 配置文件可以放置在任意位置
 
 这个配置文件只对当前action有效。
 
-##### b. 针对于package下所有action
+**b. 针对于package下所有action**
 
 位置: 在指定的包下
 
 名称: package.properties
 
-##### C. jsp页面临时使用某一个properties文件
+**C. jsp页面临时使用某一个properties文件**
 
-```MARKDOWN
+```text
 <s:i18n name="包名.文件名"></s:i18n>
 ```
 
 ### 1.2 在哪些位置使用
 
 1. action类中使用
-
-2. 配置文件中使用 &LT;validation.xml&GT;
-
+2. 配置文件中使用 &lt;validation.xml&gt;
 3. 在jsp页面上使用
 
 ### 1.3 怎样操作
@@ -66,7 +64,7 @@ properties 配置文件可以放置在任意位置
 
 前提: action类要**继承ActionSupport类**。
 
-```JAVA
+```java
 this.getText(String name);
 //就可以获取配置文件中对应名称的值。
 ```
@@ -75,19 +73,19 @@ this.getText(String name);
 
 校验器的错误信息配置
 
-```JAVA
+```java
 <message key="properties文件中的名称"/>
 ```
 
 #### 3. 在jsp页面上使用
 
-```JAVA
+```java
 <s:i18n name="包名.文件名">
     <s:text name="名称"/>;
 </s:i18n>
 ```
 
-如果没有使用&LT;s:i18n name=""&GT;来指定，会从全局配置文件中获取。
+如果没有使用&lt;s:i18n name=""&gt;来指定，会从全局配置文件中获取。
 
 如果要从某一个配置文件中获取，通过name属性来指定， 包名.配置文件名称
 
@@ -95,7 +93,7 @@ this.getText(String name);
 
 #### 1. action中怎样使用
 
-```JAVA
+```java
 properties文件中：
 msg=hello world  {0}
 
@@ -107,7 +105,7 @@ this.getText("msg",new String[]{"tom"})
 
 #### 2. jsp页面上怎样使用
 
-```JAVA
+```java
 properties文件中：
 msg=hello world  {0}
 
@@ -119,11 +117,11 @@ JSP页面上：
 </s:i18n>
 ```
 
-结果就是 hello world  张三.
+结果就是 hello world 张三.
 
-## 2. 拦截器(interceptor)
+## 2. 拦截器\(interceptor\)
 
-struts2拦截器使用的是AOP思想(面向切面编程）。AOP的底层实现就是动态代理。
+struts2拦截器使用的是AOP思想\(面向切面编程）。AOP的底层实现就是动态代理。
 
 拦截器 采用 **责任链** 模式
 
@@ -144,15 +142,15 @@ struts2中在struts-default.xml文件中声明了所有的拦截器, 而struts2�
 
 可以自定义一个类实现 com.opensymphony.xwork2.interceptor.Interceptor
 
-在这个接口中有三个方法  init  destory intercept， intercept方法是真正拦截的方法。
+在这个接口中有三个方法 init destory intercept， intercept方法是真正拦截的方法。
 
-在intercept方法中如果要向下继续执行，通过其参数ActionInvocation调用它的invoke()方法就可以。
+在intercept方法中如果要向下继续执行，通过其参数ActionInvocation调用它的invoke\(\)方法就可以。
 
 #### 2. 声明一个Interceptor
 
 在struts-default.xml文件中
 
-```markdown
+```text
 <interceptors>
     <interceptor name="" class=""/>
 </interceptors>
@@ -166,7 +164,7 @@ interceptor配置写在action配置之前。
 
 在struts.xml文件的&lt;action&gt;标签下
 
-```markdown
+```text
 <interceptor-ref name="my"/>
 ```
 
@@ -180,13 +178,13 @@ interceptor配置写在action配置之前。
 
 #### 1. 在StrutsPrepareAndExecuteFilter中查找
 
-在doFilter方法内有一句话 execute.executeAction (request, response, mapping) 执行Action操作.
+在doFilter方法内有一句话 execute.executeAction \(request, response, mapping\) 执行Action操作.
 
 #### 2. 在executeAction执行过程中会访问Dispatcher类中的serviceAction
 
 在这个方法中会创建一个
 
-ActionProxy proxy = config.getContainer().getInstance(ActionProxyFactory.class).createActionProxy(namespace, name, method, extraContext, true, false);
+ActionProxy proxy = config.getContainer\(\).getInstance\(ActionProxyFactory.class\).createActionProxy\(namespace, name, method, extraContext, true, false\);
 
 这就是我们的Action的代理对象
 
@@ -221,7 +219,7 @@ if (interceptors.hasNext()) {//判断是否有下一个拦截器.
 
 ### 2.3 权限控制案例
 
-#### 1. login.jsp------>LoginAction（登录成功，将用户存储到session）------->book.jsp
+#### 1. login.jsp------&gt;LoginAction（登录成功，将用户存储到session）-------&gt;book.jsp
 
 ```java
 public class LoginAction extends ActionSupport implements ModelDriven<User> {
@@ -248,15 +246,14 @@ public class LoginAction extends ActionSupport implements ModelDriven<User> {
 
 #### 2. 在book.jsp中提供crud链接，每一个连接访问一个BookAction中一个方法
 
-```markdown
+```text
  <a href="${pageContext.request.contextPath}/book_add">book add</a><br>
  <a href="${pageContext.request.contextPath}/book_update">book update</a><br>
  <a href="${pageContext.request.contextPath}/book_delete">book delete</a><br>
  <a href="${pageContext.request.contextPath}/book_search">book search</a>
 ```
 
-创建类不在实现Interceptor接口，而是继承其下的一个子类.MethodFilterInterceptor
-不用在重写intercept方法，而是重写 doIntercept方法。
+创建类不在实现Interceptor接口，而是继承其下的一个子类.MethodFilterInterceptor 不用在重写intercept方法，而是重写 doIntercept方法。
 
 ```java
 public class BookInterceptor extends MethodFilterInterceptor {
@@ -275,10 +272,9 @@ public class BookInterceptor extends MethodFilterInterceptor {
 }
 ```
 
-要求: 对于BookAction中的add,update,delete方法要求用户必须登录后才可以访问。search无要求
-怎样解决只控制action中某些方法的拦截？
+要求: 对于BookAction中的add,update,delete方法要求用户必须登录后才可以访问。search无要求 怎样解决只控制action中某些方法的拦截？
 
-```markdown
+```text
 <struts>
     <package name="default" namespace="/" extends="struts-default">
         <interceptors>
@@ -318,12 +314,11 @@ public class BookInterceptor extends MethodFilterInterceptor {
 
 服务器端: commons-fileupload组件
 
-struts2中文件上传:
-默认情况下struts2框架使用的就是commons-fileupload组件.
+struts2中文件上传: 默认情况下struts2框架使用的就是commons-fileupload组件.
 
 struts2它使用了一个interceptor帮助我们完成文件上传操作。
 
-```markdown
+```text
 <interceptor name="fileUpload" class="org.apache.struts2.interceptor.FileUploadInterceptor"/>
 ```
 
@@ -331,7 +326,7 @@ struts2它使用了一个interceptor帮助我们完成文件上传操作。
 
 页面上组件:
 
-```markdown
+```text
 <input type="file" name="upload">
 ```
 
@@ -355,13 +350,13 @@ FileUtils.copyFile(upload, new File("d:/upload",uploadFileName));
 
 #### 关于struts2中文件上传细节
 
-##### 1. 关于控制文件上传大小
+**1. 关于控制文件上传大小**
 
 在default.properties文件中定义了文件上传大小
 
 struts.multipart.maxSize=2097152 上传文件默认的总大小 2m
 
-##### 2. 在struts2中默认使用的是commons-fileupload进行文件上传
+**2. 在struts2中默认使用的是commons-fileupload进行文件上传**
 
 ```text
  # struts.multipart.parser=cos
@@ -372,7 +367,7 @@ struts.multipart.maxSize=2097152 上传文件默认的总大小 2m
 
 如果使用pell,cos进行文件上传，必须导入其jar包.
 
-##### 3. 配置input视图，在页面上可以通过<s:actionerror>展示错误信息
+**3. 配置input视图，在页面上可以通过展示错误信息**
 
 问题:在页面上展示的信息，全是英文，要想展示中文，国际化
 
@@ -380,7 +375,7 @@ struts-messages.properties 文件里预定义上传错误信息。
 
 在UploadAction.properties文件中通过覆盖对应key 显示中文信息。
 
-```MARKDOWN
+```text
 struts.messages.error.uploading=Error uploading: {0}
 struts.messages.error.file.too.large=The file is to large to be uploaded: {0} "{1}" "{2}" {3}
 struts.messages.error.content.type.not.allowed=Content-Type not allowed: {0} "{1}" "{2}" {3}
@@ -399,7 +394,7 @@ struts.messages.error.file.extension.not.allowed=上传文件的后缀名不允�
 {3}:上传文件的类型(对struts.messages.error.file.too.large是上传文件的大小)
 ```
 
-##### 4. 关于多文件上传时的每个上传文件大小控制以及上传文件类型控制
+**4. 关于多文件上传时的每个上传文件大小控制以及上传文件类型控制**
 
 1.多文件上传
 
@@ -415,7 +410,7 @@ private List<String> uploadFileName;
 
 在fileupload拦截器中，通过其属性进行控制.
 
-```markdown
+```text
 maximumSize---每一个上传文件大小
 allowedTypes--允许上传文件的mimeType类型.
 allowedExtensions--允许上传文件的后缀名.
@@ -448,7 +443,7 @@ protected String contentDisposition = "inline";//用于设置进行下载操作�
 protected InputStream inputStream; //用于读取要下载的文件。
 ```
 
-```markdown
+```text
 <result type="stream">
     <param name="contentType">text/plain</param>
     <param name="contentDisposition">attachment;filename=a.txt</param>
@@ -481,7 +476,7 @@ filename = new String(filename.getBytes("ios8859-1"),"utf-8");
 
 * ognl表达式配置文件类型和文件名
 
-```markdown
+```text
 <result type="stream">
     <param name="contentType">${contentType}</param> <!-- 调用当前action中的getContentType()方法 -->
     <param name="contentDisposition">attachment;filename=${downloadFileName}</param>
@@ -498,7 +493,7 @@ public String getContentType(){
 }
 ```
 
-action类中获取downloadFileName，中文乱码问题需要判断浏览器 参考* [文件的下载-文件下载时的乱码问题](../fileupload-filedownload/file-download.md)
+action类中获取downloadFileName，中文乱码问题需要判断浏览器 参考\* [文件的下载-文件下载时的乱码问题](../fileupload-filedownload/file-download.md)
 
 ```java
 public String encodeDownloadFilename(String filename, String header) {
@@ -522,3 +517,4 @@ public String encodeDownloadFilename(String filename, String header) {
         return filename;
     }
 ```
+

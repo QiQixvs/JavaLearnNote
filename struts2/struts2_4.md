@@ -8,7 +8,7 @@ description: ognl与valueStack(重点);防止表单重复提交;struts2中内置
 
 ognl中有一个OgnlContext,它可以设置root与非root。
 
-root中数据获取时，不需要加#,而非root中数据在获取时，需要加上#。
+root中数据获取时，不需要加\#,而非root中数据在获取时，需要加上\#。
 
 ## 1. ognl介绍
 
@@ -19,7 +19,7 @@ OGNL是Object Graphic Navigation Language（对象图导航语言）的缩写，
 
 OGNL 提供五大类功能
 
-1. 支持对象方法调用，如xxx.doSomeSpecial()；
+1. 支持对象方法调用，如xxx.doSomeSpecial\(\)；
 2. 支持类静态的方法调用和值访问
 3. 访问OGNL上下文（OGNL context）和ActionContext； （重点 操作ValueStack值栈 ）
 4. 支持赋值操作和表达式串联
@@ -29,14 +29,14 @@ OGNL 提供五大类功能
 
 需要结合struts2的标签使用 &lt;s:property value="ognl表达式"&gt;
 
-```markdown
+```text
 <s:property value="'abc'.length()"/>  演示对象调用方法
 <s:property value="@java.lang.Math@max(10,20)"/> 演示静态成员访问.
 ```
 
 注意:在struts2中使用静态成员访问，必须设置一个常量, 开启静态访问：
 
-```markdown
+```text
 <constant name = "struts.ognl.allowStaticMethodAccess" value="true"/>
 ```
 
@@ -51,28 +51,28 @@ OGNL 提供五大类功能
 valueStack主要是将action数据携带到页面上，通过ognl获取数据
 
 1. ValueStack有一个实现类叫**OgnlValueStack**。
-2. 每一个action都有一个ValueStack.(一个请求，一个request, 一个action，一个valueStack),valueStack**生命周期**就是request生命周期。
-3. valueStack中存储了当前action对象以及其它常用web对象(request,session,application.parameters)。
+2. 每一个action都有一个ValueStack.\(一个请求，一个request, 一个action，一个valueStack\),valueStack**生命周期**就是request生命周期。
+3. valueStack中存储了当前action对象以及其它常用web对象\(request,session,application.parameters\)。
 4. struts2框架将valueStack以“struts.valueStack”为名存储到request域中。
 
 ### 2.2 valueStack结构
 
-![valueStack结构](.gitbook/assets/2020-03-13-22-10-49.png)
+![valueStack&#x7ED3;&#x6784;](../.gitbook/assets/2020-03-13-22-10-49.png)
 
-ValueStack中 存在root属性 (CompoundRoot) 、 context 属性 （OgnlContext）
+ValueStack中 存在root属性 \(CompoundRoot\) 、 context 属性 （OgnlContext）
 
 * CompoundRoot 就是ArrayList
 * OgnlContext 就是 Map
 
 list集合中存储的是action相关信息
 
-map集合中存储的是相关映射信息，包含  paramters,request,session,application attr等。
+map集合中存储的是相关映射信息，包含 paramters,request,session,application attr等。
 
-想要从list中获取数据，可以不使用#号.(它就是ognl的root)
+想要从list中获取数据，可以不使用\#号.\(它就是ognl的root\)
 
-如果从map中获取数据，需要使用#. (其实在struts2中的map--context其实就是ognlContext)
+如果从map中获取数据，需要使用\#. \(其实在struts2中的map--context其实就是ognlContext\)
 
-![valueStack结构相关分析](.gitbook/assets/2020-03-14-19-57-14.png)
+![valueStack&#x7ED3;&#x6784;&#x76F8;&#x5173;&#x5206;&#x6790;](../.gitbook/assets/2020-03-14-19-57-14.png)
 
 #### 结论
 
@@ -91,8 +91,7 @@ if (ctx != null) {
 }
 ```
 
-valueStack是每一次请求时，都会创建。
-在ActionContext中持有了valueStack的引用。
+valueStack是每一次请求时，都会创建。 在ActionContext中持有了valueStack的引用。
 
 ### 2.4 如何获得valueStack对象
 
@@ -110,29 +109,28 @@ ValueStack vs=ActionContext.getContext().getValueStack();
 
 主要有两个方法（在OgnlValueStack类中）
 
-* push(Object obj)------->底层就是 root.add(0,obj) 将数据存储到栈顶。
-
-* set(String name,Object obj);----->底层是将数据封装到HashMap中，在将这个HashMap通过push存储。
+* push\(Object obj\)-------&gt;底层就是 root.add\(0,obj\) 将数据存储到栈顶。
+* set\(String name,Object obj\);-----&gt;底层是将数据封装到HashMap中，在将这个HashMap通过push存储。
 
 在jsp中 通过 &lt;s:debug /&gt; 查看值栈的内容
 
-![通过<s:debug> 查看值栈的内容](.gitbook/assets/2020-03-14-14-38-04.png)
+![&#x901A;&#x8FC7;&amp;lt;s:debug&amp;gt; &#x67E5;&#x770B;&#x503C;&#x6808;&#x7684;&#x5185;&#x5BB9;](../.gitbook/assets/2020-03-14-14-38-04.png)
 
 ### 2.6 在JSP中获取值栈的数据
 
-原则： root中数据不需要#，而context中数据需要#
+原则： root中数据不需要\#，而context中数据需要\#
 
 #### 如果获取root中数据
 
 1.如果栈顶是一个Map集合，获取时，可以直接通过Map集合的key来获取value.
 
-```markdown
+```text
 <s:property  value="username"/>自上而下自动查找
 ```
 
 2.如果栈顶数据不是一个Map，没有key值，可以使用序号来获取。
 
-```markdown
+```text
 <s:property value="[0]"/>  从0的位置向下查找所有。
 
 <s:property value="[0].top"/> 只查找0位置上数据。
@@ -140,7 +138,7 @@ ValueStack vs=ActionContext.getContext().getValueStack();
 
 #### 如果获取OgnlContext中数据
 
-```markdown
+```text
 request:<s:property value="#request.rname"/>  获取request中属性名为rname的数据
 
 session:<s:property value="#session.sname"> 获取session中属性名为sname的数据
@@ -172,7 +170,7 @@ this.addActionMessage("Action的消息信息");
 
 在jsp中使用 struts2提供标签 显示消息信息
 
-```markdown
+```text
 <s:fielderror fieldName="msg"/>
 <s:actionerror/>
 <s:actionmessage/>
@@ -197,7 +195,7 @@ vs.push(users);
 
 使用&lt;s:iterator&gt;标签来迭代集合。
 
-```markdown
+```text
 <s:iterator value="[0].top" var="user">
 这是将集合中迭代出来每一个元素起个引用名叫user, 而user是存储在context中，不在root中
 
@@ -217,15 +215,15 @@ vs.push(users);
 
 #### 1. 访问的action对象会被压入到valueStack中
 
-DefaultActionInvocation 的 init方法 stack.push(action);
+DefaultActionInvocation 的 init方法 stack.push\(action\);
 
 Action如果想传递数据给JSP，只要将数据保存到成员变量，并且提供get方法就可以了。然后通过Property Name就可以获取到值。
 
-![Action类中的成员](.gitbook/assets/2020-03-14-19-18-05.png)
+![Action&#x7C7B;&#x4E2D;&#x7684;&#x6210;&#x5458;](../.gitbook/assets/2020-03-14-19-18-05.png)
 
 #### 2. 对于模型驱动，model对象默认被压入valuestack中
 
-![model对象被压入valuestack中](.gitbook/assets/2020-03-14-19-32-55.png)
+![model&#x5BF9;&#x8C61;&#x88AB;&#x538B;&#x5165;valuestack&#x4E2D;](../.gitbook/assets/2020-03-14-19-32-55.png)
 
 ModelDriveInterceptor会执行下面操作
 
@@ -240,7 +238,7 @@ if (model !=  null) {
 
 将实现了ModelDrive接口的action中getModel方法的返回值，也就是我们所说的model对象压入到了valueStack。
 
-![关于默认压入的model分析](.gitbook/assets/2020-03-14-19-42-59.png)
+![&#x5173;&#x4E8E;&#x9ED8;&#x8BA4;&#x538B;&#x5165;&#x7684;model&#x5206;&#x6790;](../.gitbook/assets/2020-03-14-19-42-59.png)
 
 解释：值栈中默认先压入Action，Action中的成员user初始化赋值，再压入model对象，model对象指向初始化中的user对象。当执行到Action中excute方法，user引用重新赋值，而栈顶model对象仍指向最开始的数据。在jsp页面上获取数据时需要注意要想获得新的数据，需要通过action中的model来获取。
 
@@ -248,9 +246,9 @@ if (model !=  null) {
 
 struts2框架中所使用的request对象，是增强后的request对象。
 
-${username}---->request.getAttribute("username");
+${username}----&gt;request.getAttribute\("username"\);
 
-StrutsPreparedAndExecuteFilter的doFilter代码中 request = prepare.wrapRequest(request);
+StrutsPreparedAndExecuteFilter的doFilter代码中 request = prepare.wrapRequest\(request\);
 
 * 对Request对象进行了包装 ，StrutsRequestWrapper
 * 重写request的 getAttribute
@@ -264,13 +262,13 @@ if (attribute == null) {
 
 增强后的request,会首先在request域范围查找，如果数据找不到，去值栈中找。 request对象 具备访问值栈数据的能力 （查找root的数据）。
 
-## 3 OGNL表达式常见使用($ % #)
+## 3 OGNL表达式常见使用\($ % \#\)
 
-### 1. #号
+### 1. \#号
 
-#### 用法一  # 代表 ActionContext.getContext() 上下文
+#### 用法一  \# 代表 ActionContext.getContext\(\) 上下文
 
-```markdown
+```text
 <s:property value="#request.name" />  -->  ActionContext().getContext().getRequest().get("name");
 
 #request
@@ -280,9 +278,9 @@ if (attribute == null) {
 #parameters
 ```
 
-#### 用法二 ： 不写# 默认在 值栈中root中进行查找
+#### 用法二 ： 不写\# 默认在 值栈中root中进行查找
 
-```markdown
+```text
 * 在root中查找name属性
 <s:property value="name" />
 
@@ -295,9 +293,9 @@ if (attribute == null) {
 
 #### 用法三 ：进行投影映射 （结合复杂对象遍历 ）
 
-1）集合的投影(只输出部分属性)
+1）集合的投影\(只输出部分属性\)
 
-```markdown
+```text
 遍历集合只要name属性
 <s:iterator value="products.{name}" var="pname">
 <s:property value="#pname"/>
@@ -306,7 +304,7 @@ if (attribute == null) {
 
 2）遍历时，对数据设置条件
 
-```markdown
+```text
 遍历集合只要price大于1500商品
 
 <s:iterator value="products.{?#this.price>1500}" var="product">
@@ -316,7 +314,7 @@ if (attribute == null) {
 
 3）综合
 
-```markdown
+```text
 只显示价格大于1500 商品名称
 
 <s:iterator value="products.{?#this.price>1500}.{name}" var="pname">
@@ -324,21 +322,21 @@ if (attribute == null) {
 </s:iterator>
 ```
 
-#### 用法四： 使用#构造map集合
+#### 用法四： 使用\#构造map集合
 
 经常结合 struts2 标签用来生成 select、checkbox、radio
 
-使用#构造map集合 遍历
+使用\#构造map集合 遍历
 
-```markdown
+```text
 <s:iterator value="#{'name':'aaa','age':'20', 'hobby':'sport' }" var="entry">
 key : <s:property value="#entry.key"/> , value:  <s:property value="#entry.value"/> <br/>
 </s:iterator>
 ```
 
-使用#构造List集合 遍历
+使用\#构造List集合 遍历
 
-```markdown
+```text
 <s:iterator value="#{'aaa','bbb', 'ccc'}" var="v">
 <s:property value="#v"/> <br/>
 </s:iterator>
@@ -346,7 +344,7 @@ key : <s:property value="#entry.key"/> , value:  <s:property value="#entry.value
 
 手动创建一个集合，在struts2结合表单标签
 
-```markdown
+```text
 <s:form>
     <s:radio list="{'男','女'}" name="sex"></s:radio>
 
@@ -363,13 +361,11 @@ key : <s:property value="#entry.key"/> , value:  <s:property value="#entry.value
 
 %作用：就是用于设定当前是否要解析其为 ognl表达式.
 
-* %{表达式}  当前表达式会被做为ognl解析.
-
+* %{表达式} 当前表达式会被做为ognl解析.
 * %{'表达式'} 当前表达式不会被做为ognl解析。
-
 * &lt;s:property value="表达式"&gt; 对于s:property标签，它的value属性会被默认做为ognl.
 
-以后，所有表达式如果想要让其是ognl  **%{表达式}**
+以后，所有表达式如果想要让其是ognl **%{表达式}**
 
 ### 3. $号
 
@@ -377,7 +373,7 @@ $作用:就是在配置文件中使用ognl表达式来获取valueStack中数据.
 
 #### 1. struts.xml
 
-```markdown
+```text
 <result type="stream">
     <param name="contentType">${contentType}</param>
 </result>
@@ -385,14 +381,14 @@ $作用:就是在配置文件中使用ognl表达式来获取valueStack中数据.
 
 #### 2. 在校验文件中使用
 
-```markdown
+```text
 ${min}  ${max}
 ${minLength} ${maxLength}
 ```
 
 #### 3. 在国际化文件中使用
 
-```markdown
+```text
 在properties文件中
 
 username=${#request.username}
@@ -402,25 +398,25 @@ username=${#request.username}
 <s:text name="username">
 ```
 
-**总结**: #就是用于获取数据  %就是用于设置是否是ognl表达式  $就是在配置文件中使用ognl.
+**总结**: \#就是用于获取数据 %就是用于设置是否是ognl表达式 $就是在配置文件中使用ognl.
 
 ## 3. 防止表单重复提交
 
 ### 3.1 什么是表单重复提交
 
-regist.jsp----->RegistServlet
+regist.jsp-----&gt;RegistServlet
 
 表单重复提交危害： 刷票、 重复注册、带来服务器访问压力（拒绝服务）
 
 解决方案:
 
-在页面上生成一个令牌(就是一个随机字符串),将其存储到session中，并在表单中携带.在服务器端，获取数据时，也将令牌获取，将它与session中存储的token对比，没问题，将session中令牌删除。
+在页面上生成一个令牌\(就是一个随机字符串\),将其存储到session中，并在表单中携带.在服务器端，获取数据时，也将令牌获取，将它与session中存储的token对比，没问题，将session中令牌删除。
 
 ### 3.2 struts2中怎样解决表单重复提交
 
 在struts2中解决表单重复提交，可以使用它定义的一个interceptor。
 
-```markdown
+```text
 <interceptor name="token" class="org.apache.struts2.interceptor.TokenInterceptor"/>
 ```
 
@@ -430,13 +426,13 @@ regist.jsp----->RegistServlet
 
 2.需要在action中引入token拦截器
 
-```markdown
+```text
 <interceptor-ref name="token"/>
 ```
 
 3.需要配置视图
 
-```markdown
+```text
 <result name="invalid.token">/token.jsp</result>
 ```
 
@@ -446,7 +442,7 @@ regist.jsp----->RegistServlet
 
 ## 4. struts2中json插件使用
 
-### 4.1 struts2中怎样处理异步提交(ajax)
+### 4.1 struts2中怎样处理异步提交\(ajax\)
 
 异步提交参考[ajax](../ajax/ajax1.md)
 
@@ -465,14 +461,14 @@ response.getWriter().close();
 1. 导入json插件包 在struts2的lib包下  struts2-json-plugin-2.3.15.1.jar。
 2. 在struts.xml文件中配置
 
-```markdown
+```text
     1.<package extends="json-default">
     2.设置视图<result type="json">
 ```
 
 这样设置后，默认会将valueStack栈顶数据变成json返回。
 
-```markdown
+```text
 <action name=...>
     <result type="jspn">
         <param name="root">p</param>
@@ -485,11 +481,12 @@ response.getWriter().close();
 
 ### 4.2 怎样设置转换成json的对象中不包含特定的属性
 
-1. @JSON(serialize=false) 在getXxx方法上设置
+1. @JSON\(serialize=false\) 在getXxx方法上设置
 2. 还可以通过json插件的interceptor完成.
 
-```markdown
+```text
 <param name="includeProperties">ps\[\d+\]\.name,ps\[\d+\]\.price,ps\[\d+\]\.count</param>
 
 注意符号需要转义
 ```
+

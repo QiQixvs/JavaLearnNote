@@ -615,7 +615,7 @@ getPageContext();
 
 ## 9. login练习
 
-```markdown
+```text
 <package name="default" namespace="/" extends="struts-default">
     <action name="login" class="action.LoginAction">
         <result name="failer">/login.jsp</result>
@@ -646,3 +646,4 @@ public class LoginAction  extends ActionSupport {
 ```
 
 笔记：有两种结果登录成功或者不成功。result标签name的默认值是SUCCESS。 type=dispatcher请求转发是默认值。登录成功后需要重定向到新的页面，type是Redirect。
+

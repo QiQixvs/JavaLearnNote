@@ -44,7 +44,7 @@ newProxyInstance(ClassLoader loader,Class[] interfaces,InvocationHandler h);
 
 * loader  
 
-要求: 传递的是被代理类的[类加载器](classloader.md).
+要求: 传递的是被代理类的[类加载器](annotation/classloader.md).
 
 类加载器怎样获取: 得到其Class对象。在Class类中提供一个方法 getClassLoader\(\);
 

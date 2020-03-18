@@ -16,18 +16,21 @@
 * [文件的上传下载练习](fileupload-filedownload/file-updown-exercise.md)
 * [enctype详解](fileupload-filedownload/enctype.md)
 * [扩展-队列](fileupload-filedownload/file-download-extension.md)
-* [国际化](fileupload-filedownload/internationalization.md)
 
 ## Ajax
 
 * [ajax](ajax/ajax1.md)
 * [ajax练习](ajax/ajax-exercise.md)
-* [注解](ajax/annotation.md)
-* [Servlet](ajax/servlet.md)
-* [动态代理](ajax/dynamic-proxy.md)
-* [类加载器](ajax/classloader.md)
-* [泛型反射](ajax/generic-type-reflection.md)
-* [商城项目练习笔记](ajax/e-store-exercise.md)
+
+## 杂项
+
+* [国际化](za-xiang/internationalization.md)
+* [注解](za-xiang/annotation/README.md)
+  * [类加载器](za-xiang/annotation/classloader.md)
+* [泛型反射](za-xiang/generic-type-reflection.md)
+* [动态代理](za-xiang/dynamic-proxy.md)
+* [Servlet](za-xiang/servlet.md)
+* [商城项目练习笔记](za-xiang/e-store-exercise.md)
 
 ## Struts2
 
@@ -35,11 +38,11 @@
 * [Struts2框架-2](struts2/struts2_2.md)
 * [Struts2框架-3](struts2/struts2_3.md)
 * [Struts2框架-4](struts2/struts2_4.md)
-* [Struts2框架练习笔记](struts2-exercise.md)
+* [Struts2框架练习笔记](struts2/struts2-kuang-jia-lian-xi-bi-ji.md)
 
 ## 附录 <a id="appendix"></a>
 
 * [Tomcat使用相关](appendix/tomcat.md)
 * [IDEA踩坑记录](appendix/idea.md)
+* [MySQL数据库操作-DCL](appendix/mysql-ddl.md)
 
-* [MySQL数据库操作-DCL](mysql-ddl.md)
