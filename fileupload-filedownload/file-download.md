@@ -146,7 +146,7 @@ filename = URLEncoder.encode(filename, "utf-8");
 
 } else{
 //其他浏览器
-filename = new String(fileName.getBytes(“UTF-8”), “ISO8859-1”);
+filename = new String(filename.getBytes("UTF-8"), "ISO8859-1");
 
 }
 response.setHeader("content-disposition", "attachment;filename="+filename);

@@ -392,6 +392,11 @@ struts2的校验框架
 用于指定校验器中的参数.
 ```
 
+{% hint style="danger" %}
+在页面上显示通过<s:fielderror>，
+在struts2.xml中action标签下配置input视图，和目标页面。
+{% endhint %}
+
 #### 介绍: 关于配置校验中的校验器
 
 校验器有哪些?

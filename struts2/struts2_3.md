@@ -456,12 +456,13 @@ protected InputStream inputStream; //用于读取要下载的文件。
 </result>
 ```
 
-在action类中定义getInputStream方法
+在action类中定义成员变量InputStream，给出set/get方法。这个地方有疑问！！
 
 ```java
 public class DownloadAction extends ActionSupport{
     private String filename;
     //...get/set方法..
+
     public InputStream getInputStream() throws FileNotFoundException {
         FileInputStream fis = new FileInputStream("d:/upload/" + filename);
         return fis;
@@ -497,4 +498,27 @@ public String getContentType(){
 }
 ```
 
-action类中获取downloadFileName，中文乱码问题需要判断浏览器 参考* [文件的下载](../fileupload-filedownload/file-download.md)
+action类中获取downloadFileName，中文乱码问题需要判断浏览器 参考* [文件的下载-文件下载时的乱码问题](../fileupload-filedownload/file-download.md)
+
+```java
+public String encodeDownloadFilename(String filename, String header) {
+        if (header.contains("Edge")) {
+            // Edge浏览器
+            try {
+                filename = URLEncoder.encode(filename, "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            //其他浏览器
+            try {
+                filename = new String(filename.getBytes("UTF-8"), "ISO8859-1");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return filename;
+    }
+```

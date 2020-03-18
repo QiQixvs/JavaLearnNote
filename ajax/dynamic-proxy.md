@@ -181,7 +181,7 @@ login.jsp --&gt; LoginServlet --&gt; UserService --&gt; UserDao.
 
 在servlet中判断method值是什么，调用不同的请求处理方法.
 
-这种方式下，在做权限控制时，如果使用[url级别权限控制](../filter-listener/filter-examples.md)，就不能通过判断请求的资源路径来处理。
+这种方式下，在做权限控制时，如果使用[Filter案例 - URL级别的权限控制](../filter-listener/filter-examples.md)，就不能通过判断请求的资源路径来处理。
 
 可以使用**细粒度权限控制**。
 

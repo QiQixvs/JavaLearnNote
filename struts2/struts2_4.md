@@ -353,9 +353,9 @@ key : <s:property value="#entry.key"/> , value:  <s:property value="#entry.value
     <s:radio list="#{'男':''male,'女':'female'}" name="sex"></s:radio>
     <!--'男'是value，'male'是选项文本-->
 
-    <s:select list="{'a','b','c'}" name="aa"}"></s:select>
+    <s:select list="{'a','b','c'}" name="aa"></s:select>
 
-    <s:select list="#{'a':'aaa','b':'bbb','c':'ccc' name="aa"}"></s:select>
+    <s:select list="#{'a':'aaa','b':'bbb','c':'ccc'} name="aa"></s:select>
 </s:form>
 ```
 
@@ -369,7 +369,7 @@ key : <s:property value="#entry.key"/> , value:  <s:property value="#entry.value
 
 * &lt;s:property value="表达式"&gt; 对于s:property标签，它的value属性会被默认做为ognl.
 
-以后，所有表达式如果想要让其是ognl  %｛表达式｝
+以后，所有表达式如果想要让其是ognl  **%{表达式}**
 
 ### 3. $号
 
@@ -460,7 +460,7 @@ response.getWriter().close();
 
 还可以使用struts2中提供的json插件:
 
-[json数据介绍](../ajax/ajax1.md)
+[ajax-关于json插件使用](../ajax/ajax1.md)
 
 1. 导入json插件包 在struts2的lib包下  struts2-json-plugin-2.3.15.1.jar。
 2. 在struts.xml文件中配置
