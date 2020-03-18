@@ -25,8 +25,8 @@
 ## 杂项
 
 * [国际化](za-xiang/internationalization.md)
-* [注解](za-xiang/annotation/README.md)
-  * [类加载器](za-xiang/annotation/classloader.md)
+* [注解](za-xiang/annotation.md)
+* [类加载器](za-xiang/classloader.md)
 * [泛型反射](za-xiang/generic-type-reflection.md)
 * [动态代理](za-xiang/dynamic-proxy.md)
 * [Servlet](za-xiang/servlet.md)

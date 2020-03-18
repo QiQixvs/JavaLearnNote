@@ -89,7 +89,7 @@ interface MyAnnotation extends Annotation
 5. Annotation
 6. 以上类型的一维数组。
 
-![&#x6CE8;&#x89E3;&#x4E2D;&#x7684;&#x5C5E;&#x6027;](../../.gitbook/assets/2020-03-04-14-37-41.png)
+![&#x6CE8;&#x89E3;&#x4E2D;&#x7684;&#x5C5E;&#x6027;](../.gitbook/assets/2020-03-04-14-37-41.png)
 
 ### 3.2 属性的使用问题
 
