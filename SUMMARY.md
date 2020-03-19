@@ -32,13 +32,17 @@
 * [Servlet](za-xiang/servlet.md)
 * [商城项目练习笔记](za-xiang/e-store-exercise.md)
 
-## Struts2
+## Struts2框架 <a id="struts2frame"></a>
 
-* [struts2框架-1](struts2/struts2_1.md)
-* [Struts2框架-2](struts2/struts2_2.md)
-* [Struts2框架-3](struts2/struts2_3.md)
-* [Struts2框架-4](struts2/struts2_4.md)
-* [Struts2框架练习笔记](struts2/struts2-kuang-jia-lian-xi-bi-ji.md)
+* [struts2框架-1](struts2frame/struts2_1.md)
+* [Struts2框架-2](struts2frame/struts2_2.md)
+* [Struts2框架-3](struts2frame/struts2_3.md)
+* [Struts2框架-4](struts2frame/struts2_4.md)
+* [Struts2框架练习笔记](struts2frame/struts2-kuang-jia-lian-xi-bi-ji.md)
+
+## Hibernate框架 <a id="hibernate-frame"></a>
+
+* [Hibernate框架-1](hibernate-frame/hibernate-1.md)
 
 ## 附录 <a id="appendix"></a>
 
@@ -46,4 +50,3 @@
 * [IDEA踩坑记录](appendix/idea.md)
 * [MySQL数据库操作-DCL](appendix/mysql-ddl.md)
 
-* [Hibernate框架-1](Hibernate-1.md)
