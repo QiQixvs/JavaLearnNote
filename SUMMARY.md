@@ -46,3 +46,4 @@
 * [IDEA踩坑记录](appendix/idea.md)
 * [MySQL数据库操作-DCL](appendix/mysql-ddl.md)
 
+* [Hibernate框架-1](Hibernate-1.md)
