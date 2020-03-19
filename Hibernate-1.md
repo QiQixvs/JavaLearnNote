@@ -503,9 +503,16 @@ type三种写法
 
 * 一个表对应多个主键形式:(复合主键:) ---了解.
 
+由多个字段组合确定一条记录的唯一性
+
 ```MARKDOWN
-<composite-id></composite-id>
+<composite-id>
+    <key-property>...
+    <key-property>...
+</composite-id>
 ```
+
+实体类必须实现序列化接口 implements java.io.Serializable
 
 ##### 4. 关联关系
 
@@ -647,7 +654,7 @@ Transaction tx = session.beginTransaction();
 事务是否自动提交在核心配置里设置，设置了自动提交，在这种情况下，session的操作会生效。
 {% endhint %}
 
-### 5.5 Query & Criteria
+### 5.5 Query
 
 [查询操作另见](#查询所有)
 
@@ -669,10 +676,30 @@ query.setFirstResult(3);
 query.setMaxResults(3);`
 ```
 
+![HQL](.gitbook/assets/2020-03-19-19-58-31.png)
+
+### 5.6 Criteria
+
+```java
+
+// 1.简单查询
+List<Customer> list = session.createCriteria(Customer.class).list();
+
+// 2.条件查询:
+Criteria criteria = session.createCriteria(Customer.class);
+criteria.add(Restrictions.eq("name","wangwu"));
+List<Customer> list = criteria.list();
+
+// 3.分页查询:
+Criteria criteria = session.createCriteria(Customer.class);
+criteria.setFirstResult(3);
+criteria.setMaxResults(3);
+List<Customer> list = criteria.list();
+```
 
 ## 6. Hibernate中的持久化类
 
-持久化类: 实体类 + 映射文件.
+持久化类: 实体类 + 映射文件
 
 ### 6.1 持久化类编写规范
 
@@ -682,39 +709,64 @@ query.setMaxResults(3);`
 ```text
     * java区分两个对象是否是同一个使用 地址.
     * 数据库区分两条记录是否一致:使用  主键.
-    * Hibernate中区分持久化对象是否是同一个,根据唯一标识:
+    * Hibernate中区分持久化对象是否是同一个, 根据唯一标识:
 ```
 
-* 所有属性提供public访问控制符的 set  get 方法:框架中存值和取值的时候使用.
-* 标识属性应尽量使用基本数据类型的包装类型
+* 所有属性提供public访问控制符的 set/get 方法 : 框架中存值和取值的时候使用.
+* 标识属性应尽量使用基本数据类型的**包装类型**
 
 ```text
     * 使用基本数据类型:
     * 成绩表:
         学号    姓名    成绩
         1       张三    null
+    成绩位置，如果显示0会出现误解，用Integer类型，没成绩会显示null。
 ```
 
-* 持久化类尽量不要使用final进行修饰,用final修饰的类是不能被继承.无法生成代理对象.(延迟加载的时候返回代理对象.延迟加载就失效.)
+* 持久化类尽量不要使用final进行修饰, 用final修饰的类是不能被继承.无法生成代理对象. (延迟加载的时候返回代理对象.延迟加载就失效.)
 
-建表的时候:
+### 6.2 建表的时候自然主键和代理主键
 
-* 自然主键和代理主键:
-* 自然主键:
+自然主键:
+
 * 创建一个人员表.人员表中某条记录唯一确定.人都有身份证号.我们可以使用身份证号作为主键.(身份证号本身就是人员的一个属性.作为主键.)
 
-* 代理主键:
+代理主键:
+
 * 创建一个人员表.人员表中某条记录唯一确定.但是没有使用身份证号作为主键,新建字段(用新建的字段作为主键.只是一个标识作用.)
 
-* 尽量要Hibernate自己去维护主键:
+在关系数据库中，用主键来识别记录并保证每条记录的唯一性。所以作为主键的字段必须非空，不能重复且不应该被改变。自然主键，作为记录的属性之一，如果参与业务逻辑，就需要被改变，所以应该使用代理主键。
+
+{% hint style="info" %}
+尽量要Hibernate自己去维护主键
+{% endhint %}
 
 #### 主键的生成策略
 
-* increment:自动增长.适合 short int long...不是使用数据库的自动增长机制.使用Hibernate框架提供的自动增长方式.
-* select max(id) from 表; 在最大值的基础上+1.(多线程的问题.)在集群下不要使用
-* identity:自动增长.适合 short int long...采用数据库的自动增长机制.不适合于Oracle数据库.
-* sequence:序列.适用于 short int long ... 应用在Oracle上 .
-* uuid:适用于字符串类型的主键.采用随机的字符串作为主键.
-* native:本地策略.底层数据库不同.自动选择适用identity 还是 sequence.
-* assigned:Hibernate框架不维护主键,主键由程序自动生成.
-* foreign:主键的外来的.(应用在多表一对一的关系.)
+设置映射文件配置中generator标签的class属性：
+
+```markdown
+<id name="id" column="id">
+    <generator class="native"/>
+</id>
+```
+
+increment: 自动增长. 适合 short int long... 不是使用数据库的自动增长机制.使用Hibernate框架提供的自动增长方式.
+
+* 在增加记录时，会先查询最大的id值 select max(id) from 表; 在最大值的基础上+1.(多线程的问题.主键重复) 在集群下不要使用
+
+identity: 自动增长. 适合 short int long... 采用数据库的自动增长机制. <font color=red>不适合于Oracle数据库.</font>
+
+sequence: 序列. 适用于 short int long ... <font color=red>应用在Oracle上</font> .
+
+uuid: 适用于**字符串类型**的主键. 采用随机的字符串作为主键.
+
+native: 本地策略. 底层数据库不同. 自动选择适用identity 还是 sequence.
+
+assigned: Hibernate框架不维护主键, 主键由程序自动生成.
+
+foreign: 主键的外来的. (应用在多表一对一的关系.)
+
+#### 扩展：复合主键
+
+[另见](#配置唯一标识与主键映射)
