@@ -65,3 +65,7 @@ Java项目或者web项目视情况选择。Idea默认下载的是Hibernate5，�
 Generate Column Properties选项勾选后，会在生成的实体类.hbm.xml中生成对应字段属性，但是需要检查一下not-null属性是否正确。
 
 每次自动生成实体类后，hibernate.cgf.xml中关于数据库连接那一块会被替换重置，需要重新修改。
+
+方式三： 已有实体类，无表。
+
+建类，写映射配置文件，在核心配置中写好mapping，跑Main.class的主方法。
