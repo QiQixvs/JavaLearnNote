@@ -38,7 +38,7 @@
 * [Struts2框架-2](struts2frame/struts2_2.md)
 * [Struts2框架-3](struts2frame/struts2_3.md)
 * [Struts2框架-4](struts2frame/struts2_4.md)
-* [Struts2框架练习笔记](struts2frame/struts2-kuang-jia-lian-xi-bi-ji.md)
+* [Struts2框架练习笔记](struts2frame/struts2-exercise.md)
 
 ## Hibernate框架 <a id="hibernate-frame"></a>
 

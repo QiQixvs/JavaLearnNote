@@ -364,7 +364,7 @@ if (admins.contains(path) || users.contains(path))
 
 ## 全局编码过滤（通过get和post乱码过滤器）
 
-![request&#x3001;response&#x521B;&#x5EFA;&#x4E0E;&#x9500;&#x6BC1;](../.gitbook/assets/2020-02-28-23-32-19%20%281%29.png)
+![](.gitbook/assets/2020-03-20-10-28-23.png)
 
 用装饰模式类对request进行增强，解决编码问题。被装饰类是由服务器实现的request。
 

@@ -57,7 +57,7 @@ valueStack主要是将action数据携带到页面上，通过ognl获取数据
 
 ### 2.2 valueStack结构
 
-![valueStack&#x7ED3;&#x6784;](../.gitbook/assets/2020-03-13-22-10-49.png)
+![valueStack&#x7ED3;&#x6784;](.gitbook/assets/2020-03-13-22-10-49.png)
 
 ValueStack中 存在root属性 \(CompoundRoot\) 、 context 属性 （OgnlContext）
 
@@ -72,7 +72,7 @@ map集合中存储的是相关映射信息，包含 paramters,request,session,ap
 
 如果从map中获取数据，需要使用\#. \(其实在struts2中的map--context其实就是ognlContext\)
 
-![valueStack&#x7ED3;&#x6784;&#x76F8;&#x5173;&#x5206;&#x6790;](../.gitbook/assets/2020-03-14-19-57-14.png)
+![valueStack&#x7ED3;&#x6784;&#x76F8;&#x5173;&#x5206;&#x6790;](.gitbook/assets/2020-03-14-19-57-14.png)
 
 #### 结论
 
@@ -114,7 +114,7 @@ ValueStack vs=ActionContext.getContext().getValueStack();
 
 在jsp中 通过 &lt;s:debug /&gt; 查看值栈的内容
 
-![&#x901A;&#x8FC7;&amp;lt;s:debug&amp;gt; &#x67E5;&#x770B;&#x503C;&#x6808;&#x7684;&#x5185;&#x5BB9;](../.gitbook/assets/2020-03-14-14-38-04.png)
+![&#x901A;&#x8FC7;&amp;lt;s:debug&amp;gt; &#x67E5;&#x770B;&#x503C;&#x6808;&#x7684;&#x5185;&#x5BB9;](.gitbook/assets/2020-03-14-14-38-04.png)
 
 ### 2.6 在JSP中获取值栈的数据
 
@@ -223,7 +223,7 @@ Action如果想传递数据给JSP，只要将数据保存到成员变量，并�
 
 #### 2. 对于模型驱动，model对象默认被压入valuestack中
 
-![model&#x5BF9;&#x8C61;&#x88AB;&#x538B;&#x5165;valuestack&#x4E2D;](../.gitbook/assets/2020-03-14-19-32-55.png)
+![model&#x5BF9;&#x8C61;&#x88AB;&#x538B;&#x5165;valuestack&#x4E2D;](.gitbook/assets/2020-03-14-19-32-55.png)
 
 ModelDriveInterceptor会执行下面操作
 
@@ -238,7 +238,7 @@ if (model !=  null) {
 
 将实现了ModelDrive接口的action中getModel方法的返回值，也就是我们所说的model对象压入到了valueStack。
 
-![&#x5173;&#x4E8E;&#x9ED8;&#x8BA4;&#x538B;&#x5165;&#x7684;model&#x5206;&#x6790;](../.gitbook/assets/2020-03-14-19-42-59.png)
+![&#x5173;&#x4E8E;&#x9ED8;&#x8BA4;&#x538B;&#x5165;&#x7684;model&#x5206;&#x6790;](.gitbook/assets/2020-03-14-19-42-59.png)
 
 解释：值栈中默认先压入Action，Action中的成员user初始化赋值，再压入model对象，model对象指向初始化中的user对象。当执行到Action中excute方法，user引用重新赋值，而栈顶model对象仍指向最开始的数据。在jsp页面上获取数据时需要注意要想获得新的数据，需要通过action中的model来获取。
 
