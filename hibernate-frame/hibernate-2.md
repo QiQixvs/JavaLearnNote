@@ -387,44 +387,75 @@ public class Order {
 
 #### 第三步: 将映射放到核心配置文件中
 
-![](.gitbook/assets/2020-03-20-23-27-27.png)
+![一对多](.gitbook/assets/2020-03-20-23-27-27.png)
 
 ### 4.3 Hibernate中 级联 保存的效果
 
 级联: 操作当前对象的时候, 关联的对象如何处理.
 
-cascade=”save-update”
+在&lt;set&gt;标签上添加
+
+```markdown
+<set name ="orders" cascade="save-update">
+...
+</set>
+```
+
+设置后，save客户数据，对应的订单数据也会被保存。
 
 级联方向性:
 
-* 保存客户的时候,选择级联订单.
-* 保存订单的时候,选择级联客户.
+* 保存客户的时候, 选择级联订单.
+* 保存订单的时候, 选择级联客户.
 
-### 4.4 Hibernate中级联删除的效果
+### 4.4 Hibernate中 级联 删除的效果
 
-cascade=”delete”
+先查询再删除
+
+```java
+Customer customer = (Customer) session.get(Customer.class,1);
+session.delete(customer);
+```
+
+并在Customer.hbm.xml中&lt;set&gt;标签上配置
+
+```markdown
+<set name ="orders" cascade=”delete”>
+...
+</set>
+
+<!--如果是多个值，就用逗号隔开-->
+<set name ="orders" cascade="save-update,delete">
+...
+</set>
+```
 
 ### 4.5 Hibernate中的级联取值
 
-none:不使用级联
-dave-update:保存或更新的时候级联
-delete:删除的时候级联
-all:除了孤儿删除以外的所有级联.
-delete-orphan:孤儿删除(孤子删除).
+|cascade属性值|描述|
+|----|----|
+|none|不使用级联|
+|dave-update|保存或更新的时候级联|
+|delete|删除的时候级联|
+|all|除了孤儿删除以外的所有级联.|
+|delete-orphan|孤儿删除(孤子删除).|
+|all-delete-orphan|包含了孤儿删除的所有的级联.|
+delete-orphan：
 
 * 仅限于一对多.只有一对多时候,才有父子存在.认为一的一方是父亲,多的一方是子方.
 * 当一个客户与某个订单解除了关系.将外键置为null.订单没有了所属客户,相当于一个孩子没有了父亲.将这种记录就删除了.
 
-all-delete-orphan:包含了孤儿删除的所有的级联.
-
 ### 4.6 双向维护产生多余的SQL
 
-配置inverse=”true”:在那一端配置.那么那一端放弃了外键的维护权.
+默认双方都能维护外键
+
+在&lt;set&gt;标签上配置inverse=”true”: 在那一端配置.那么那一端放弃了外键的维护权.
 
 * 一般情况下,一的一方去放弃.
 
-cascade:操作关联对象.
-inverse:控制外键的维护.
+总结：
+cascade: 操作关联对象.
+inverse: 控制外键的维护.
 
 ### 4.7 Hibernate的多对多的配置
 
@@ -471,12 +502,16 @@ public class Course {
         <property name="sname" column="sname" length="20"/>
 
         <!-- 配置关联映射 -->
+
         <!-- <set>标签 name:对应学生中的课程集合的名称   table:中间表名称. -->
         <set name="courses" table="stu_cour">
+
         <!-- <key>中column写 当前类在中间表的外键.-->
             <key column="sno"></key>
+
         <!-- <many-to-many>中class:另一方类的全路径. column:另一方在中间表中外键名称-->
             <many-to-many class="cn.itcast.hibernate3.demo3.Course" column="cno"/>
+
         </set>
     </class>
 </hibernate-mapping>
@@ -494,15 +529,95 @@ public class Course {
         <!-- 配置普通属性 -->
         <property name="cname" column="cname" length="20"/>
         <!-- 配置与学生关联映射 -->
+
         <!-- <set>中name:对应当前类中的学生的集合的名称  table:中间表的名称-->
         <set name="students" table="stu_cour">
+
         <!-- <key>中column:当前类在中间表中外键 -->
             <key column="cno"></key>
+
         <!-- <many-to-many>中class:另一方的类全路径. column:另一方在中间表中外键名称 -->
             <many-to-many class="cn.itcast.hibernate3.demo3.Student" column="sno"/>
+
         </set>
     </class>
 </hibernate-mapping>
 ```
 
+* 在&lt;set&gt;标签上配置table=中间表名称
+* &lt;many-to-many&gt;中class:另一方的类全路径. column:另一方在中间表中外键名称
+
 #### 第三步: 将映射文件加入到核心配置文件中
+
+#### 多对多保存操作
+
+多对多必须有一方放弃外键维护权，一般由关系产生的主动方进行维护
+
+在课程的&lt;set&gt;标签上配置inverse=”true”:
+
+##### 级联 保存
+
+```java
+@Test
+// 级联操作:级联保存:保存学生关联课程
+// 在Student.hbm.xml中配置<set>上 cascade="save-update"
+public void demo2() {
+    Session session = HibernateUtils.openSession();
+    Transaction tx = session.beginTransaction();
+
+    // 创建学生:
+    Student student1 = new Student();
+    student1.setSname("王五");
+
+    // 创建课程:
+    Course course1 = new Course();
+    course1.setCname("PHP语言");
+
+    student1.getCourses().add(course1);
+    course1.getStudents().add(student1);
+
+    session.save(student1);
+
+    tx.commit();
+    session.close();
+}
+```
+
+#### 多对多级联删除操作
+
+```java
+@Test
+// 级联删除:在多对多中很少使用.
+// 删除:删除学生同时删除学生关联选课
+public void demo3(){
+    Session session = HibernateUtils.openSession();
+    Transaction tx = session.beginTransaction();
+
+    Student student = (Student) session.get(Student.class, 3);
+    session.delete(student);
+
+    tx.commit();
+    session.close();
+}
+```
+
+级联删除:在多对多中很少使用,这样级联删除学生时会同时删除关联的课程
+
+```java
+Test
+// 多对多的学生退选.
+public void demo4(){
+    Session session = HibernateUtils.openSession();
+    Transaction tx = session.beginTransaction();
+
+    // 查询一号学生
+    Student student = (Student) session.get(Student.class, 1);
+    Course course = (Course) session.get(Course.class, 2);
+    student.getCourses().remove(course);
+
+    tx.commit();
+    session.close();
+}
+```
+
+用集合的remove()方法实现学生退选操作，解除该学生和课程的关联。
