@@ -389,9 +389,9 @@ public class Order {
 
 ![](.gitbook/assets/2020-03-20-23-27-27.png)
 
-### 4.3 Hibernate中级联保存的效果
+### 4.3 Hibernate中 级联 保存的效果
 
-级联:操作当前对象的时候, 关联的对象如何处理.
+级联: 操作当前对象的时候, 关联的对象如何处理.
 
 cascade=”save-update”
 
