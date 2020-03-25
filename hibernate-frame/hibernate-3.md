@@ -347,6 +347,8 @@ System.out.println(customers);
 
 ## 2. Hibernate的抓取策略Fetching Strategies
 
+Query 的 list 方法会忽略映射文件配置的迫切左外连接检索策略, 而采用延迟检索或立即检索策略，根据customer类级别的lazy属性
+
 ## 2.1 延迟和立即检索
 
 立即检索:

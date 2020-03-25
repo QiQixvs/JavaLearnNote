@@ -45,6 +45,7 @@
 * [Hibernate框架-1](hibernate-frame/hibernate-1.md)
 * [Hibernate框架-2](hibernate-frame/hibernate-2.md)
 * [Hibernate框架-3](hibernate-frame/hibernate-3.md)
+* [Hibernate框架-4](hibernate-frame/hibernate-4.md)
 
 ## 附录 <a id="appendix"></a>
 
