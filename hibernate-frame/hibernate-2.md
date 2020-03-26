@@ -420,7 +420,7 @@ session.delete(customer);
 并在Customer.hbm.xml中&lt;set&gt;标签上配置
 
 ```markdown
-<set name ="orders" cascade=”delete”>
+<set name ="orders" cascade="delete">
 ...
 </set>
 

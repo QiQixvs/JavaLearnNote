@@ -231,24 +231,21 @@ query.list();
 
 ### 1.3 SH的整合
 
-第一步:创建一个web项目:
-第二步:导入jar包:
-Struts2开发包:
-Hibernate开发包:
-* hibernate3.jar
-* lib/jpa/*.jar
-* lib/required/*.jar
-* mysql驱动
-* c3p0
-引入配置文件:
+第一步: 创建一个web项目
+第二步: 导入jar包: Struts2开发包，Hibernate开发包
+
+第三步：引入配置文件
+
 * struts.xml
 * hibernate.cfg.xml
 * log4j.properties
-第三步:创建包结构:
-cn.itcast.vo
-...
 
-第四步:创建实体类与映射:
+第四步:创建包结构
 
-第五步:请求
-customer_findAll.action
+第五步:创建实体类与映射
+
+第六步: Action类和配置
+
+Hibernate的检索查询操作写在dao层。根据需要获得和返回的数据类型，设计Action类中的成员。
+
+使用Ajax，json实现异步查询订单详情，用OrderAction。
