@@ -4,7 +4,7 @@ description: 持久化对象的状态，一级缓存，关联关系映射
 
 # Hibernate框架-2
 
-[TOC]
+\[TOC\]
 
 ## 1. Hibernate的持久化类状态
 
@@ -14,27 +14,23 @@ description: 持久化对象的状态，一级缓存，关联关系映射
 
 Hibernate为了方便管理持久化类,将持久化类分成了三种状态:
 
-* 瞬时态 transient (临时态)
+* 瞬时态 transient \(临时态\)
 * 持久态 persistent
-* 脱管态 detached (离线态)
+* 脱管态 detached \(离线态\)
 
 ### 1.2 三种持久化对象的状态
 
-Transient瞬时态:
-特点:持久化对象没有唯一标识OID. 没有纳入Session的管理.
+Transient瞬时态: 特点:持久化对象没有唯一标识OID. 没有纳入Session的管理.
 
-Persistent持久态:
-特点:持久化对象有唯一标识OID. 已经纳入到Session的管理.
+Persistent持久态: 特点:持久化对象有唯一标识OID. 已经纳入到Session的管理.
 
 * 持久化持久态对象有自动更新数据库的能力.
 
-Detached脱管态:
-特点:持久化对象有唯一标识OID, 没有纳入到Session管理.
+Detached脱管态: 特点:持久化对象有唯一标识OID, 没有纳入到Session管理.
 
 ### 1.3 区分三种持久化对象的状态
 
 ```java
-
 @Test
 // 区分持久化对象的三种状态:
 public void demo1(){
@@ -62,48 +58,48 @@ public void demo1(){
 
 ### 1.4 三种状态对象转换
 
-![持久化对象状态转换](.gitbook/assets/2020-03-20-19-41-59.png)
+![&#x6301;&#x4E45;&#x5316;&#x5BF9;&#x8C61;&#x72B6;&#x6001;&#x8F6C;&#x6362;](../.gitbook/assets/2020-03-20-19-41-59.png)
 
 瞬时态:
 
-* 获得: Book book = new Book();
+* 获得: Book book = new Book\(\);
 
-瞬时--->持久
+瞬时---&gt;持久
 
-* save(book);
-* save()/saveOrUpdate();
+* save\(book\);
+* save\(\)/saveOrUpdate\(\);
 
-瞬时--->脱管：
+瞬时---&gt;脱管：
 
-* book.setId(1);
+* book.setId\(1\);
 
 持久态:
 
-* 获得: Book book = (Book)session.get(Book.class,1);
-* get()/load()/find()/iterate();
+* 获得: Book book = \(Book\)session.get\(Book.class,1\);
+* get\(\)/load\(\)/find\(\)/iterate\(\);
 
-持久--->瞬时:
+持久---&gt;瞬时:
 
-* delete(book);
-* 特殊状态: 删除态. (被删除的对象,不建议去使用.)
+* delete\(book\);
+* 特殊状态: 删除态. \(被删除的对象,不建议去使用.\)
 
-持久--->脱管:
+持久---&gt;脱管:
 
-* session.close();
-* close()/clear()/evict();  
+* session.close\(\);
+* close\(\)/clear\(\)/evict\(\);  
 
 脱管态:
 
-* 获得: Book book = new Book(); book.setId(1);（不建议直接获得）
+* 获得: Book book = new Book\(\); book.setId\(1\);（不建议直接获得）
 
-脱管--->持久:
+脱管---&gt;持久:
 
-* session.update();
-* update()/saveOrUpdate()/lock()
+* session.update\(\);
+* update\(\)/saveOrUpdate\(\)/lock\(\)
 
-脱管--->瞬时:
+脱管---&gt;瞬时:
 
-* book.setId(null);
+* book.setId\(null\);
 
 ### 1.5 持久态对象有自动更新数据库的能力
 
@@ -129,11 +125,11 @@ public void demo2(){
 }
 ```
 
-![自带update](.gitbook/assets/2020-03-20-20-00-17.png)
+![&#x81EA;&#x5E26;update](../.gitbook/assets/2020-03-20-20-00-17.png)
 
 自动更新数据库的能力依赖了Hibernate的一级缓存.
 
-## 2. Hibernate的一级缓存(重要)
+## 2. Hibernate的一级缓存\(重要\)
 
 ### 2.1 Hibernate的一级缓存
 
@@ -183,7 +179,7 @@ public void demo3(){
 }
 ```
 
-![查询两次但是只有一次SQL语句](.gitbook/assets/2020-03-20-20-12-17.png)
+![&#x67E5;&#x8BE2;&#x4E24;&#x6B21;&#x4F46;&#x662F;&#x53EA;&#x6709;&#x4E00;&#x6B21;SQL&#x8BED;&#x53E5;](../.gitbook/assets/2020-03-20-20-12-17.png)
 
 ### 2.3 深入理解一级缓存中快照区
 
@@ -209,7 +205,7 @@ public void demo4(){
 
 这段程序运行两次，第二次运行时数据是一样的，于是就不会执行第二遍sql
 
-![更新的是一级缓存区，与快照区内容相比较](.gitbook/assets/2020-03-20-20-32-06.png)
+![&#x66F4;&#x65B0;&#x7684;&#x662F;&#x4E00;&#x7EA7;&#x7F13;&#x5B58;&#x533A;&#xFF0C;&#x4E0E;&#x5FEB;&#x7167;&#x533A;&#x5185;&#x5BB9;&#x76F8;&#x6BD4;&#x8F83;](../.gitbook/assets/2020-03-20-20-32-06.png)
 
 **结论**: 向一级缓存存入数据的时候,放入一级缓存区和一级缓存快照区,当更新了一级缓存的数据的时候,事务一旦提交,比对一级缓存和快照区,如果数据一致,不更新,如果数据不一致,自动更新数据库。
 
@@ -217,12 +213,12 @@ public void demo4(){
 
 一级缓存是与session的生命周期相关的. session生命周期结束,一级缓存销毁了.
 
-* clear(): 清空一级缓存中所有的对象.
-* evict(Object obj): 清空一级缓存中某个对象.
-* flush(): 刷出缓存. 可以控制set新的数据之后，update语句发出的时间
-* refresh(Object obj): 将快照区的数据重新覆盖了一级缓存的数据. set新的数据后，在事务提交前，refresh会用快照区数据重新覆盖一级缓存区的数据，结果就是没改。
+* clear\(\): 清空一级缓存中所有的对象.
+* evict\(Object obj\): 清空一级缓存中某个对象.
+* flush\(\): 刷出缓存. 可以控制set新的数据之后，update语句发出的时间
+* refresh\(Object obj\): 将快照区的数据重新覆盖了一级缓存的数据. set新的数据后，在事务提交前，refresh会用快照区数据重新覆盖一级缓存区的数据，结果就是没改。
 
-### 2.5 Hibernate一级缓存的刷出时机:(了解.)
+### 2.5 Hibernate一级缓存的刷出时机:\(了解.\)
 
 FlushMode 常量:
 
@@ -237,22 +233,21 @@ Transaction tx = session.beginTransaction();
 * COMMIT : 在事务提交的时候,手动调用flush的时候.
 * MANUAL : 只有在手动调用flush才会刷出.
 
-严格程度: MANUAL > COMMIT > AUTO > ALWAYS
+严格程度: MANUAL &gt; COMMIT &gt; AUTO &gt; ALWAYS
 
 ## 3. 操作持久化对象的方法
 
-### save()
+### save\(\)
 
 保存一条记录:将瞬时态对象转成持久态对象. 主键根据主键生成策略生成
 
-### update()
+### update\(\)
 
-更新一条记录: 将脱管态对象转成持久态对象。
-通过setId变成脱管态，再通过update转为持久态。
+更新一条记录: 将脱管态对象转成持久态对象。 通过setId变成脱管态，再通过update转为持久态。
 
 在&lt;class&gt;标签上设置select-before-update="true" 在更新之前先去查询
 
-### saveOrUpdate()
+### saveOrUpdate\(\)
 
 根据对象状态的不同执行不同的save获得update方法.
 
@@ -260,11 +255,11 @@ Transaction tx = session.beginTransaction();
 * 如果对象是一个脱管态对象: 执行update操作.
 * 设置id数据库中不存在, 就会报错, 可以在&lt;id&gt;上设置一个unsaved-value=”-1”, 这个数为刚才找不到的id，就会将这条数据作为没有存过的数据执行save的操作加一条.
 
-### delete()
+### delete\(\)
 
 将持久态对象转成瞬时态.
 
-### get()/load()
+### get\(\)/load\(\)
 
 获得一个持久态对象.
 
@@ -282,12 +277,11 @@ Transaction tx = session.beginTransaction();
 
 * 建表原则: 创建第三张表,中间表至少有两个字段, 分别作为外键指向多对多双方主键.
 
-**一对一**: (特殊.最少.) 一个公司只能有一个注册地址,一个注册地址,只能被一个公司使用.(否则将两个表建到一个表.)
+**一对一**: \(特殊.最少.\) 一个公司只能有一个注册地址,一个注册地址,只能被一个公司使用.\(否则将两个表建到一个表.\)
 
 * 建表原则:
-
-1. 唯一外键: 一对一的双方,假设一方是多的关系.需要在多的一方创建一个字段,作为外键.指向一的一方的主键.但是在外键添加一个unique，不能出现重复值.
-2. 主键对应: 一对一的双方,通过主键进行关联.
+* 唯一外键: 一对一的双方,假设一方是多的关系.需要在多的一方创建一个字段,作为外键.指向一的一方的主键.但是在外键添加一个unique，不能出现重复值.
+* 主键对应: 一对一的双方,通过主键进行关联.
 
 ### 4.2 Hibernate中一对多的配置
 
@@ -325,7 +319,7 @@ public class Order {
 
 * Customer.hbm.xml
 
-```markdown
+```text
 <hibernate-mapping>
     <class name="cn.itcast.hibernate3.demo2.Customer" table="customer">
         <!-- 配置唯一标识 -->
@@ -349,7 +343,7 @@ public class Order {
 
 * Order.hbm.xml
 
-```markdown
+```text
 <hibernate-mapping>
     <class name="cn.itcast.hibernate3.demo2.Order" table="orders">//这里表名是Orders
     <!-- 配置唯一标识  -->
@@ -361,9 +355,9 @@ public class Order {
         <!-- 配置映射 -->
         <!-- 
         <many-to-one>标签
-        name 	:关联对象的属性的名称.
-        column	:表中的外键名称.
-        class	:关联对象类的全路径
+        name     :关联对象的属性的名称.
+        column    :表中的外键名称.
+        class    :关联对象类的全路径
         -->
         <many-to-one name="customer" column="cno" class="cn.itcast.hibernate3.demo2.Customer"/>
     </class>
@@ -387,7 +381,7 @@ public class Order {
 
 #### 第三步: 将映射放到核心配置文件中
 
-![一对多](.gitbook/assets/2020-03-20-23-27-27.png)
+![&#x4E00;&#x5BF9;&#x591A;](../.gitbook/assets/2020-03-20-23-27-27.png)
 
 ### 4.3 Hibernate中 级联 保存的效果
 
@@ -395,7 +389,7 @@ public class Order {
 
 在&lt;set&gt;标签上添加
 
-```markdown
+```text
 <set name ="orders" cascade="save-update">
 ...
 </set>
@@ -419,7 +413,7 @@ session.delete(customer);
 
 并在Customer.hbm.xml中&lt;set&gt;标签上配置
 
-```markdown
+```text
 <set name ="orders" cascade="delete">
 ...
 </set>
@@ -432,14 +426,15 @@ session.delete(customer);
 
 ### 4.5 Hibernate中的级联取值
 
-|cascade属性值|描述|
-|----|----|
-|none|不使用级联|
-|dave-update|保存或更新的时候级联|
-|delete|删除的时候级联|
-|all|除了孤儿删除以外的所有级联.|
-|delete-orphan|孤儿删除(孤子删除).|
-|all-delete-orphan|包含了孤儿删除的所有的级联.|
+| cascade属性值 | 描述 |
+| :--- | :--- |
+| none | 不使用级联 |
+| dave-update | 保存或更新的时候级联 |
+| delete | 删除的时候级联 |
+| all | 除了孤儿删除以外的所有级联. |
+| delete-orphan | 孤儿删除\(孤子删除\). |
+| all-delete-orphan | 包含了孤儿删除的所有的级联. |
+
 delete-orphan：
 
 * 仅限于一对多.只有一对多时候,才有父子存在.认为一的一方是父亲,多的一方是子方.
@@ -453,9 +448,7 @@ delete-orphan：
 
 * 一般情况下,一的一方去放弃.
 
-总结：
-cascade: 操作关联对象.
-inverse: 控制外键的维护.
+总结： cascade: 操作关联对象. inverse: 控制外键的维护.
 
 ### 4.7 Hibernate的多对多的配置
 
@@ -491,7 +484,7 @@ public class Course {
 
 * Student.hbm.xml
 
-```markdown
+```text
 <hibernate-mapping>
     <class name="cn.itcast.hibernate3.demo3.Student" table="student">
         <!-- 配置唯一标识 -->
@@ -519,7 +512,7 @@ public class Course {
 
 * Course.hbm.xml
 
-```markdown
+```text
 <hibernate-mapping>
     <class name="cn.itcast.hibernate3.demo3.Course" table="course">
         <!-- 配置唯一标识 -->
@@ -555,7 +548,7 @@ public class Course {
 
 在课程的&lt;set&gt;标签上配置inverse=”true”:
 
-##### 级联 保存
+**级联 保存**
 
 ```java
 @Test
@@ -620,4 +613,5 @@ public void demo4(){
 }
 ```
 
-用集合的remove()方法实现学生退选操作，解除该学生和课程的关联。
+用集合的remove\(\)方法实现学生退选操作，解除该学生和课程的关联。
+

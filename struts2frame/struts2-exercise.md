@@ -1,4 +1,4 @@
-# Struts2-练习笔记
+# Struts2框架练习笔记
 
 ## 1. 目标功能
 
@@ -15,14 +15,13 @@
 
 ### Oracle和MySQL 作为应用数据库区别
 
-mysql存在数据库概念，在企业开发中，针对一个项目创建一个单独数据库，创建单独用户， 为用户授予数据库权限 ，
-oracle 一个数据库就是一个服务，在这个库中可以存在很多用户，每个用户有单独表空间 ，针对一个项目，只需要创建一个用户
+mysql存在数据库概念，在企业开发中，针对一个项目创建一个单独数据库，创建单独用户， 为用户授予数据库权限 ， oracle 一个数据库就是一个服务，在这个库中可以存在很多用户，每个用户有单独表空间 ，针对一个项目，只需要创建一个用户
 
 ### 创建用户与授权
 
 为项目数据库创建单独用户，并为用户授予数据库权限,在c3p0配置中使用这个用户的信息连接数据库。
 
-[MySQL数据库操作-DCL](../mysql-ddl.md)
+[MySQL数据库操作-DCL](https://github.com/QiQixvs/JavaLearnNote/tree/1f7781d590e3144a26ef80b30f22b8a3f73854bc/mysql-ddl.md)
 
 ### 用户表
 
@@ -55,7 +54,7 @@ INSERT INTO s_user (userID,userName,logonName,logonPwd) VALUES (1,'超级管理�
 
 #### 1. 使用struts2提供的表单标签来改造页面
 
-```MARKDOWN
+```text
 <form>-------------------<s:form>
 <input type="text">------<s:textfield>
 <input type="password">---<s:password>
@@ -65,7 +64,7 @@ INSERT INTO s_user (userID,userName,logonName,logonPwd) VALUES (1,'超级管理�
 
 1.改造form
 
-```MARKDOWN
+```text
 <s:form id="loginAction_home" name="form1" action="user_login" namespace="/" target="_parent" method="post">
 </s:form>
 ```
@@ -74,13 +73,13 @@ INSERT INTO s_user (userID,userName,logonName,logonPwd) VALUES (1,'超级管理�
 
 2.改造登录名
 
-```MARKDOWN
+```text
 <s:textfield name="logonName" value="" id="logonName" cssClass="text" cssStyle="width: 160px;"/>
 ```
 
 3.改造登录密码
 
-```MARKDOWN
+```text
 <s:password  name="logonPwd" id="logonPwd" cssClass="text" cssStyle="width: 160px;"/>
 ```
 
@@ -90,29 +89,29 @@ INSERT INTO s_user (userID,userName,logonName,logonPwd) VALUES (1,'超级管理�
 
 4.提交
 
-```MARKDOWN
+```text
 <s:submit name="submit" value="登录" cssClass="buttoninput"/>
 ```
 
 5.重置
 
-```MARKDOWN
+```text
 <s:reset name="reset" value="取消" cssClass="buttoninput"/>
 ```
 
 注意: struts2中的表单标签，有默认的主题xhtml. 如果不想要添加任何修饰，只需要将主题修改为simple.
 
-##### 怎样设置表单主题
+**怎样设置表单主题**
 
 1.全局----在struts.xml文件中配置一个常量
 
-```MARKDOWN
+```text
 <constant name="struts.ui.theme" value="simple"></constant>
 ```
 
 2.局部----针对于某一个form.
 
-```MARKDOWN
+```text
 <s:form theme="simple">
 ```
 
@@ -120,15 +119,15 @@ INSERT INTO s_user (userID,userName,logonName,logonPwd) VALUES (1,'超级管理�
 
 #### 2. 需要使用xml配置方式对数据进行校验
 
-要求： 用户名 非空，3-12位,密码  非空。
+要求： 用户名 非空，3-12位,密码 非空。
 
-[Struts2框架-2-4.2 配置校验](../struts2/struts2_2.md)
+[Struts2框架-2-4.2 配置校验](https://github.com/QiQixvs/JavaLearnNote/tree/1f7781d590e3144a26ef80b30f22b8a3f73854bc/struts2/struts2_2.md)
 
 1.在UserAction所在包下创建一个UserAction-validation.xml
 
 2.在xml文件中添加dtd约束
 
-```MARKDOWN
+```text
 <!DOCTYPE validators PUBLIC
 "-//Apache Struts//XWork Validator 1.0.3//EN"
 "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
@@ -136,7 +135,7 @@ INSERT INTO s_user (userID,userName,logonName,logonPwd) VALUES (1,'超级管理�
 
 3.对属性进行校验
 
-```MARKDOWN
+```text
 <validator>
     <field name="logonName">
         <field-validator type="requiredstring">
@@ -157,7 +156,7 @@ INSERT INTO s_user (userID,userName,logonName,logonPwd) VALUES (1,'超级管理�
 </validator>
 ```
 
-在页面上显示通过<s:fielderror>
+在页面上显示通过
 
 3.登录成功，将用户存储到session，在页面上显示用户。
 
@@ -169,7 +168,7 @@ INSERT INTO s_user (userID,userName,logonName,logonPwd) VALUES (1,'超级管理�
 
 1.修改left.jsp页面上的用户管理的连接
 
-```markdown
+```text
 d.add(3,2,'用户管理','${pageContext.request.contextPath}/user_list','','mainFrame');
 ```
 
@@ -177,16 +176,16 @@ UserAction采用通配符配置
 
 2.在list方法中调用service,dao完成查询操作,得到一个List&lt;User&gt; users
 
-3.将List&lt;User&gt;users 声明成成员变量，提供get/set方法，集合就会自动的压入到valueStack中。[Struts2框架-4 - 2.8 关于默认压入到valueStack中的数据](../struts2/struts2_4.md)
+3.将List&lt;User&gt;users 声明成成员变量，提供get/set方法，集合就会自动的压入到valueStack中。[Struts2框架-4 - 2.8 关于默认压入到valueStack中的数据](https://github.com/QiQixvs/JavaLearnNote/tree/1f7781d590e3144a26ef80b30f22b8a3f73854bc/struts2/struts2_4.md)
 
 问题:
 
-1. 由于使用通配符配置UserAction造成的返回SUCCESS问题  登录成功返回  login_success   查询所有成功  list_success.
-2. 关于查询操作时，校验的配置文件会执行。将校验登录信息的配置文件名修改为   UserAction-user_login-validation.xml 这就只会对user_login进行校验。
+1. 由于使用通配符配置UserAction造成的返回SUCCESS问题  登录成功返回  login\_success   查询所有成功  list\_success.
+2. 关于查询操作时，校验的配置文件会执行。将校验登录信息的配置文件名修改为   UserAction-user\_login-validation.xml 这就只会对user\_login进行校验。
 
 4.查询成功跳转到了 list.jsp，在页面上展示信息.
 
-```markdown
+```text
 <s:iterator value="%{users}" var="u">
     <tr>
         <td>
@@ -208,27 +207,27 @@ UserAction采用通配符配置
 
 #### 1. 对add.jsp页面上html标签修改----struts2的表单标签
 
-##### 1. 性别
+**1. 性别**
 
 原标签:
 
-```MARKDOWN
+```text
 <input type="radio" name="sex" id="sex男" value="男"/><label for="sex男">男</label>
 <input type="radio" name="sex" id="sex女" value="女"/><label for="sex女">女</label>
 ```
 
 struts2标签:
 
-```MARKDOWN
+```text
 <s:radio list="{'男','女'}" name="sex" id="sex" value="%{'男'}"/>
 <!--'男'作为默认值-->
 ```
 
-##### 2. 学历
+**2. 学历**
 
 原标签:
 
-```MARKDOWN
+```text
 <select name="education" id="education">
     <option value="" selected="selected">--选择学历--</option>
     <option value="博士">博士</option>
@@ -242,34 +241,34 @@ struts2标签:
 
 struts2标签
 
-```MARKDOWN
+```text
 <s:select list="{'博士','硕士','研究生','本科','专科','高中'}" name="education"
  id="education" headerKey="" headerValue="--选择学历--"></s:select>
 ```
 
-##### 3. 兴趣爱好
+**3. 兴趣爱好**
 
-```MARKDOWN
+```text
 <s:checkboxlist list="{'看电影','旅游','健身','购物','睡觉'}" name="interest"/>
 ```
 
-##### 4. 上传
+**4. 上传**
 
-```MARKDOWN
+```text
 <s:file name="upload" size="30" value="" id="userAction_save_do_upload"/>
 ```
 
-##### 5. 文本域
+**5. 文本域**
 
-```MARKDOWN
+```text
 <s:textarea name="remark" cols="30" rows="3" id="userAction_save_do_remark" cssStyle="WIDTH: 96%"/>
 ```
 
 #### 2. 添加数据的校验
 
-在UserAction类所在包下创建一个 UserAction-user_add-validation.xml
+在UserAction类所在包下创建一个 UserAction-user\_add-validation.xml
 
-#### 3.完成添加操作(简历上传)
+#### 3.完成添加操作\(简历上传\)
 
 在UserAction类中
 
@@ -281,13 +280,12 @@ private String uploadContentType;
 private String uploadFileName;
 ```
 
-添加的用户信息，除了上传文件的信息，其它的都封装到了user对象中。
-而上传文件信息在三个属性上封装。
+添加的用户信息，除了上传文件的信息，其它的都封装到了user对象中。 而上传文件信息在三个属性上封装。
 
 添加用户还需要有下列信息:
 
-* userID----->自动增长
-* path------->人为指定
+* userID-----&gt;自动增长
+* path-------&gt;人为指定
 
 简历不允许被浏览器端直接访问,保存到本地磁盘位置
 
@@ -295,11 +293,11 @@ private String uploadFileName;
 
 添加用户操作完成后应重新进行查询操作,重定向到UserAction中
 
-```markdown
+```text
 <result name="add_success" type="redirectAction">user_list</result>
 ```
 
-因为多个action在同一个配置中(使用了通配符)，多个请求操作时校验失败时，可能都需要跳转到input视图。但是它们跳转的页面不一样，在UserAction类中相应方法上**通过 @InputConfig注解**，改为校验失败后 跳转视图.
+因为多个action在同一个配置中\(使用了通配符\)，多个请求操作时校验失败时，可能都需要跳转到input视图。但是它们跳转的页面不一样，在UserAction类中相应方法上**通过 @InputConfig注解**，改为校验失败后 跳转视图.
 
 ```java
 @InputConfig(resultName = "add_input")//对应配置文件中的result标签中的name属性
@@ -326,7 +324,7 @@ public String add() throws IOException {
 
 struts2.xml中配置result：
 
-```markdown
+```text
 <result name="login_input">/login/login.jsp</result>
 <result name="add_input">/user/add.jsp</result>
 ```
@@ -337,17 +335,17 @@ struts2.xml中配置result：
 
 是否上传简历
 
-```markdown
+```text
 <s:select list="#{'1':'有','2':'无'}" name="isUpload" id="isUpload" headerKey="0" headerValue="--请选择--"></s:select>
 ```
 
 #### 2. 完成条件查询操作
 
-是否上传简历，在action中获取，需要在User中添加一个属性  String isUpload
+是否上传简历，在action中获取，需要在User中添加一个属性 String isUpload
 
 在dao中根据条件查询，sql语句如何写？考虑到不一定每一项条件都给出了，有几个待填参数不确定。
 
-解决方法： 创建一个List&lt;Object&gt;, 在每一次判断时，直接将参数添加到集合中，最后将集合转换成Object[]，做为参数传递到query方法中。
+解决方法： 创建一个List&lt;Object&gt;, 在每一次判断时，直接将参数添加到集合中，最后将集合转换成Object\[\]，做为参数传递到query方法中。
 
 ```java
 String sql = "select * from s_user where 1=1 ";
@@ -388,7 +386,7 @@ return runner.query(sql, new BeanListHandler<User>(User.class),params.toArray())
 
 原标签:
 
-```markdown
+```text
 <a href="${pageContext.request.contextPath}/user/list.jsp?userID=15">
 <img src="${pageContext.request.contextPath}/images/i_del.gif" width="16" height="16" border="0" style="CURSOR: hand">
 </a>
@@ -396,7 +394,7 @@ return runner.query(sql, new BeanListHandler<User>(User.class),params.toArray())
 
 使用struts2标签修改
 
-```markdown
+```text
 第一种方式
 <s:a href="路径">
 
@@ -450,10 +448,9 @@ public String del() {
 
 ### 6.员工详细信息查看
 
-查询出用户信息(user),需要在view.jsp页面展示,在页面上展示时，我们不能使用valueStack栈顶的user对象，而要使用压入的action的getModel方法，重新得到user对象去获取信息，%{model.logonName}，原因见：
-[Struts2框架-4 - 2.8 关于默认压入到valueStack中的数据](../struts2/struts2_4.md)
+查询出用户信息\(user\),需要在view.jsp页面展示,在页面上展示时，我们不能使用valueStack栈顶的user对象，而要使用压入的action的getModel方法，重新得到user对象去获取信息，%{model.logonName}，原因见： [Struts2框架-4 - 2.8 关于默认压入到valueStack中的数据](https://github.com/QiQixvs/JavaLearnNote/tree/1f7781d590e3144a26ef80b30f22b8a3f73854bc/struts2/struts2_4.md)
 
-```markdown
+```text
 <tr>
     <td>登录名：</td>
     <td><s:property value="%{model.logonName}" /></td>
@@ -483,7 +480,7 @@ public String del() {
 </script>
 ```
 
-```markdown
+```text
 <result name="download_success" type="stream">
     <param name="contentType">${contentType}</param>
     <param name="contentDisposition">attachment;filename=${downloadFilename}</param>
@@ -494,7 +491,6 @@ public String del() {
 一个流 ，两个头信息
 
 ```java
-
 public String download() {
     ...//根据id找到user
     return "download_success";
@@ -519,13 +515,13 @@ public String encodeDownloadFilename(String filename, String header) {
 }
 ```
 
-参考 [Struts2框架-3 - 3.2 下载](../struts2/struts2_3.md)
+参考 [Struts2框架-3 - 3.2 下载](https://github.com/QiQixvs/JavaLearnNote/tree/1f7781d590e3144a26ef80b30f22b8a3f73854bc/struts2/struts2_3.md)
 
 ### 8. 员工信息修改
 
 #### 1.查询
 
-```markdown
+```text
 <s:url namespace="/" action="user_updateForFind" var="editUrl">
     <s:param name="userID" value="%{#u.userID}"/>
 </s:url>
@@ -537,7 +533,7 @@ public String encodeDownloadFilename(String filename, String header) {
 
 根据id查询出user对象，跳转到edit.jsp页面，展示用户信息。与添加用户界面类似，但是需要显示原有的用户信息。
 
-```markdown
+```text
 <s:form id="userAction_save_do" name="Form1" action="user_add" namespace="/" method="post" enctype="multipart/form-data"><!--有上传文件操作-->
 <s:hidden name="userID" value="%{model.userID}"/><!--ID不能变-->
 ...
@@ -553,16 +549,16 @@ public String encodeDownloadFilename(String filename, String header) {
 
 #### 2. 修改
 
-修改就是一个上传操作，和user_add功能相同
+修改就是一个上传操作，和user\_add功能相同
 
 问题:在修改时，关于用户简历的处理?
 
 1. 原来没有  修改也没有。---不管
 2. 原来没有  修改有了    ----处理
 3. 原来有    修改没有了 -----不管
-4. 原来有    修改也有.  -----处理(将旧的删除)
+4. 原来有    修改也有.  -----处理\(将旧的删除\)
 
-所以修改前必须先查询出用户。service.edit(User user, boolean isEditUpload); 通过布尔值控制对用户的更新是否包括简历。
+所以修改前必须先查询出用户。service.edit\(User user, boolean isEditUpload\); 通过布尔值控制对用户的更新是否包括简历。
 
 ```java
 public String edit(){
@@ -608,15 +604,15 @@ public String edit(){
 3. 在struts.xml文件注册
 4. 在action中引入
 
-[Struts2框架-3 - 2.3 权限控制案例](../struts2/struts2_3.md)
+[Struts2框架-3 - 2.3 权限控制案例](https://github.com/QiQixvs/JavaLearnNote/tree/1f7781d590e3144a26ef80b30f22b8a3f73854bc/struts2/struts2_3.md)
 
 ### 10. struts2 提供的异常处理
 
-对于action中的操作，出现问题，直接抛出自定义异常, 例如new FindByIdException()。
+对于action中的操作，出现问题，直接抛出自定义异常, 例如new FindByIdException\(\)。
 
 在struts.xml文件中
 
-```markdown
+```text
 <global-exception-mappings>
     <exception-mapping result="login" exception="user.exception.FindByIdException">
     <!--一旦捕获这个指定的自定义异常跳到“login”页面-->
@@ -626,12 +622,11 @@ public String edit(){
 
 这就可以让特定的异常，跳转到自定的页面。
 
-原理:
-struts2,默认加载的18个拦截器的第一个是exception这个拦截器ExceptionMappingInterceptor.class，它没有做任何操作，
-直接放行，只是它将 invocation.invoke()操作使用try-catch进行了处理。
+原理: struts2,默认加载的18个拦截器的第一个是exception这个拦截器ExceptionMappingInterceptor.class，它没有做任何操作， 直接放行，只是它将 invocation.invoke\(\)操作使用try-catch进行了处理。
 
 其它的拦截器，或是action只要向外抛出异常，exception拦截器就会将其捕获。
 
-![defaultStack第一个是exception](.gitbook/assets/2020-03-18-19-15-19.png)
+![defaultStack&#x7B2C;&#x4E00;&#x4E2A;&#x662F;exception](../.gitbook/assets/2020-03-18-19-15-19.png)
 
-![捕获异常跳转指定页面](.gitbook/assets/2020-03-18-19-16-03.png)
+![&#x6355;&#x83B7;&#x5F02;&#x5E38;&#x8DF3;&#x8F6C;&#x6307;&#x5B9A;&#x9875;&#x9762;](../.gitbook/assets/2020-03-18-19-16-03.png)
+

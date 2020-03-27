@@ -317,7 +317,7 @@ action中重写的validate是在请求处理方法\(execute\)之前执行的。
 
 对于struts2提供的校验，它也是通过拦截器实现的。
 
-![validation&#x62E6;&#x622A;&#x5668;&#x5B9E;&#x73B0;&#x6821;&#x9A8C;](.gitbook/assets/2020-03-11-20-21-02.png)
+![validation&#x62E6;&#x622A;&#x5668;&#x5B9E;&#x73B0;&#x6821;&#x9A8C;](../.gitbook/assets/2020-03-11-20-21-02.png)
 
 #### 在validate方法中怎样存储校验错误信息
 
