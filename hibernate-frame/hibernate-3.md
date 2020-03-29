@@ -4,7 +4,7 @@ description: 检索方式，抓取策略，二级缓存
 
 # Hibernate框架-3
 
-\[TOC\]
+[TOC]
 
 ## 1. Hibernate的检索方式
 

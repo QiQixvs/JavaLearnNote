@@ -4,7 +4,7 @@ description: 环境搭建，开发流程，配置和API
 
 # Hibernate框架-1
 
-\[TOC\]
+[TOC]
 
 ## 1. Hibernate框架的概述
 

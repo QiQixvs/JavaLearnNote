@@ -4,7 +4,7 @@ description: 持久化对象的状态，一级缓存，关联关系映射
 
 # Hibernate框架-2
 
-\[TOC\]
+[TOC]
 
 ## 1. Hibernate的持久化类状态
 
