@@ -789,8 +789,6 @@ JDBC:org.springframework.jdbc.core.support.JdbcDaoSupport
 Hibernate 3.0:org.springframework.orm.hibernate3.support.HibernateDaoSupport
 iBatis:org.springframework.orm.ibatis.support.SqlMapClientDaoSupport
 
-编写DAO的时候继承JdbcDaoSupport，就不需要在类中进行jdbcTemplate注入
-
 ```java
 Public class UserDao extends JdbcDaoSupport{
 
@@ -802,9 +800,11 @@ Public class UserDao extends JdbcDaoSupport{
 }
 ```
 
+编写DAO的时候继承JdbcDaoSupport，该类会用DataSource创建jdbcTemplate，就不需要在类中进行jdbcTemplate注入
+
 ```markdown
-<bean id="userDao" class="cn.itcast.spring3.demo2.UserDao">
-  <property name="jdbcTemplate" ref="jdbcTemplate"/>
+<bean id="userDao" class="demo2.UserDao">
+  <property name="dataSource" ref="dataSource"/>
 </bean>
 ```
 
