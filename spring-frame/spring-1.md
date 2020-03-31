@@ -1,5 +1,5 @@
 ---
-descriqption: 快速入门；IOC;
+descriqption: 快速入门；IOC; 
 ---
 
 # Spring框架-1
