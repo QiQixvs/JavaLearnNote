@@ -40,13 +40,13 @@ File --&gt; Project Structure --&gt; Facets --&gt; Struts2
 
 Java项目或者web项目视情况选择。Idea默认下载的是Hibernate5，也可以自己之后导入包。
 
-![&#x65B0;&#x5EFA;&#x9879;&#x76EE;](../.gitbook/assets/2020-03-20-10-32-32.png)
+![&#x65B0;&#x5EFA;&#x9879;&#x76EE;](.gitbook/assets/2020-03-20-10-32-32.png)
 
 ### 建立实体类与数据库表的映射
 
 方式一：已有实体java类，数据库中已经建表，新建实体类名.hbm.xml文件，并在hibernate.cgf.xml中增加映射文件配置
 
-![](../.gitbook/assets/2020-03-20-10-36-29.png)
+![](.gitbook/assets/2020-03-20-10-36-29.png)
 
 ```text
 <mapping resource="hibernate3/demo1/User.hbm.xml"/>
@@ -54,11 +54,11 @@ Java项目或者web项目视情况选择。Idea默认下载的是Hibernate5，�
 
 方式二：无实体类，用hibernate生成
 
-![&#x8FDE;&#x63A5;&#x6570;&#x636E;&#x5E93;](../.gitbook/assets/2020-03-20-10-34-37.png)
+![&#x8FDE;&#x63A5;&#x6570;&#x636E;&#x5E93;](.gitbook/assets/2020-03-20-10-34-37.png)
 
-![Generate Persistence Mapping](../.gitbook/assets/2020-03-20-10-37-37.png)
+![Generate Persistence Mapping](.gitbook/assets/2020-03-20-10-37-37.png)
 
-![&#x751F;&#x6210;&#x5B9E;&#x4F53;&#x7C7B;](../.gitbook/assets/2020-03-20-10-39-09.png)
+![&#x751F;&#x6210;&#x5B9E;&#x4F53;&#x7C7B;](.gitbook/assets/2020-03-20-10-39-09.png)
 
 选择实体类生成后所在位置，选择是类名后加的后缀。
 

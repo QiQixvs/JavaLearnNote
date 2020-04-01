@@ -626,7 +626,7 @@ public String edit(){
 
 其它的拦截器，或是action只要向外抛出异常，exception拦截器就会将其捕获。
 
-![defaultStack&#x7B2C;&#x4E00;&#x4E2A;&#x662F;exception](../.gitbook/assets/2020-03-18-19-15-19.png)
+![defaultStack&#x7B2C;&#x4E00;&#x4E2A;&#x662F;exception](.gitbook/assets/2020-03-18-19-15-19.png)
 
-![&#x6355;&#x83B7;&#x5F02;&#x5E38;&#x8DF3;&#x8F6C;&#x6307;&#x5B9A;&#x9875;&#x9762;](../.gitbook/assets/2020-03-18-19-16-03.png)
+![&#x6355;&#x83B7;&#x5F02;&#x5E38;&#x8DF3;&#x8F6C;&#x6307;&#x5B9A;&#x9875;&#x9762;](.gitbook/assets/2020-03-18-19-16-03.png)
 

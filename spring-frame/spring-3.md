@@ -383,339 +383,545 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 ## 2. SSH框架整合
 
-1.2.1	Struts2+Spring+Hibernate导包
-Struts2导入jar包:
-* struts2/apps/struts2-blank.war/WEB-INF/lib/*.jar
-* 导入与spring整合的jar
-* struts2/lib/struts2-spring-plugin-2.3.15.3.jar		--- 整合Spring框架
-* struts2/lib/struts2-json-plugin-2.3.15.3.jar			--- 整合AJAX
-* struts2/lib/struts2-convention-plugin-2.3.15.3.jar	--- 使用Struts2注解开发.
+### 2.1 Struts2 + Spring + Hibernate导包
 
-* 配置
-web.xml
+#### Struts2
+
+* struts2/apps/struts2-blank.war/WEB-INF/lib/*.jar
+
+导入与spring整合的jar
+
+* struts2/lib/struts2-spring-plugin-2.3.15.3.jar--- 整合Spring框架
+* struts2/lib/struts2-json-plugin-2.3.15.3.jar--- 整合AJAX
+* struts2/lib/struts2-convention-plugin-2.3.15.3.jar--- 使用Struts2注解开发.
+
+* web.xml
+
+```markdown
 <filter>
-  <filter-name>struts2</filter-name> 
-  <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class> 
+  <filter-name>struts2</filter-name>
+  <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
 </filter>
 <filter-mapping>
-  <filter-name>struts2</filter-name> 
-  <url-pattern>/*</url-pattern> 
+  <filter-name>struts2</filter-name>
+  <url-pattern>/*</url-pattern>
 </filter-mapping>
+```
 
-struts.xml
+* struts.xml
+
+```markdown
 <struts>
 
     <constant name="struts.devMode" value="true" />
 
     <package name="default" namespace="/" extends="struts-default">
-    	
+
     </package>
 
 </struts>
+```
 
+#### Spring
 
-Spring导入jar包:
 Spring3.2 开发最基本jar包
-spring-beans-3.2.0.RELEASE.jar
-spring-context-3.2.0.RELEASE.jar
-spring-core-3.2.0.RELEASE.jar
-spring-expression-3.2.0.RELEASE.jar
-com.springsource.org.apache.commons.logging-1.1.1.jar
-com.springsource.org.apache.log4j-1.2.15.jar
+
+* spring-beans-3.2.0.RELEASE.jar
+* spring-context-3.2.0.RELEASE.jar
+* spring-core-3.2.0.RELEASE.jar
+* spring-expression-3.2.0.RELEASE.jar
+* com.springsource.org.apache.commons.logging-1.1.1.jar
+* com.springsource.org.apache.log4j-1.2.15.jar
+
 AOP开发
-spring-aop-3.2.0.RELEASE.jar
-spring-aspects-3.2.0.RELEASE.jar
-com.springsource.org.aopalliance-1.0.0.jar
-com.springsource.org.aspectj.weaver-1.6.8.RELEASE.jar
+
+* spring-aop-3.2.0.RELEASE.jar
+* spring-aspects-3.2.0.RELEASE.jar
+* com.springsource.org.aopalliance-1.0.0.jar
+* com.springsource.org.aspectj.weaver-1.6.8.RELEASE.jar
+
 Spring Jdbc开发
-spring-jdbc-3.2.0.RELEASE.jar
-spring-tx-3.2.0.RELEASE.jar
+
+* spring-jdbc-3.2.0.RELEASE.jar
+* spring-tx-3.2.0.RELEASE.jar
+
 Spring事务管理
-spring-tx-3.2.0.RELEASE.jar
+
+* spring-tx-3.2.0.RELEASE.jar
+
 Spring整合其他ORM框架
-spring-orm-3.2.0.RELEASE.jar
+
+* spring-orm-3.2.0.RELEASE.jar
+
 Spring在web中使用
-spring-web-3.2.0.RELEASE.jar
+
+* spring-web-3.2.0.RELEASE.jar
+
 Spring整合Junit测试
-spring-test-3.2.0.RELEASE.jar
+
+* spring-test-3.2.0.RELEASE.jar
 
 (Spring没有引入c3p0和数据库驱动)
 
-* 配置:
-applicationContext.xml
-Log4j.properties
+配置: applicationContext.xml，Log4j.properties
 
-在web.xml中配置监听器;
+![三大框架整合开发步骤](.gitbook/assets/2020-04-01-23-01-22.png)
+
+在web.xml中配置监听器，服务器启动时加载Spring环境
+
+```markdown
 <!-- 配置Spring的监听器 -->
 <listener>
-	<!-- 监听器默认加载的是WEB-INF/applicationContext.xml -->
-	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  <!-- 监听器默认加载的是WEB-INF/applicationContext.xml -->
+  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>
 
 <!-- 指定Spring框架的配置文件所在的位置 -->
 <context-param>
-	<param-name>contextConfigLocation</param-name>
-	<param-value>classpath:applicationContext.xml</param-value>
+  <param-name>contextConfigLocation</param-name>
+  <param-value>classpath:applicationContext.xml</param-value>
 </context-param>
+```
 
-Hibernate的jar包导入:
+#### Hibernate
+
 * 核心包:hibernate3.jar
 * lib/required/*.jar
 * lib/jpa/*.jar
-* 引入hibernate整合日志系统的jar包:
-* 数据连接池:
-* 数据库驱动:
+* 引入hibernate整合日志系统的jar包 sl4j
+* 数据连接池
+* 数据库驱动
 
-* 二级缓存:(可选的.)
+二级缓存:(可选的)
+
 * backport-util-concurrent.jar
 * commons-logging.jar
 * ehcache-1.5.0.jar
 
-* Hibernate的配置:
-* hibernate.cfg.xml
-* 映射:
-* 格式:类名.hbm.xml
-1.2.2	Struts2和Spring的整合:
-1.新建包结构:
-* cn.itcast.action
-* cn.itcast.service
-* cn.itcast.dao
-* cn.itcast.vo
+Hibernate的配置:
 
-2.创建实体类:
-* Book
+* hibernate.cfg.xml
+
+```markdown
+<session-factory>
+   <!-- 必须去配置的属性 -->
+   <!-- 配置数据库连接的基本信息: -->
+  <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+  <property name="hibernate.connection.url">jdbc:mysql:///ssh1</property>
+  <property name="hibernate.connection.username">root</property>
+  <property name="hibernate.connection.password">****</property>
+
+  <!-- Hibernate的方言 -->
+  <!-- 生成底层SQL不同的 -->
+  <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+  <!-- 可选的属性 -->
+  <!-- 显示SQL -->
+  <property name="hibernate.show_sql">true</property>
+  <!-- 格式化SQL -->
+  <property name="hibernate.format_sql">true</property>
+
+  <property name="hibernate.connection.autocommit">false</property>
+  <!-- hbm:映射 to DDL: create drop alter -->
+  <property name="hibernate.hbm2ddl.auto">update</property>
+
+  <!-- C3P0连接池设定-->
+  <!-- 使用c3po连接池  配置连接池提供的供应商-->
+  <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+
+  <!--在连接池中可用的数据库连接的最少数目 -->
+  <property name="c3p0.min_size">5</property>
+  <!--在连接池中所有数据库连接的最大数目  -->
+  <property name="c3p0.max_size">20</property>
+  <!--设定数据库连接的过期时间,以秒为单位,
+  如果连接池中的某个数据库连接处于空闲状态的时间超过了timeout时间,就会从连接池中清除 -->
+  <property name="c3p0.timeout">120</property>
+  <!--每3000秒检查所有连接池中的空闲连接 以秒为单位-->
+  <property name="c3p0.idle_test_period">3000</property>
+
+</session-factory>
+```
+
+* 映射: 格式:类名.hbm.xml
+
+### 2.2 Struts2和Spring的整合
+
+1.新建包结构
+
+2.创建实体类
 
 3.新建一个jsp页面:
+
 * addBook.jsp
-        <s:form action="book_add" namespace="/" method="post" theme="simple">
-	图书名称:<s:textfield name="name"/><br/>
-	图书价格:<s:textfield name="price"/><br/>
-	<s:submit value="添加图书"/>
+
+```markdown
+<s:form action="book_add" namespace="/" method="post" theme="simple">
+  图书名称:<s:textfield name="name"/><br/>
+  图书价格:<s:textfield name="price"/><br/>
+  <s:submit value="添加图书"/>
 </s:form>
+```
 
-4.编写Action:
+4.编写Action
+
+```java
 public class BookAction extends ActionSupport implements ModelDriven<Book>{
-	// 模型驱动类
-	private Book book = new Book();
-	public Book getModel() {
-		return book;
-	}
+    // 模型驱动类
+    private Book book = new Book();
+    public Book getModel() {
+        return book;
+     }
 
-	// 处理请求的方法:
-	public String add(){
-		System.out.println("web层的添加执行了...");
-		return NONE;
-	}
+    // 处理请求的方法:
+    public String add(){
+        System.out.println("web层的添加执行了...");
+        return NONE;
+    }
 }
+```
 
 5.配置struts.xml
-<action name="book_*" class="cn.itcast.action.BookAction" method="{1}">
-    		
-    	</action>
 
-1.2.3	Struts2和Spring的整合两种方式:
-Struts2自己管理Action:(方式一)
+```markdown
+<action name="book_*" class="action.BookAction" method="{1}">
+</action>
+```
+
+### 2.3 Struts2和Spring的整合两种方式
+
+#### Struts2自己管理Action(方式一)
+
+```markdown
 <action name="book_*" class="cn.itcast.action.BookAction" method="{1}">
+```
+
 * Struts2框架自动创建Action的类.
-Action交给Spring管理:(方式二)
-可以在<action>标签上通过一个伪类名方式进行配置:
+
+#### Action交给Spring管理(方式二)
+
+可以在action标签上通过一个**伪类名**方式进行配置:
+
+```markdown
 <action name="book_*" class="bookAction" method="{1}"></action>
+```
 
 在spring的配置文件中:
-<!-- 配置Action -->
-	<bean id="bookAction" class="cn.itcast.action.BookAction"></bean>
-(*****)注意:Action交给Spring管理一定要配置scope=”prototype”
 
-推荐使用二:
+```markdown
+<!-- 配置Action -->
+<bean id="bookAction" class="action.BookAction" scope="prototype"></bean>
+```
+
+**注意**: Action交给Spring管理一定要配置scope=”prototype”默认是单例
+
+推荐使用方式二:
+
 * 在Spring中管理的类,可以对其进行AOP开发.统一的管理.
 
-Web层获得Service:
+#### Web层获得Service
+
 传统方式:
+
 * 获得WebApplicationContext对象.
 * 通过WebAppolicationContext中getBean(“”);
 
 实际开发中:
-* 引入了struts2-spring-plugin-2.3.15.3.jar
-* 有一个配置文件 : struts-plugin.xml
-开启常量 :
+
+* 引入了struts2-spring-plugin-2.3.15.3.jar，有一个配置文件 : struts-plugin.xml
+
+在这里开启了常量:
+
+```markdown
 <constant name="struts.objectFactory" value="spring" />
-引发另一个常量的执行:(Spring的工厂类按照名称自动注入)
+```
+
+这将引发另一个常量的执行: (**Spring的工厂类按照名称自动注入**)
+
 struts.objectFactory.spring.autoWire = name
 
-1.2.4	Spring整合Hibernate:
-Spring整合Hibernate框架的时候有两种方式:
-零障碍整合:(一)
+只需要在BookAction类中对private BookService bookservice；属性提供setBookService方法，就可以在add方法中获得service对象并使用。还要在spring的配置文件中配置BookAction类的注入属性。
+
+### 2.4 Spring整合Hibernate
+
+Spring整合Hibernate框架的时候有两种方式
+
+#### 零障碍整合(方式一)
+
 可以在Spring中引入Hibernate的配置文件.
+
 1.通过LocalSessionFactoryBean在spring中直接引用hibernate配置文件
-	<!-- 零障碍整合 在spring配置文件中引入hibernate的配置文件 -->
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-		<property name="configLocation" value="classpath:hibernate.cfg.xml"/>
-	</bean>
+
+```markdown
+<!-- 零障碍整合 在spring配置文件中引入hibernate的配置文件 -->
+<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+</bean>
+```
 
 2.Spring提供了Hibernate的模板.只需要将HibernateTemplate模板注入给DAO.
-* DAO继承HibernateDaoSupport.
-	<!-- DAO的配置 -->
-	<bean id="bookDao" class="cn.itcast.dao.BookDao">
-		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
 
-改写DAO:继承HibernateDaoSupport类.
+* DAO继承HibernateDaoSupport.
+
+```markdown
+<!-- DAO的配置 -->
+<bean id="bookDao" class="dao.BookDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+```
+
+改写DAO:
+
+继承HibernateDaoSupport类,就可以直接调用HibernateTemplate模板
+
+```java
 public class BookDao extends HibernateDaoSupport{
 
-	public void save(Book book) {
-		System.out.println("DAO层的保存图书...");
-		this.getHibernateTemplate().save(book);
-	}
-
+    public void save(Book book) {
+        System.out.println("DAO层的保存图书...");
+        this.getHibernateTemplate().save(book);
+    }
 }
+```
 
 3.创建一个映射文件 :
+
+```markdown
 <hibernate-mapping>
-	<class name="cn.itcast.vo.Book" table="book">
-		<id name="id">
-			<generator class="native"/>
-		</id>
-		<property name="name"/>
-		<property name="price"/>
-	</class>
+  <class name="vo.Book" table="book">
+    <id name="id">
+      <generator class="native"/>
+    </id>
+    <property name="name"/>
+    <property name="price"/>
+  </class>
 </hibernate-mapping>
+```
 
-4.别忘记事务管理:
-事务管理器:
-	<!-- 管理事务 -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
+4.事务管理器
 
-5.注解管理事务:
+事务管理器注入的属性对象是sessionFactory
+
+```markdown
+<!-- 管理事务 -->
+<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+  <property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+```
+
+5.注解管理事务
+
+```markdown
 <!-- 注解开启事务 -->
-	<tx:annotation-driven transaction-manager="transactionManager"/>
+<tx:annotation-driven transaction-manager="transactionManager"/>
+```
 
-6.在业务层类上添加一个注解:
-@Transactional
-没有Hibernate配置文件的形式(二)
-不需要Hibernate配置文件的方式,将Hibernate配置文件的信息直接配置到Spring中.
+6.在业务层类BookService上添加一个注解 @Transactional
+
+#### 没有Hibernate配置文件的形式(方式二)
+
+不需要Hibernate配置文件的方式, 将Hibernate配置文件的信息直接配置到Spring中.
+
 Hibernate配置文件中的信息 :
-* 连接数据库基本参数:
-* Hibernate常用属性:
-* 连接池:
-* 映射:
+
+* 连接数据库基本参数
+* Hibernate常用属性
+* 连接池
+* 映射
 
 把Hibernate配置文件整合Spring中:
-连接池:
+
+在spring配置文件中配置连接池：
+
+```markdown
 <!-- 引入外部属性文件. -->
-	<context:property-placeholder location="classpath:jdbc.properties"/>
-	
-	<!-- 配置c3p0连接池 -->
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-		<property name="driverClass" value="${jdbc.driver}"/>
-		<property name="jdbcUrl" value="${jdbc.url}"/>
-		<property name="user" value="${jdbc.user}"/>
-		<property name="password" value="${jdbc.password}"/>
-	</bean>
-Hibernate常用属性:
-<!-- 配置Hibernate的属性 -->
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.format_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.connection.autocommit">false</prop>
-			</props>
-		</property>
+<context:property-placeholder location="classpath:jdbc.properties"/>
 
-映射
-<!-- <property name="mappingResources">
-			<list>
-				<value>cn/itcast/vo/Book.hbm.xml</value>
-			</list>
-		</property> -->
-		<property name="mappingDirectoryLocations">
-			<list>
-				<value>classpath:cn/itcast/vo</value>
-			</list>
-		</property>
-1.2.5	HibernateTemplate的API:
- Serializable save(Object entity) 						:保存数据
- void update(Object entity) 							:修改数据
- void delete(Object entity) 							:删除数据
- <T> T get(Class<T> entityClass, Serializable id) 		:根据ID进行检索.立即检索
- <T> T load(Class<T> entityClass, Serializable id) 		:根据ID进行检索.延迟检索.
- List find(String queryString, Object... values) 		:支持HQL查询.直接返回List集合.
- List findByCriteria(DetachedCriteria criteria)  		:离线条件查询.
- List findByNamedQuery(String queryName, Object... values)	:命名查询的方式.
+<!-- 配置c3p0连接池 -->
+<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+  <property name="driverClass" value="${jdbc.driver}"/>
+  <property name="jdbcUrl" value="${jdbc.url}"/>
+  <property name="user" value="${jdbc.user}"/>
+  <property name="password" value="${jdbc.password}"/>
+</bean>
+```
 
-1.2.6	OpenSessionInView:
+在SessionFactory中配置Hibernate常用属性:
+
+```markdown
+<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+
+    <!-- 配置Hibernate的属性 -->
+    <property name="hibernateProperties">
+        <props>
+            <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+            <prop key="hibernate.show_sql">true</prop>
+            <prop key="hibernate.format_sql">true</prop>
+            <prop key="hibernate.hbm2ddl.auto">update</prop>
+            <prop key="hibernate.connection.autocommit">false</prop>
+        </props>
+    </property>
+</bean>
+```
+
+映射：
+
+```markdown
+<!--方式一 按照映射文件加载-->
+<property name="mappingResources">
+  <list>
+    <value>vo/Book.hbm.xml</value><!--用/表示路径-->
+  </list>
+</property>
+
+<!--方式二 按照映射文件所在文件夹加载-->
+<property name="mappingDirectoryLocations">
+  <list>
+    <value>classpath:vo</value><!--用/表示路径-->
+  </list>
+</property>
+```
+
+### 2.5 HibernateTemplate的API
+
+|方法|描述|
+|---|---|
+|Serializable save(Object entity)|保存数据|
+|void update(Object entity) |修改数据|
+|void delete(Object entity) |删除数据|
+|&lt;T&gt; T get(Class&lt;T&gt; entityClass, Serializable id) |根据ID进行检索.立即检索|
+|&lt;T&gt; T load(Class&lt;T&gt; entityClass, Serializable id) |根据ID进行检索.延迟检索|
+|List find(String queryString, Object... values) |支持HQL查询.直接返回List集合|
+|List findByCriteria(DetachedCriteria criteria)  |离线条件查询|
+|List findByNamedQuery(String queryName, Object... values)|命名查询的方式|
+
+```java
+
+this.getHibernateTemplate().save(book);
+
+this.getHibernateTemplate().update(book);
+
+this.getHibernateTemplate().delete(book);
+
+this.getHibernateTemplate().get(Book.class, id);
+
+this.getHibernateTemplate().find("from Book");
+
+this.getHibernateTemplate().findByCriteria(criteria);
+
+this.getHibernateTemplate().findByNamedQuery("findByName", name);//命名查询需要配置
+```
+
+#### 2.6 OpenSessionInView
+
+this.getHibernateTemplate().load(Book.class,id); 在dao中获得的是延迟加载对象，在web层打印对象时，service层的事务已经关闭，web加载不到真实对象。
+
+![OpenSessionInView](.gitbook/assets/2020-04-02-00-35-20.png)
+
+解决方法：过滤器OpenSessionInView在视图层管理事务操作
+
+```markdown
+<filter>
+	<filter-name>OpenSessionInViewFilter</filter-name>
+	<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+</filter>
+
+<filter-mapping>
+	<filter-name>OpenSessionInViewFilter</filter-name>
+	<url-pattern>/*</url-pattern>
+</filter-mapping>
+```
 
 ## 3. 基于注解的方式整合SSH
 
-导入以上工程jar包:
-* 导入struts2的注解开发:
-* struts2-convention-plugin-2.3.15.3.jar
+* 导入以上工程jar包
 
-* web.xml:
+* 导入struts2的注解开发 struts2-convention-plugin-2.3.15.3.jar
+
+* web.xml
+
+```markdown
 <!-- 配置Spring的监听器 -->
 <listener>
-	<!-- 监听器默认加载的是WEB-INF/applicationContext.xml -->
-	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  <!-- 监听器默认加载的是WEB-INF/applicationContext.xml -->
+  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>
 
 <!-- 指定Spring框架的配置文件所在的位置 -->
 <context-param>
-	<param-name>contextConfigLocation</param-name>
-	<param-value>classpath:applicationContext.xml</param-value>
+  <param-name>contextConfigLocation</param-name>
+  <param-value>classpath:applicationContext.xml</param-value>
 </context-param>
 
 <!-- 配置Struts2的核心过滤器 -->
 <filter>
-	<filter-name>struts2</filter-name> 
-	<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class> 
+  <filter-name>struts2</filter-name>
+  <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
 </filter>
 <filter-mapping>
-	<filter-name>struts2</filter-name> 
-	<url-pattern>/*</url-pattern> 
-</filter-mapping>
+  <filter-name>struts2</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping
+```
 
-* 创建包结构:
+* 创建包结构
+
 * 引入spring的配置文件、log4j、jdbc属性文件.
 
-* 创建页面:
-* 创建Action:
+* 创建页面
+
+* 创建Action
+
+```java
 @Namespace("/")
 @ParentPackage("struts-default")
 public class BookAction extends ActionSupport implements ModelDriven<Book>{
-	private Book book = new Book();
-	public Book getModel() {
-		return book;
-	}
+  private Book book = new Book();
+  public Book getModel() {
+  return book;
+}  
 
-	@Action(value="book_add")
-	public String add(){
-		System.out.println("web层添加图书...");
-		return NONE;
-	}
+  @Action(value="book_add")
+  public String add(){
+    System.out.println("web层添加图书...");
+    return NONE;
+  }
 }
+```
 
 * Action---Service----Dao
+
 将各层类使用注解装配Spring中:
-@Controller
-@Service
-@@Repository
 
-完成属性注入:
-@Autowired
-	@Qualifier("bookService")
+@Controller --Action 还要配@Scope("protopype")
+@Service  --Service
+@Repository  --Dao
 
-* 实体类:
+完成属性注入: 在Action中注入Service，在Service中注入Dao
+
+@Autowired  
+@Qualifier("bookService")
+
+在spring配置文件中开启注解,指定查找注解类的包
+
+```markdown
+<context:component-scan base-package="action,service,dao"/>
+```
+
+* 实体类
+
+```java
 @Entity
 @Table(name="book")
 public class Book {
 	@Id
+	//生成策略
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+
 	@Column(name="name")
 	private String name;
+
 	private Double price;
 	public Integer getId() {
 		return id;
@@ -741,110 +947,60 @@ public class Book {
 	}
 	
 }
-* 事务管理:
+```
 
-* 模板注入:
-今天内容总结:
-Spring的事务管理:
-* 编程式事务:(了解)
-* 声明式事务:
-* TransactionProxyFactoryBean.
-* AOP和事务配置:(*****)
-* 基于注解事务管理:(*****)
+* 配置Hibernate的其他属性
 
-SSH整合:
-* SSH整合(带有hibernate配置文件)
-* 导包:
-* 配置文件:
-* Struts2+Spring
-* 两种方式:
-* Action的类由Struts框架创建.
-* Action的类由Spring框架创建.(scope=”prototype”)
-* Spring+Hibernate:
-* 在Spring框架中引入Hibernate的配置文件.
-* 管理事务:
-* DAO中注入sessionFactory.
+这里用的是AnnotationSessionFactoryBean，并配置映射扫描
 
-* SSH整合(不带Hibernate配置文件)
-* 导包:
-* 配置文件:
-* Struts2+Spring
-* 两种方式:
-* Action的类由Struts框架创建.
-* Action的类由Spring框架创建.(scope=”prototype”)
-* Spring+Hibernate
-* 把Hibernate配置信息配置到Spring中
-* 管理事务:
-* DAO中注入sessionFactory.
-
-* SSH注解.(**)
-* Struts2:
-* 在Action的类上
-* @Namespace(“/”)
-* @ParentPackage("struts-default")
-
-* 在要执行的方法上:
-* @Action
-
-* 把Action/Service/Dao交给Spring.
-* Action:
-@Controller("bookAction")
-@Scope("prototype")
-* Service
-@Service
-* Dao
-@Repository
-
-* 配置Spring中自动扫描;
-<context:component-scan base-package="cn.itcast.action,cn.itcast.service,cn.itcast.dao"/>
-
-* 映射:
-@Entity
-@Table(name="book")
-public class Book {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
-	@Column(name="name")
-private String name;
-...
-}
-* 配置SessionFactory:
+```markdown
 <!-- 配置Hibernate的其他属性: -->
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		<property name="dataSource" ref="dataSource"/>
-		<!-- 配置Hibernate的属性 -->
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.format_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.connection.autocommit">false</prop>
-			</props>
-		</property>
-		<!-- 映射扫描 -->
-		<property name="packagesToScan">
-			<list>
-				<value>cn.itcast.vo</value>
-			</list>
-		</property>
-	</bean>
+<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+	<property name="dataSource" ref="dataSource"/>
+	<!-- 配置Hibernate的属性 -->
+	<property name="hibernateProperties">
+		<props>
+			<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+			<prop key="hibernate.show_sql">true</prop>
+			<prop key="hibernate.format_sql">true</prop>
+			<prop key="hibernate.hbm2ddl.auto">update</prop>
+			<prop key="hibernate.connection.autocommit">false</prop>
+		</props>
+	</property>
 
-* 事务管理:
-	<!-- 事务管理器 -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
+	<!-- 映射扫描 -->
+	<property name="packagesToScan">
+		<list>
+			<value>vo</value>
+		</list>
+	</property>
+</bean>
+```
+
+* 事务管理
+
+```markdown
+<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+</bean>
 	
-	<tx:annotation-driven transaction-manager="transactionManager"/>
+<tx:annotation-driven transaction-manager="transactionManager"/>
+```
 
-* DAO中使用Hibernate模板:
-* 手动注入HibernateTemplate :
-	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
-		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
-* 在Dao中
-	@Autowired
-	@Qualifier("hibernateTemplate")
-	private HibernateTemplate hibernateTemplate;
+* 模板注入
+
+这种注解方式下必须手动注入HibernateTemplate，不能继承HibernateDaoSupport类，因为原来的类不能加注解
+
+```markdown
+<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+    <property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+```
+
+在Dao中手动注入HibernateTemplate
+
+```java
+@Autowired
+@Qualifier("hibernateTemplate")
+private HibernateTemplate hibernateTemplate;
+```
