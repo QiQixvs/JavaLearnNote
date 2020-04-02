@@ -4,7 +4,7 @@ description: 检索方式，抓取策略，二级缓存
 
 # Hibernate框架-3
 
-[TOC]
+\[TOC\]
 
 ## 1. Hibernate的检索方式
 
@@ -247,11 +247,11 @@ criteria.add(Restrictions.like("cname", "大%"));
 List<Customer> list = criteria.list();
 ```
 
-![Restrictions](.gitbook/assets/2020-03-23-21-55-50.png)
+![Restrictions](../.gitbook/assets/2020-03-23-21-55-50.png)
 
-![HQL&#x548C;QBC&#x652F;&#x6301;&#x7684;&#x5404;&#x79CD;&#x8FD0;&#x7B97; ](.gitbook/assets/2020-03-23-21-57-11.png)
+![HQL&#x548C;QBC&#x652F;&#x6301;&#x7684;&#x5404;&#x79CD;&#x8FD0;&#x7B97; ](../.gitbook/assets/2020-03-23-21-57-11.png)
 
-![HQL&#x548C;QBC&#x652F;&#x6301;&#x7684;&#x5404;&#x79CD;&#x8FD0;&#x7B97;](.gitbook/assets/2020-03-23-21-58-08.png)
+![HQL&#x548C;QBC&#x652F;&#x6301;&#x7684;&#x5404;&#x79CD;&#x8FD0;&#x7B97;](../.gitbook/assets/2020-03-23-21-58-08.png)
 
 ### 1.4 SQL
 
@@ -308,7 +308,7 @@ Query query = session.createQuery\("from Customer c inner join fetch c.orders"\)
 
 HQL的内连接和迫切内连接区别:
 
-![&#x5185;&#x8FDE;&#x63A5;&#x548C;&#x8FEB;&#x5207;&#x5185;&#x8FDE;&#x63A5;](.gitbook/assets/2020-03-24-16-51-09.png)
+![&#x5185;&#x8FDE;&#x63A5;&#x548C;&#x8FEB;&#x5207;&#x5185;&#x8FDE;&#x63A5;](../.gitbook/assets/2020-03-24-16-51-09.png)
 
 * 内连接查询 : 将数据封装一个List&lt;Object\[\]&gt;中,是对象数组\[Customer对象，Order对象\].
 * 迫切内连接 : 将数据封装一个List&lt;Customer&gt;中，Order对象被封装在Customer对象中的订单集合中，每查询一次就会有一个Customer对象，所以会有重复记录, 需要使用distinct排重.
@@ -319,13 +319,13 @@ Query query = session.createQuery\("select distinct c from Customer c inner join
 
 ### 1.6 命名查询
 
-![&#x547D;&#x540D;&#x67E5;&#x8BE2;](.gitbook/assets/2020-03-24-17-13-25.png)
+![&#x547D;&#x540D;&#x67E5;&#x8BE2;](../.gitbook/assets/2020-03-24-17-13-25.png)
 
 &lt;sql-query&gt;标签内写sql语句，&lt;query&gt;标签内写HQL语句
 
 ### 1.7  离线条件查询
 
-![&#x79BB;&#x7EBF;&#x6761;&#x4EF6;&#x67E5;&#x8BE2;](../.gitbook/assets/2020-03-24-17-16-49.png)
+![&#x79BB;&#x7EBF;&#x6761;&#x4EF6;&#x67E5;&#x8BE2;](https://github.com/QiQixvs/JavaLearnNote/tree/73e9339878bff7aadd40fd1981b8c2af8e82de63/.gitbook/assets/2020-03-24-17-16-49.png)
 
 在web层获取一个离线的Criteria对象，设置查询对象，再传入service层和dao层
 
@@ -367,7 +367,7 @@ Customer c=(Customer)session.load(Customer.class, 1);//代理对象
 Hibernate.initialize(c);//初始化代理对象发送sql语句
 ```
 
-![&#x5EF6;&#x8FDF;&#x68C0;&#x7D22;&#x4E2D;&#x7684;&#x4EE3;&#x7406;](../.gitbook/assets/2020-03-24-19-18-35.png)
+![&#x5EF6;&#x8FDF;&#x68C0;&#x7D22;&#x4E2D;&#x7684;&#x4EE3;&#x7406;](https://github.com/QiQixvs/JavaLearnNote/tree/73e9339878bff7aadd40fd1981b8c2af8e82de63/.gitbook/assets/2020-03-24-19-18-35.png)
 
 ## 2.2 类级别检索和关联级别检索
 
@@ -521,7 +521,7 @@ thread
 * 使用SessionFactory中的getCurrentSession\(\);方法.同一个线程里获取的session就是同一个，这样开启的事务也就是同一个
 * 底层就是ThreadLocal.
 
-![Session &#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#x4E0E;&#x672C;&#x5730;&#x7EBF;&#x7A0B;&#x7ED1;&#x5B9A;](.gitbook/assets/2020-03-25-00-11-16.png)
+![Session &#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#x4E0E;&#x672C;&#x5730;&#x7EBF;&#x7A0B;&#x7ED1;&#x5B9A;](../.gitbook/assets/2020-03-25-00-11-16.png)
 
 注意： 当前线程中的session不需要进行关闭, 线程结束后自动关闭
 

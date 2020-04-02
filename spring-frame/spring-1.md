@@ -1,16 +1,16 @@
 ---
-descriqption: 快速入门；IOC; 
+descriqption: 快速入门；IOC;
 ---
 
 # Spring框架-1
 
-[TOC]
+\[TOC\]
 
 ## 1 Spring框架的概述
 
 ### 1.1 什么是Spring
 
-Spring是分层的JavaSE/EE full-stack(一站式) 轻量级开源框架
+Spring是分层的JavaSE/EE full-stack\(一站式\) 轻量级开源框架
 
 分层:
 
@@ -24,11 +24,11 @@ Spring是分层的JavaSE/EE full-stack(一站式) 轻量级开源框架
 * 持久层: JDBC Template
 * 业务层: Spring的Bean管理
 
-![体系结构](.gitbook/assets/2020-03-28-15-01-46.png)
+![&#x4F53;&#x7CFB;&#x7ED3;&#x6784;](../.gitbook/assets/2020-03-28-15-01-46.png)
 
 ### 1.2 Spring的核心
 
-![底层原理](.gitbook/assets/2020-03-28-21-51-44.png)
+![&#x5E95;&#x5C42;&#x539F;&#x7406;](../.gitbook/assets/2020-03-28-21-51-44.png)
 
 IOC:（Inverse of Control 反转控制）
 
@@ -38,14 +38,13 @@ AOP:Aspect Oriented Programming 是 面向对象的功能延伸.不是替换面�
 
 ### 1.3 Spring的版本
 
-Spring3.x和Spring4.x  Spring4需要整合hibernate4. 5...
+Spring3.x和Spring4.x Spring4需要整合hibernate4. 5...
 
 ### 1.4 EJB: 企业级JavaBean
 
 EJB: SUN公司提出EE解决方案.
 
-2002 : Expert One-to-One J2EE Design and Development
-2004 : Expert One-to-One J2EE Development without EJB (EE开发真正需要使用的内容.)
+2002 : Expert One-to-One J2EE Design and Development 2004 : Expert One-to-One J2EE Development without EJB \(EE开发真正需要使用的内容.\)
 
 ### 1.5 Spring优点
 
@@ -87,14 +86,9 @@ spring-framework-3.0.2.RELEASE-dependencies.zip---Spring开发中的依赖包
 
 ### 2.2 创建web工程引入相应jar包
 
-spring-beans-3.2.0.RELEASE.jar
-spring-context-3.2.0.RELEASE.jar
-spring-core-3.2.0.RELEASE.jar
-spring-expression-3.2.0.RELEASE.jar
+spring-beans-3.2.0.RELEASE.jar spring-context-3.2.0.RELEASE.jar spring-core-3.2.0.RELEASE.jar spring-expression-3.2.0.RELEASE.jar
 
-开发的日志记录的包:
-com.springsource.org.apache.commons.logging-1.1.1.jar --- 用于整合其他的日志的包(类似Hibernate中slf4j)
-com.springsource.org.apache.log4j-1.2.15.jar
+开发的日志记录的包: com.springsource.org.apache.commons.logging-1.1.1.jar --- 用于整合其他的日志的包\(类似Hibernate中slf4j\) com.springsource.org.apache.log4j-1.2.15.jar
 
 ### 2.3 创建Spring的配置文件
 
@@ -102,7 +96,7 @@ com.springsource.org.apache.log4j-1.2.15.jar
 
 引入XML的约束:
 
-```markdown
+```text
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
@@ -113,7 +107,7 @@ com.springsource.org.apache.log4j-1.2.15.jar
 
 通过&lt;bean&gt;标签设置类的信息，通过id属性为类起一个标识
 
-```markdown
+```text
 <bean id="userService" class="demo1.HelloServiceImpl">
 </bean>
 ```
@@ -134,22 +128,27 @@ public void demo2() {
 
 控制反转，将原本在程序中手动创建HelloService对象的控制权，交由Spring框架管理
 
-### 2.6 IOC和DI(*****)区别
+### 2.6 IOC和DI\(**\***\)区别
 
 * IOC Inverse of Control 控制反转: 将**对象**的创建权,由Spring管理.
 * DI Dependency Injection依赖注入: 在Spring创建Bean对象的过程中,把**对象依赖的属性**注入到类中.
-&lt;bean&gt;下通过&lt;bean&gt;标签设置类的属性值，需要在类中给出set方法。
 
-```markdown
+  &lt;bean&gt;下通过&lt;bean&gt;标签设置类的属性值，需要在类中给出set方法。
+
+```text
 <property id="info属性名" value="属性值"></property>
 ```
 
 面向对象中对象之间的关系;
 
 * 依赖:
-public class A{
-private B b;
-}
+
+  public class A{
+
+  private B b;
+
+  }
+
 * 继承:
 * 聚合: 聚集，组合:
 
@@ -157,22 +156,20 @@ private B b;
 
 ApplicationContext 应用上下文，加载Spring 框架配置文件
 
-加载classpath下面配置文件：
-new ClassPathXmlApplicationContext("applicationContext.xml");
+加载classpath下面配置文件： new ClassPathXmlApplicationContext\("applicationContext.xml"\);
 
-加载磁盘路径下面配置文件：
-new FileSystemXmlApplicationContext("applicationContext.xml");
+加载磁盘路径下面配置文件： new FileSystemXmlApplicationContext\("applicationContext.xml"\);
 
 ### 2.8 BeanFactory与ApplicationContext区别
 
-![AppliactionContext](.gitbook/assets/2020-03-28-15-10-34.png)
+![AppliactionContext](../.gitbook/assets/2020-03-28-15-10-34.png)
 
 ApplicationContext类继承了BeanFactory.
 
-BeanFactory在使用到这个类的时候, getBean()方法的时候才会加载这个类.早期开发使用BeanFactory.
+BeanFactory在使用到这个类的时候, getBean\(\)方法的时候才会加载这个类.早期开发使用BeanFactory.
 
-* BeanFactory beanFactory = new XmlBeanFactory(new FileSystemResource("applicationContext.xml"));
-* BeanFactory beanFactory = new XmlBeanFactory(new ClassPathReasource("applicationContext.xml"));
+* BeanFactory beanFactory = new XmlBeanFactory\(new FileSystemResource\("applicationContext.xml"\)\);
+* BeanFactory beanFactory = new XmlBeanFactory\(new ClassPathReasource\("applicationContext.xml"\)\);
 
 ApplicationContext类加载配置文件的时候, 创建所有的类.ApplicationContext对BeanFactory提供了扩展:
 
@@ -187,7 +184,7 @@ ApplicationContext类加载配置文件的时候, 创建所有的类.Application
 
 提供了三种方式实例化Bean
 
-* 构造方法实例化(默认无参数)
+* 构造方法实例化\(默认无参数\)
 * 静态工厂实例化
 * 实例工厂实例化
 
@@ -195,7 +192,7 @@ ApplicationContext类加载配置文件的时候, 创建所有的类.Application
 
 默认情况下使用的就是无参数的构造方法
 
-```markdown
+```text
 <bean id="bean1" class="demo2.Bean1"></bean>
 ```
 
@@ -206,10 +203,9 @@ public class Bean2Factory {
     public static Bean2 getBean2(){//提供一个静态方法
         return new Bean2();
     }
-
 ```
 
-```markdown
+```text
 <!-- 第二种使用静态工厂实例化 -->
 <bean id="bean2" class="demo2.Bean2Factory" factory-method="getBean2"></bean>
 ```
@@ -223,7 +219,7 @@ public class Bean3Factory {
     }
 ```
 
-```markdown
+```text
 <!-- 第三种使用实例工厂实例化 -->
 <bean id="bean3" factory-bean="bean3Factory" factory-method="getBean3"></bean>
 <bean id="bean3Factory" class="demo2.Bean3Factory"/>
@@ -233,9 +229,7 @@ public class Bean3Factory {
 
 #### id和name的区别
 
-id遵守XML约束的id的约束.
-id约束保证这个属性的值是唯一的,而且必须以字母开始，可以使用字母、数字、连字符、下划线、句话、冒号
-name没有这些要求
+id遵守XML约束的id的约束. id约束保证这个属性的值是唯一的,而且必须以字母开始，可以使用字母、数字、连字符、下划线、句话、冒号 name没有这些要求
 
 * 如果bean标签上没有配置id,那么name可以作为id.
 
@@ -245,10 +239,10 @@ name没有这些要求
 
 &lt;bean&gt;标签内scope属性
 
-* singleton:单例的.(默认的值.) 只实例化一次对象
+* singleton:单例的.\(默认的值.\) 只实例化一次对象
 * prototype:多例的.
-* request:web开发中.创建了一个对象,将这个对象存入request范围,request.setAttribute();
-* session:web开发中.创建了一个对象,将这个对象存入session范围,session.setAttribute();
+* request:web开发中.创建了一个对象,将这个对象存入request范围,request.setAttribute\(\);
+* session:web开发中.创建了一个对象,将这个对象存入session范围,session.setAttribute\(\);
 * globalSession:一般用于Porlet应用环境.指的是分布式开发.不是porlet环境,globalSession等同于session;
 
 实际开发中主要使用singleton,prototype
@@ -268,7 +262,7 @@ name没有这些要求
 
 Bean的生命周期的11个步骤:
 
-![生命周期](.gitbook/assets/2020-03-28-20-53-25.png)
+![&#x751F;&#x547D;&#x5468;&#x671F;](../.gitbook/assets/2020-03-28-20-53-25.png)
 
 1. instantiate bean对象实例化
 2. populate properties 封装属性
@@ -286,7 +280,7 @@ Bean的生命周期的11个步骤:
 
 ### 3.3 Bean中属性注入
 
-![类的属性的注入](.gitbook/assets/2020-03-28-21-52-35.png)
+![&#x7C7B;&#x7684;&#x5C5E;&#x6027;&#x7684;&#x6CE8;&#x5165;](../.gitbook/assets/2020-03-28-21-52-35.png)
 
 Spring支持构造方法注入和setter方法注入.
 
@@ -309,7 +303,7 @@ public class Car {
 }
 ```
 
-```markdown
+```text
 <bean id="car" class="demo5.Car">
     <!--方式一：通过属性名称-->
     <constructor-arg name="name" value="宝马"/>
@@ -336,9 +330,9 @@ public class Car2 {
     }
 ```
 
- &lt;property&gt;标签中name就是属性名称,value是普通属性的值,ref:引用其他的对象
+&lt;property&gt;标签中name就是属性名称,value是普通属性的值,ref:引用其他的对象
 
-```markdown
+```text
 <bean id="car2" class="demo5.Car2">  
     <property name="name" value="保时捷"/>
     <property name="price" value="5000000"/>
@@ -349,19 +343,17 @@ public class Car2 {
 
 ref写该对象对应类的id或name
 
-```markdown
+```text
 <property name="car2" ref="car2"/>
 ```
 
 #### 名称空间p 注入属性
 
-Spring2.5版本引入了名称空间p.
-p:&lt;属性名&gt;="xxx" 引入常量值
-p:&lt;属性名&gt;-ref="xxx" 引用其它Bean对象
+Spring2.5版本引入了名称空间p. p:&lt;属性名&gt;="xxx" 引入常量值 p:&lt;属性名&gt;-ref="xxx" 引用其它Bean对象
 
 引入名称空间:
 
-```markdown
+```text
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -376,10 +368,9 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 
 spring expression language
 
-Spring3.0提供注入属性方式:
-语法：#{表达式}
+Spring3.0提供注入属性方式: 语法：\#{表达式}
 
-```markdown
+```text
 <bean id="" value="#{表达式}">
 
 <bean id="car2" class="demo5.Car2">
@@ -396,12 +387,11 @@ Spring3.0提供注入属性方式:
 <bean id="personInfo" class="demo5.PersonInfo">
     <property name="name" value="张三"/>
 </bean>
-
 ```
 
 ### 3.4 集合属性的注入
 
-```markdown
+```text
 <bean id="collectionBean" class="demo6.CollectionBean">
     <!-- 注入List集合 -->
     <property name="list">
@@ -440,27 +430,27 @@ Spring3.0提供注入属性方式:
 
 第一种写法：在创建ApplicationContext对象时传入多个配置文件
 
-ApplicationContext applicationContext = new ClassPathXmlApplicationContext("bean1.xml","bean2.xml";
+ApplicationContext applicationContext = new ClassPathXmlApplicationContext\("bean1.xml","bean2.xml";
 
 第二种方法:
 
 在配置文件的根标签下引入其他配置文件
 
-```markdown
+```text
 <import resource="applicationContext2.xml"/>
 ```
 
-## 4. IOC装配Bean(注解方式)
+## 4. IOC装配Bean\(注解方式\)
 
 ### 4.1 Spring的注解装配Bean
 
 Spring2.5 引入使用注解去定义Bean
 
-@Component  描述Spring框架中Bean
+@Component 描述Spring框架中Bean
 
 在配置文件中配置支持注解
 
-```markdown
+```text
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -496,7 +486,7 @@ private String info;
 对象属性:
 
 * @Autowired: 自动装配，默认使用类型注入.
-* @Qualifier("userDao")  --- 按名称进行注入.
+* @Qualifier\("userDao"\)  --- 按名称进行注入.
 
 ```java
 @Autowired
@@ -519,12 +509,11 @@ init-method 和 destroy-method.
 
 #### 配置Bean的作用范围
 
-@Scope--默认单例
-@Scope(value="prototype")
+@Scope--默认单例 @Scope\(value="prototype"\)
 
 ### 4.4 Spring3.0提供使用Java类定义Bean信息的方法
 
-写一个java类来作为Bean的配置信息, 
+写一个java类来作为Bean的配置信息,
 
 ```java
 @Configuration
@@ -550,10 +539,9 @@ public class BeanConfig {
 
 ### 4.5 实际开发中使用XML还是注解
 
-![装配方式比较](.gitbook/assets/2020-03-29-00-44-32.png)
+![&#x88C5;&#x914D;&#x65B9;&#x5F0F;&#x6BD4;&#x8F83;](../.gitbook/assets/2020-03-29-00-44-32.png)
 
-XML:bean管理
-注解：注入属性的时候比较方便.
+XML:bean管理 注解：注入属性的时候比较方便.
 
 两种方式结合; 一般使用XML注册Bean,使用注解进行属性的注入.
 
@@ -561,7 +549,7 @@ xml和注解方式混合使用
 
 1、引入context命名空间
 
-```markdown
+```text
 <beans xmlns="http://www.springframework.org/schema/beans"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns:context="http://www.springframework.org/schema/context"
@@ -573,7 +561,7 @@ xml和注解方式混合使用
 
 2、在配置文件中添加context:annotation-config标签使@Resource、@ PostConstruct、@ PreDestroy、@Autowired注解生效
 
-```markdown
+```text
 <context:annotation-config/>
 ```
 
@@ -592,7 +580,7 @@ xml和注解方式混合使用
 
 在web.xml中配置监听器和初始化参数
 
-```markdown
+```text
 <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>
@@ -634,3 +622,4 @@ public class SpringTest {
     }
 }
 ```
+
