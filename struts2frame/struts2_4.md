@@ -19,7 +19,7 @@ OGNL是Object Graphic Navigation Language（对象图导航语言）的缩写，
 
 OGNL 提供五大类功能
 
-1. 支持对象方法调用，如xxx.doSomeSpecial\(\)；
+1. 支持对象方法调用，如xxx.doSomeSpecial()；
 2. 支持类静态的方法调用和值访问
 3. 访问OGNL上下文（OGNL context）和ActionContext； （重点 操作ValueStack值栈 ）
 4. 支持赋值操作和表达式串联
@@ -51,15 +51,15 @@ OGNL 提供五大类功能
 valueStack主要是将action数据携带到页面上，通过ognl获取数据
 
 1. ValueStack有一个实现类叫**OgnlValueStack**。
-2. 每一个action都有一个ValueStack.\(一个请求，一个request, 一个action，一个valueStack\),valueStack**生命周期**就是request生命周期。
-3. valueStack中存储了当前action对象以及其它常用web对象\(request,session,application.parameters\)。
+2. 每一个action都有一个ValueStack.(一个请求，一个request, 一个action，一个valueStack),valueStack**生命周期**就是request生命周期。
+3. valueStack中存储了当前action对象以及其它常用web对象(request,session,application.parameters)。
 4. struts2框架将valueStack以“struts.valueStack”为名存储到request域中。
 
 ### 2.2 valueStack结构
 
 ![valueStack&#x7ED3;&#x6784;](.gitbook/assets/2020-03-13-22-10-49.png)
 
-ValueStack中 存在root属性 \(CompoundRoot\) 、 context 属性 （OgnlContext）
+ValueStack中 存在root属性 (CompoundRoot) 、 context 属性 （OgnlContext）
 
 * CompoundRoot 就是ArrayList
 * OgnlContext 就是 Map
@@ -68,9 +68,9 @@ list集合中存储的是action相关信息
 
 map集合中存储的是相关映射信息，包含 paramters,request,session,application attr等。
 
-想要从list中获取数据，可以不使用\#号.\(它就是ognl的root\)
+想要从list中获取数据，可以不使用\#号.(它就是ognl的root)
 
-如果从map中获取数据，需要使用\#. \(其实在struts2中的map--context其实就是ognlContext\)
+如果从map中获取数据，需要使用\#. (其实在struts2中的map--context其实就是ognlContext)
 
 ![valueStack&#x7ED3;&#x6784;&#x76F8;&#x5173;&#x5206;&#x6790;](.gitbook/assets/2020-03-14-19-57-14.png)
 
@@ -109,8 +109,8 @@ ValueStack vs=ActionContext.getContext().getValueStack();
 
 主要有两个方法（在OgnlValueStack类中）
 
-* push\(Object obj\)-------&gt;底层就是 root.add\(0,obj\) 将数据存储到栈顶。
-* set\(String name,Object obj\);-----&gt;底层是将数据封装到HashMap中，在将这个HashMap通过push存储。
+* push(Object obj)-------&gt;底层就是 root.add(0,obj) 将数据存储到栈顶。
+* set(String name,Object obj);-----&gt;底层是将数据封装到HashMap中，在将这个HashMap通过push存储。
 
 在jsp中 通过 &lt;s:debug /&gt; 查看值栈的内容
 
@@ -215,7 +215,7 @@ vs.push(users);
 
 #### 1. 访问的action对象会被压入到valueStack中
 
-DefaultActionInvocation 的 init方法 stack.push\(action\);
+DefaultActionInvocation 的 init方法 stack.push(action);
 
 Action如果想传递数据给JSP，只要将数据保存到成员变量，并且提供get方法就可以了。然后通过Property Name就可以获取到值。
 
@@ -246,9 +246,9 @@ if (model !=  null) {
 
 struts2框架中所使用的request对象，是增强后的request对象。
 
-${username}----&gt;request.getAttribute\("username"\);
+${username}----&gt;request.getAttribute("username");
 
-StrutsPreparedAndExecuteFilter的doFilter代码中 request = prepare.wrapRequest\(request\);
+StrutsPreparedAndExecuteFilter的doFilter代码中 request = prepare.wrapRequest(request);
 
 * 对Request对象进行了包装 ，StrutsRequestWrapper
 * 重写request的 getAttribute
@@ -266,7 +266,7 @@ if (attribute == null) {
 
 ### 1. \#号
 
-#### 用法一  \# 代表 ActionContext.getContext\(\) 上下文
+#### 用法一  \# 代表 ActionContext.getContext() 上下文
 
 ```text
 <s:property value="#request.name" />  -->  ActionContext().getContext().getRequest().get("name");
@@ -293,7 +293,7 @@ if (attribute == null) {
 
 #### 用法三 ：进行投影映射 （结合复杂对象遍历 ）
 
-1）集合的投影\(只输出部分属性\)
+1）集合的投影(只输出部分属性)
 
 ```text
 遍历集合只要name属性
@@ -410,7 +410,7 @@ regist.jsp-----&gt;RegistServlet
 
 解决方案:
 
-在页面上生成一个令牌\(就是一个随机字符串\),将其存储到session中，并在表单中携带.在服务器端，获取数据时，也将令牌获取，将它与session中存储的token对比，没问题，将session中令牌删除。
+在页面上生成一个令牌(就是一个随机字符串),将其存储到session中，并在表单中携带.在服务器端，获取数据时，也将令牌获取，将它与session中存储的token对比，没问题，将session中令牌删除。
 
 ### 3.2 struts2中怎样解决表单重复提交
 
@@ -442,7 +442,7 @@ regist.jsp-----&gt;RegistServlet
 
 ## 4. struts2中json插件使用
 
-### 4.1 struts2中怎样处理异步提交\(ajax\)
+### 4.1 struts2中怎样处理异步提交(ajax)
 
 异步提交参考[ajax](../ajax/ajax1.md)
 
@@ -485,7 +485,7 @@ response.getWriter().close();
 2. 还可以通过json插件的interceptor完成.
 
 ```text
-<param name="includeProperties">ps\[\d+\]\.name,ps\[\d+\]\.price,ps\[\d+\]\.count</param>
+<param name="includeProperties">ps[\d+]\.name,ps[\d+]\.price,ps[\d+]\.count</param>
 
 注意符号需要转义
 ```

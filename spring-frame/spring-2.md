@@ -4,7 +4,7 @@ description: AOP
 
 # Spring框架-2
 
-\[TOC\]
+[TOC]
 
 ## 1. AOP的概述
 
@@ -22,7 +22,7 @@ AspecJ是一个基于Java语言的AOP框架，Spring2.0开始，Spring AOP引入
 
 就是代理机制:
 
-* 动态代理:\(JDK中使用\)
+* 动态代理:(JDK中使用)
 * JDK的动态代理,对实现了接口的类生成代理.
 
 ### 1.3 Spring的AOP代理
@@ -33,14 +33,14 @@ JDK动态代理: 对实现了接口的类生成代理 CGLib代理机制: 对类�
 
 ![AOP&#x672F;&#x8BED;](../.gitbook/assets/2020-03-29-22-39-51.png)
 
-* Joinpoint\(连接点\): 所谓连接点是指那些被拦截到的点。在spring中,这些点指的是方法,因为spring只支持方法类型的连接点.
-* Pointcut\(切入点\): 所谓切入点是指我们要对哪些Joinpoint进行拦截的定义.
-* Advice\(通知/增强\):所谓通知是指拦截到Joinpoint之后所要做的事情就是通知.通知分为前置通知,后置通知,异常通知,最终通知,环绕通知\(切面要完成的功能\)
-* Introduction\(引介\):引介是一种特殊的通知在不修改类代码的前提下, Introduction可以在运行期为类动态地添加一些方法或Field.
-* Target\(目标对象\):代理的目标对象
-* Weaving\(织入\):是指把增强应用到目标对象来创建新的代理对象的过程.spring采用动态代理织入，而AspectJ采用编译期织入和类装在期织入
+* Joinpoint(连接点): 所谓连接点是指那些被拦截到的点。在spring中,这些点指的是方法,因为spring只支持方法类型的连接点.
+* Pointcut(切入点): 所谓切入点是指我们要对哪些Joinpoint进行拦截的定义.
+* Advice(通知/增强):所谓通知是指拦截到Joinpoint之后所要做的事情就是通知.通知分为前置通知,后置通知,异常通知,最终通知,环绕通知(切面要完成的功能)
+* Introduction(引介):引介是一种特殊的通知在不修改类代码的前提下, Introduction可以在运行期为类动态地添加一些方法或Field.
+* Target(目标对象):代理的目标对象
+* Weaving(织入):是指把增强应用到目标对象来创建新的代理对象的过程.spring采用动态代理织入，而AspectJ采用编译期织入和类装在期织入
 * Proxy（代理）:一个类被AOP织入增强后，就产生一个结果代理类
-* Aspect\(切面\): 是切入点和通知（引介）的结合
+* Aspect(切面): 是切入点和通知（引介）的结合
 
 ## 2. AOP的底层实现
 
@@ -77,7 +77,7 @@ public class JDKProxy implements InvocationHandler{
 
 ### 2.2 CGLIB动态代理
 
-CGLIB\(Code Generation Library\)是一个开源项目.是一个强大的，高性能，高质量的Code生成类库，它可以在运行期扩展Java类与实现Java接口。 Hibernate支持它来实现PO\(Persistent Object 持久化对象\)字节码的动态生成
+CGLIB(Code Generation Library)是一个开源项目.是一个强大的，高性能，高质量的Code生成类库，它可以在运行期扩展Java类与实现Java接口。 Hibernate支持它来实现PO(Persistent Object 持久化对象)字节码的动态生成
 
 Hibernate生成持久化类的javassist.
 
@@ -127,7 +127,7 @@ public class CGLibProxy implements MethodInterceptor{
 
 AOP: 不是由Spring定义. AOP联盟的组织定义.
 
-Spring中的通知:\(增强代码\)
+Spring中的通知:(增强代码)
 
 前置通知 org.springframework.aop.MethodBeforeAdvice
 
@@ -156,11 +156,11 @@ Advisor : Spring中传统切面.
 * Advisor:都是有一个切点和一个通知组合.
 * Aspect:多个切点和多个通知组合.
 
-Advisor : 代表一般切面，Advice本身就是一个切面，对目标类所有方法进行拦截\(\* 不带有切点的切面.针对所有方法进行拦截\) PointcutAdvisor : 代表具有切点的切面，可以指定拦截目标类哪些方法\(带有切点的切面,针对某个方法进行拦截\) IntroductionAdvisor : 代表引介切面，针对引介通知而使用切面（不要求掌握）
+Advisor : 代表一般切面，Advice本身就是一个切面，对目标类所有方法进行拦截(\* 不带有切点的切面.针对所有方法进行拦截) PointcutAdvisor : 代表具有切点的切面，可以指定拦截目标类哪些方法(带有切点的切面,针对某个方法进行拦截) IntroductionAdvisor : 代表引介切面，针对引介通知而使用切面（不要求掌握）
 
 ### 3.3 Spring的AOP的开发
 
-#### 不带有切点的切面\(针对所有方法的增强\)
+#### 不带有切点的切面(针对所有方法的增强)
 
 第一步:导入相应jar包.
 
@@ -189,7 +189,7 @@ public class MyBeforwAdvice implements MethodBeforeAdvice {
 }
 ```
 
-第四步:生成代理:\(配置生成代理\)
+第四步:生成代理:(配置生成代理)
 
 * 生成代理Spring基于ProxyFactoryBean类.底层自动选择使用JDK的动态代理还是CGLIB的代理.
 * 属性:
@@ -236,7 +236,7 @@ public class MyBeforwAdvice implements MethodBeforeAdvice {
 private CustomerDao customerDao;
 ```
 
-#### 带有切点的切面:\(针对目标对象的某些方法进行增强\)
+#### 带有切点的切面:(针对目标对象的某些方法进行增强)
 
 PointcutAdvisor 接口:
 
@@ -305,7 +305,7 @@ pattern里写正则匹配规则，.代表任意，\*代表多个，“.”需要
 
 前面的案例中，每个代理都是通过ProxyFactoryBean织入切面代理，在实际开发中，非常多的Bean每个都配置ProxyFactoryBean开发维护量巨大
 
-自动创建代理\(**基于后处理Bean.在Bean创建的过程中完成的增强.生成Bean就是代理**.\) 与3.3中配置的区别就是不用配置产生代理，而是配置自动代理相关。
+自动创建代理(**基于后处理Bean.在Bean创建的过程中完成的增强.生成Bean就是代理**.) 与3.3中配置的区别就是不用配置产生代理，而是配置自动代理相关。
 
 * BeanNameAutoProxyCreator 根据Bean名称创建代理
 * DefaultAdvisorAutoProxyCreator 根据Advisor本身包含信息创建代理
@@ -368,7 +368,7 @@ private CustomerDao customerDao;
 * ProxyFactoryBean:先有被代理对象,将被代理对象传入到代理类中生成代理.
 * 自动代理基于后处理Bean.在Bean的生成过程中,就产生了代理对象,把代理对象返回.生成Bean已经是代理对象.
 
-## 4. Spring的AspectJ的AOP\(**\***\)
+## 4. Spring的AspectJ的AOP(**\***)
 
 AspectJ是一个面向切面的框架，它扩展了Java语言。AspectJ定义了AOP语法所以它有一个专门的编译器用来生成遵守Java字节编码规范的Class文件。
 
@@ -378,13 +378,13 @@ AspectJ是一个基于Java语言的AOP框架。Spring2.0以后新增了对Aspect
 
 AspectJ表达式:
 
-**语法**:execution\(表达式\)
+**语法**:execution(表达式)
 
-execution\(&lt;访问修饰符&gt;?&lt;返回类型&gt;&lt;方法名&gt;\(&lt;参数&gt;\)&lt;异常&gt;\)
+execution(&lt;访问修饰符&gt;?&lt;返回类型&gt;&lt;方法名&gt;(&lt;参数&gt;)&lt;异常&gt;)
 
-* execution\(" _demo1.dao._\(..\)"\) ---只检索当前包
-* execution\(" _demo1.dao.._\(..\)"\) ---检索包及当前包的子包.
-* execution\( _dao.GenericDAO+._\(..\)\) ---检索GenericDAO及子类
+* execution(" _demo1.dao._(..)") ---只检索当前包
+* execution(" _demo1.dao.._(..)") ---检索包及当前包的子包.
+* execution( _dao.GenericDAO+._(..)) ---检索GenericDAO及子类
 
 AspectJ增强:
 
@@ -393,7 +393,7 @@ AspectJ增强:
 * @Around 环绕通知，相当于MethodInterceptor
 * @AfterThrowing抛出通知，相当于ThrowAdvice
 * @After 最终final通知，不管是否异常，该通知都会执行
-* @DeclareParents 引介通知，相当于IntroductionInterceptor \(不要求掌握\)
+* @DeclareParents 引介通知，相当于IntroductionInterceptor (不要求掌握)
 
 ### 4.1 基于注解
 
@@ -488,7 +488,7 @@ AspectJ的通知类型:
 
 **@After 最终final通知**，不管是否异常，该通知都会执行
 
-**@DeclareParents 引介通知**，相当于IntroductionInterceptor \(不要求掌握\)
+**@DeclareParents 引介通知**，相当于IntroductionInterceptor (不要求掌握)
 
 #### 切点的定义
 
@@ -632,7 +632,7 @@ JdbcTemplate模板与DbUtils工具类比较类似.
 
 ### 5.1 Spring对持久层技术支持
 
-JDBC:org.springframework.jdbc.core.JdbcTemplate Hibernate3.0:org.springframework.orm.hibernate3.HibernateTemplate IBatis\(MyBatis\):org.springframework.orm.ibatis.SqlMapClientTemplate JPA:org.springframework.orm.jpa.JpaTemplate
+JDBC:org.springframework.jdbc.core.JdbcTemplate Hibernate3.0:org.springframework.orm.hibernate3.HibernateTemplate IBatis(MyBatis):org.springframework.orm.ibatis.SqlMapClientTemplate JPA:org.springframework.orm.jpa.JpaTemplate
 
 ### 5.2 开发JDBCTemplate入门
 
@@ -795,19 +795,19 @@ Public class UserDao extends JdbcDaoSupport{
 
 进行CRUD的操作;
 
-* 保存:update\(String sql,Object... args\)
-* 修改:update\(String sql,Object... args\)
-* 删除:update\(String sql,Object... args\)
+* 保存:update(String sql,Object... args)
+* 修改:update(String sql,Object... args)
+* 删除:update(String sql,Object... args)
 
 简单查询:
 
-* select count\(\*\) from user;--- queryForInt\(String sql\);
-* select name from user where id = ?;--- queryForObject\(String sql,Class clazz,Object... args\);
+* select count(\*) from user;--- queryForInt(String sql);
+* select name from user where id = ?;--- queryForObject(String sql,Class clazz,Object... args);
 
-复杂查询:\(返回对象,和对象集合\)
+复杂查询:(返回对象,和对象集合)
 
-* select \* from user where id = ?--- queryForObjectString sql,RowMapper&lt;T&gt; rowMapper,Object... args\); 查一个对象
-* select \* from user;--- query\(String sql,RowMapper&lt;T&gt; rowMapper,Object... args\); 查对象集合
+* select \* from user where id = ?--- queryForObjectString sql,RowMapper&lt;T&gt; rowMapper,Object... args); 查一个对象
+* select \* from user;--- query(String sql,RowMapper&lt;T&gt; rowMapper,Object... args); 查对象集合
 
 ```java
 public User findById(int id){

@@ -8,7 +8,7 @@ description: struts2处理请求参数---重点；struts2的类型转换；strut
 
 ### 1.1 struts2中的MVC
 
-在struts2中action是什么?\(struts2是一个mvc框架\)
+在struts2中action是什么?(struts2是一个mvc框架)
 
 * V: jsp
 * M: action
@@ -80,7 +80,7 @@ public class RegistAction2 extends ActionSupport {
 <interceptor name="params" class="com.opensymphony.xwork2.interceptor.ParametersInterceptor"/>
 ```
 
-### 1.3 模型驱动\(在开发中应用比较多\)
+### 1.3 模型驱动(在开发中应用比较多)
 
 步骤：
 
@@ -199,7 +199,7 @@ struts2中的类型转换器根接口是：**com.opensymphony.xwork2.conversion.
 public Object convertValue(Map<String, Object> context, Object target, Member member, String propertyName, Object value, Class toType);
 ```
 
-如果实现接口，这个方法参数太多\(6个\)
+如果实现接口，这个方法参数太多(6个)
 
 #### 2. 不推荐实现接口，可以继承 DefaultTypeConverter类
 
@@ -272,7 +272,7 @@ No result defined for action cn.itcast.action.RegistAction and result input
 
 如果配置了，出现类型转换问题，就会跳转到input指定的视图。
 
-问题: 为什么会向input视图跳转? 是因为struts2中的拦截器\(interceptor\).
+问题: 为什么会向input视图跳转? 是因为struts2中的拦截器(interceptor).
 
 ```text
 <interceptor name="conversionError" class="org.apache.struts2.interceptor.StrutsConversionErrorInterceptor"/>
@@ -306,14 +306,14 @@ struts2中提供的校验-----服务器端校验。
 
 分成两种:
 
-1. 手动校验\(编码校验\)
-2. 配置校验\(annotation,xml\) 我们讲的是xml。
+1. 手动校验(编码校验)
+2. 配置校验(annotation,xml) 我们讲的是xml。
 
-### 4.1 手动校验\(了解\)
+### 4.1 手动校验(了解)
 
 要求: action类必须继承自**ActionSupport**。需要重写一个方法 **validate**。
 
-action中重写的validate是在请求处理方法\(execute\)之前执行的。
+action中重写的validate是在请求处理方法(execute)之前执行的。
 
 对于struts2提供的校验，它也是通过拦截器实现的。
 
@@ -327,7 +327,7 @@ action中重写的validate是在请求处理方法\(execute\)之前执行的。
 this.addFieldError(Sting name,String value);
 ```
 
-#### 在页面上怎样获取错误信息?\(在input视图上\)
+#### 在页面上怎样获取错误信息?(在input视图上)
 
 ```text
 jsp页面导入标签库
@@ -337,19 +337,19 @@ jsp页面导入标签库
 * &lt;s:fielderror&gt; 展示所有错误信息
 * &lt;s:fielderror fieldName=""&gt; 展示特定名称的错误信息.
 
-#### 在同一个Action中有多个请求处理方法\(login,regist\)
+#### 在同一个Action中有多个请求处理方法(login,regist)
 
 有些方法是需要校验的，有些是不需要的，怎样处理?
 
 解决方案: 创建一个校验方法名称格式为 validate+请求处理方法名 （命名规范）
 
-例如: 请求处理方法叫regist\(\)，则校验的方法名为 validateRegist\(\)。如果某个校验操作对于该action中的每个请求处理方法都应用，则写在validation\(\)方法中。
+例如: 请求处理方法叫regist()，则校验的方法名为 validateRegist()。如果某个校验操作对于该action中的每个请求处理方法都应用，则写在validation()方法中。
 
-### 4.2 配置校验\(xml\)
+### 4.2 配置校验(xml)
 
 struts2的校验框架
 
-已经完成了校验操作\(做了很多校验方法\), 而我们在使用时，只需要将它们调用就可以\(通过配置文件\)
+已经完成了校验操作(做了很多校验方法), 而我们在使用时，只需要将它们调用就可以(通过配置文件)
 
 要求: action类必须继承自ActionSupport。
 
@@ -416,7 +416,7 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 <validator name="conditionalvisitor" class="com.opensymphony.xwork2.validator.validators.ConditionalVisitorFieldValidator"/>
 ```
 
-* required \(**必填校验器**,要求被校验的属性值不能为null\)
+* required (**必填校验器**,要求被校验的属性值不能为null)
 
 ```java
 <field-validator type="required">
@@ -424,7 +424,7 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 </field-validator>
 ```
 
-* requiredstring \(**必填字符串校验器**,要求被校验的属性值不能为null，并且长度大于0, 默认情况下会对字符串去前后空格\)
+* requiredstring (**必填字符串校验器**,要求被校验的属性值不能为null，并且长度大于0, 默认情况下会对字符串去前后空格)
 
 ```java
 <field-validator type="requiredstring">
@@ -433,7 +433,7 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 </field-validator>
 ```
 
-* stringlength \(**字符串长度校验器**，要求被校验的属性值必须在指定的范围内，否则校验失败,minLength参数指定最小长度，maxLength参数指定最大长度，trim参数指定校验field之前是否去除字符串前后的空格\)
+* stringlength (**字符串长度校验器**，要求被校验的属性值必须在指定的范围内，否则校验失败,minLength参数指定最小长度，maxLength参数指定最大长度，trim参数指定校验field之前是否去除字符串前后的空格)
 
 ```java
 <field-validator type="stringlength">
@@ -444,7 +444,7 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 </field-validator>
 ```
 
-* regex \(**正则表达式校验器**，检查被校验的属性值是否匹配一个正则表达式，expression参数指定正则表达式，caseSensitive参数指定进行正则表达式匹配时，是否区分大小写,默认值为true\)
+* regex (**正则表达式校验器**，检查被校验的属性值是否匹配一个正则表达式，expression参数指定正则表达式，caseSensitive参数指定进行正则表达式匹配时，是否区分大小写,默认值为true)
 
 ```java
 <field-validator type="regex">
@@ -453,7 +453,7 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 </field-validator>
 ```
 
-* int\(**整数校验器**，要求field的整数值必须在指定范围内，min指定最小值，max指定最大值\)
+* int(**整数校验器**，要求field的整数值必须在指定范围内，min指定最小值，max指定最大值)
 
 ```java
 <field-validator type="int">
@@ -463,8 +463,8 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 </field-validator>
 ```
 
-* double\(双精度浮点数校验器,要求field的双精度浮点数必须在指定范围内,min指定最小值,max指定最大值\)
-* fieldexpression \(**字段OGNL表达式校验器**,要求field满足一个ognl表达式，expression参数指定ognl表达式,该逻辑表达式基于ValueStack进行求值,返回true时校验通过，否则不通过\)
+* double(双精度浮点数校验器,要求field的双精度浮点数必须在指定范围内,min指定最小值,max指定最大值)
+* fieldexpression (**字段OGNL表达式校验器**,要求field满足一个ognl表达式，expression参数指定ognl表达式,该逻辑表达式基于ValueStack进行求值,返回true时校验通过，否则不通过)
 
 ```java
 <field-validator type="fieldexpression">
@@ -473,7 +473,7 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 </field-validator>
 ```
 
-* email\(**邮件地址校验器**，要求如果被校验的属性值非空，则必须是合法的邮件地址\)
+* email(**邮件地址校验器**，要求如果被校验的属性值非空，则必须是合法的邮件地址)
 
 ```java
 <field-validator type="email">
@@ -481,7 +481,7 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 </field-validator>
 ```
 
-* url\(**网址校验器**,要求如果被校验的属性值非空,则必须是合法的url地址\)
+* url(**网址校验器**,要求如果被校验的属性值非空,则必须是合法的url地址)
 
 ```java
 <field-validator type="url">
@@ -489,7 +489,7 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 </field-validator>
 ```
 
-* date\(**日期校验器**,要求field的日期值必须在指定范围内,min指定最小值,max指定最大值\)
+* date(**日期校验器**,要求field的日期值必须在指定范围内,min指定最小值,max指定最大值)
 
 ```java
 <field-validator type="date">
@@ -503,16 +503,16 @@ xwork-core-2.3.7.jar 中 /com/opensymphony/xwork2/validator/validators/default.x
 
 只需要将校验xml文件名称修改就可以。
 
-格式 Action类名-ActionName\(&lt;action&gt;元素name属性\)-validation.xml
+格式 Action类名-ActionName(&lt;action&gt;元素name属性)-validation.xml
 
 UserAction-regist-validation.xml
 
-## 5. 自定义校验规则\(了解\)
+## 5. 自定义校验规则(了解)
 
 步骤一：自定义校验器必须实现 Validator 接口 通常自定义校验器 继承 ValidatorSupport 和 FieldValidatorSupport
 
-* ValidatorSupport 针对不是一个输入字段 \(两个密码一致\)
-* FieldValidatorSupport 针对是一个输入字段  \(用户名非空\)
+* ValidatorSupport 针对不是一个输入字段 (两个密码一致)
+* FieldValidatorSupport 针对是一个输入字段  (用户名非空)
 
 步骤二： 注册校验器
 
@@ -526,7 +526,7 @@ UserAction-regist-validation.xml
 
 struts2 引入了Convention插件来支持零配置，使用约定无需struts.xml或者Annotation配置
 
-需要 struts2-convention-plugin-2.3.7.jar 、asm-\*.jar\(三个\)
+需要 struts2-convention-plugin-2.3.7.jar 、asm-\*.jar(三个)
 
 插件会自动搜索action、actions、struts、struts2包下所有Java类，所有实现了com.opensymphony.xwork2.Action的Java类，所有类名以Action结尾的Java类
 

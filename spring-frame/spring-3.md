@@ -4,7 +4,7 @@ description: 事务管理；三大框架整合
 
 # Spring框架-3
 
-\[TOC\]
+[TOC]
 
 ## 1. Spring的事务管理
 
@@ -18,24 +18,24 @@ Spring提供事务管理API:
 
 **PlatformTransactionManager**:平台事务管理器.
 
-* commit\(TransactionStatus status\)
-* getTransaction\(TransactionDefinition definition\)
-* rollback\(TransactionStatus status\)
+* commit(TransactionStatus status)
+* getTransaction(TransactionDefinition definition)
+* rollback(TransactionStatus status)
 
 **TransactionDefinition**:事务定义
 
 * ISOLation\_XXX: 事务隔离级别.
-* PROPAGATION\_XXX: 事务的传播行为.\(不是JDBC中有的，为了解决实际开发问题.\)
+* PROPAGATION\_XXX: 事务的传播行为.(不是JDBC中有的，为了解决实际开发问题.)
 * 过期时间
 
 **TransactionStatus**:事务状态
 
 * flush
-* 是否有保存点 hasSavepoint\(\)
-* isCompleted\(\) 事务是否已经提交或回滚
-* isNewTransaction\(\) 是否一个新的事务
-* isRollbackOnly\(\)
-* setRollbackOnly\(\)
+* 是否有保存点 hasSavepoint()
+* isCompleted() 事务是否已经提交或回滚
+* isNewTransaction() 是否一个新的事务
+* isRollbackOnly()
+* setRollbackOnly()
 
 关系: PlatformTransactionManager通过TransactionDefinition设置事务相关信息管理事务，管理事务过程中，产生一些事务状态， 状态由TransactionStatus记录.
 
@@ -55,13 +55,13 @@ Spring提供事务管理API:
 
 ISOLation\_XXX: 事务隔离级别：
 
-* ISOLATION\_DEFAULT: 默认级别. Mysql\(repeatable\_read\) oracle \(read\_commited\)
+* ISOLATION\_DEFAULT: 默认级别. Mysql(repeatable\_read) oracle (read\_commited)
 * ISOLATION\_READ\_UNCOMMITTED
 * ISOLATION\_READ\_COMMITTED
 * ISOLATION\_REPEATABLE\_READ
 * ISOLATION\_SERIALIZABLE
 
-PROPAGATION\_XXX事务的传播行为: \(不是JDBC事务管理，用来解决实际开发的问题.\)传播行为：
+PROPAGATION\_XXX事务的传播行为: (不是JDBC事务管理，用来解决实际开发的问题.)传播行为：
 
 解决业务层之间的调用的事务的关系.
 
@@ -103,7 +103,7 @@ A,B 非事务的方式运行，A有事务，就会挂起当前的事务.
 A,B  A有事务，A执行之后，将A事务执行之后的内容保存到SavePoint. B事务有异常的话，用户需要自己设置事务提交还是回滚.
 ```
 
-* 常用:\(重点\)
+* 常用:(重点)
 
   PROPAGATION\_REQUIRED 默认
 
@@ -180,7 +180,7 @@ public class SpringTest1 {
 
 需要**事务管理器**: 真正管理事务对象.
 
-* Spring提供了事务管理的模板\(工具类\)
+* Spring提供了事务管理的模板(工具类)
 
 第一步: 注册事务管理器:
 
@@ -201,7 +201,7 @@ public class SpringTest1 {
 </bean>
 ```
 
-第三步: 在业务层注入模板类:\(模板类管理事务\)
+第三步: 在业务层注入模板类:(模板类管理事务)
 
 ```text
 <!-- 业务层类 -->
@@ -233,7 +233,7 @@ public void transfer(final String from, final String to, final double money) {
 
 * 代码量增加,代码有侵入性.
 
-#### 声明式事务管理:\(原始方式\)
+#### 声明式事务管理:(原始方式)
 
 基于TransactionProxyFactoryBean. 导入:aop相应jar包.
 
@@ -281,7 +281,7 @@ prop格式：PROPAGATION,ISOLATION,readOnly,-Exception,+Exception
 
 **缺点**: 就是需要为每一个管理事务的类生成代理. 需要为每个类都需要进行配置.
 
-#### 声明式事务管理:\(自动代理.基于切面 **\*\***\)
+#### 声明式事务管理:(自动代理.基于切面 **\*\***)
 
 第一步: 导入相应jar包
 
@@ -316,7 +316,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 </bean>
 ```
 
-第四步:定义增强\(事务管理\)
+第四步:定义增强(事务管理)
 
 ```text
 <!-- 定义一个增强 -->
@@ -337,7 +337,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 </tx:advice>
 ```
 
-第五步:定义aop的配置\(切点和通知的组合\)
+第五步:定义aop的配置(切点和通知的组合)
 
 ```text
 <!-- aop配置定义切面和切点的信息 -->
@@ -351,7 +351,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 第六步: 编写测试类
 
-* 注入Service对象, 不需要注入代理对象\(生成这个类的时候,已经是代理对象.\)
+* 注入Service对象, 不需要注入代理对象(生成这个类的时候,已经是代理对象.)
 
 #### 基于注解的事务管理
 
@@ -462,7 +462,7 @@ Spring整合Junit测试
 
 * spring-test-3.2.0.RELEASE.jar
 
-\(Spring没有引入c3p0和数据库驱动\)
+(Spring没有引入c3p0和数据库驱动)
 
 配置: applicationContext.xml，Log4j.properties
 
@@ -493,7 +493,7 @@ Spring整合Junit测试
 * 数据连接池
 * 数据库驱动
 
-二级缓存:\(可选的\)
+二级缓存:(可选的)
 
 * backport-util-concurrent.jar
 * commons-logging.jar
@@ -590,7 +590,7 @@ public class BookAction extends ActionSupport implements ModelDriven<Book>{
 
 ### 2.3 Struts2和Spring的整合两种方式
 
-#### Struts2自己管理Action\(方式一\)
+#### Struts2自己管理Action(方式一)
 
 ```text
 <action name="book_*" class="cn.itcast.action.BookAction" method="{1}">
@@ -598,7 +598,7 @@ public class BookAction extends ActionSupport implements ModelDriven<Book>{
 
 * Struts2框架自动创建Action的类.
 
-#### Action交给Spring管理\(方式二\)
+#### Action交给Spring管理(方式二)
 
 可以在action标签上通过一个**伪类名**方式进行配置:
 
@@ -624,7 +624,7 @@ public class BookAction extends ActionSupport implements ModelDriven<Book>{
 传统方式:
 
 * 获得WebApplicationContext对象.
-* 通过WebAppolicationContext中getBean\(“”\);
+* 通过WebAppolicationContext中getBean(“”);
 
 实际开发中:
 
@@ -636,7 +636,7 @@ public class BookAction extends ActionSupport implements ModelDriven<Book>{
 <constant name="struts.objectFactory" value="spring" />
 ```
 
-这将引发另一个常量的执行: \(**Spring的工厂类按照名称自动注入**\)
+这将引发另一个常量的执行: (**Spring的工厂类按照名称自动注入**)
 
 struts.objectFactory.spring.autoWire = name
 
@@ -646,7 +646,7 @@ struts.objectFactory.spring.autoWire = name
 
 Spring整合Hibernate框架的时候有两种方式
 
-#### 零障碍整合\(方式一\)
+#### 零障碍整合(方式一)
 
 可以在Spring中引入Hibernate的配置文件.
 
@@ -718,7 +718,7 @@ public class BookDao extends HibernateDaoSupport{
 
 6.在业务层类BookService上添加一个注解 @Transactional
 
-#### 没有Hibernate配置文件的形式\(方式二\)
+#### 没有Hibernate配置文件的形式(方式二)
 
 不需要Hibernate配置文件的方式, 将Hibernate配置文件的信息直接配置到Spring中.
 
@@ -787,14 +787,14 @@ Hibernate配置文件中的信息 :
 
 | 方法 | 描述 |
 | :--- | :--- |
-| Serializable save\(Object entity\) | 保存数据 |
-| void update\(Object entity\) | 修改数据 |
-| void delete\(Object entity\) | 删除数据 |
-| &lt;T&gt; T get\(Class&lt;T&gt; entityClass, Serializable id\) | 根据ID进行检索.立即检索 |
-| &lt;T&gt; T load\(Class&lt;T&gt; entityClass, Serializable id\) | 根据ID进行检索.延迟检索 |
-| List find\(String queryString, Object... values\) | 支持HQL查询.直接返回List集合 |
-| List findByCriteria\(DetachedCriteria criteria\) | 离线条件查询 |
-| List findByNamedQuery\(String queryName, Object... values\) | 命名查询的方式 |
+| Serializable save(Object entity) | 保存数据 |
+| void update(Object entity) | 修改数据 |
+| void delete(Object entity) | 删除数据 |
+| &lt;T&gt; T get(Class&lt;T&gt; entityClass, Serializable id) | 根据ID进行检索.立即检索 |
+| &lt;T&gt; T load(Class&lt;T&gt; entityClass, Serializable id) | 根据ID进行检索.延迟检索 |
+| List find(String queryString, Object... values) | 支持HQL查询.直接返回List集合 |
+| List findByCriteria(DetachedCriteria criteria) | 离线条件查询 |
+| List findByNamedQuery(String queryName, Object... values) | 命名查询的方式 |
 
 ```java
 this.getHibernateTemplate().save(book);
@@ -814,7 +814,7 @@ this.getHibernateTemplate().findByNamedQuery("findByName", name);//命名查询�
 
 #### 2.6 OpenSessionInView
 
-this.getHibernateTemplate\(\).load\(Book.class,id\); 在dao中获得的是延迟加载对象，在web层打印对象时，service层的事务已经关闭，web加载不到真实对象。
+this.getHibernateTemplate().load(Book.class,id); 在dao中获得的是延迟加载对象，在web层打印对象时，service层的事务已经关闭，web加载不到真实对象。
 
 ![OpenSessionInView](../.gitbook/assets/2020-04-02-00-35-20.png)
 
@@ -888,12 +888,12 @@ public class BookAction extends ActionSupport implements ModelDriven<Book>{
 
 将各层类使用注解装配Spring中:
 
-@Controller --Action 还要配@Scope\("protopype"\) @Service --Service @Repository --Dao
+@Controller --Action 还要配@Scope("protopype") @Service --Service @Repository --Dao
 
 完成属性注入: 在Action中注入Service，在Service中注入Dao
 
 @Autowired  
-@Qualifier\("bookService"\)
+@Qualifier("bookService")
 
 在spring配置文件中开启注解,指定查找注解类的包
 

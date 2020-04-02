@@ -5,7 +5,7 @@
 **i18n**：internationalization
 
 * 对于程序中**固定使用**的文本元素，例如菜单栏、导航条等中使用的文本元素、或错误提示信息，状态信息等，需要根据来访者的地区和国家，选择不同语言的文本为之服务。
-* 对于程序**动态产生**的数据，例如\(日期，货币等\)，软件应能根据当前所在的国家或地区的文化习惯进行显示。
+* 对于程序**动态产生**的数据，例如(日期，货币等)，软件应能根据当前所在的国家或地区的文化习惯进行显示。
 
 ## 配置文件
 
@@ -16,7 +16,7 @@
 对于软件中的菜单栏、导航条、错误提示信息，状态信息等这些固定不变的文本信息，可以把它们写在一个properties文件中， 并根据不同的国家编写不同的properties文件。这一组properties文件称之为一个资源包。
 
 * ResourceBundler，它是用于从资源包中获取数据的。
-* 关于资源文件\(properties\)命名: 基名_语言_国家.properties
+* 关于资源文件(properties)命名: 基名_语言_国家.properties
 
 ```text
 message_zh_CN.properties
@@ -89,7 +89,7 @@ native2ascii  源文件路径   目录文件路径
 1. 创建登录页面
 2. 创建配置文件
 3. 在登录页面上根据不同的国家获取ResourceBundle
-4. 在页面上需要国际化的位置，通过ResourceBundle.getString\(\)来获取信息
+4. 在页面上需要国际化的位置，通过ResourceBundle.getString()来获取信息
 
 ```java
 <!--将语言选项提交到本页面-->
@@ -263,7 +263,7 @@ MassageFormate.formate(pattern,"username","ok")
 
 * MessageFormat使用
 
-MessageForamt.format\(String pattern,Object... params\);
+MessageForamt.format(String pattern,Object... params);
 
 * 说明一下动态文本中的占位符
 

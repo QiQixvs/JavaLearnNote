@@ -149,7 +149,7 @@ request.setAttribute("rs",rs);
 ```
 
 * 创建一个DownloadServlet
-* 根据request.getParamter\("id"\) 查询数据库，得到要下载的文件的相关信息
+* 根据request.getParamter("id") 查询数据库，得到要下载的文件的相关信息
 * 下载操作
 
 设置mimeType
@@ -169,7 +169,7 @@ response.setHeader("content-disposition", "attachment;filename="+filename);
 
 参考[根据浏览器编码文件名](file-download.md)
 
-将下载的文件通过resposne.getOutputStream\(\)流写回到浏览器端。
+将下载的文件通过resposne.getOutputStream()流写回到浏览器端。
 
 ```java
 byte[] b = FileUtils.readFileToByteArray(file); // 将指定文件读取到byte[]数组中.

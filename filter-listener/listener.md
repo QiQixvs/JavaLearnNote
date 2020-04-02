@@ -9,7 +9,7 @@
 
    监听器就是可以监听某一个事件在执行一个特定操作时，我们可以让其触发一个操作。 可以在满足特定条件的情况下执行一段操作。
 
-   javaweb中的监听器，主要用于监听javaweb中常用对\(**request\(HttpServletRequest\), session\(HttpSession\), application\(ServletContext**\)的三种类型操作：
+   javaweb中的监听器，主要用于监听javaweb中常用对(**request(HttpServletRequest), session(HttpSession), application(ServletContext**)的三种类型操作：
 
 5. 对象的创建与销毁
 6. 对象的属性变化
@@ -109,7 +109,7 @@ public class MyServletContextListener implements ServletContextListener {
 ### 三个对象何时创建何时销毁
 
 1. application对象是服务器启动时创建，服务器关闭时销毁。
-2. session对象 session对象创建:reqeust.getSession\(\);它是用于获session. 是否创建，分以下几种情况:
+2. session对象 session对象创建:reqeust.getSession();它是用于获session. 是否创建，分以下几种情况:
 
    ```text
     1.请求中如果没有jsessionid,那么就是创建session对象。
@@ -150,7 +150,7 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 ![](../.gitbook/assets/image2.png) ![](../.gitbook/assets/image3.png)
 
 {% hint style="success" %}
-在java的监听机制中，是可以在监听器中获取事件源的我们在开发中，如果有到了事件触发机制，那么一般情况下，都可以使用方法的参数\(事件对象\)来获取想要的信息.
+在java的监听机制中，是可以在监听器中获取事件源的我们在开发中，如果有到了事件触发机制，那么一般情况下，都可以使用方法的参数(事件对象)来获取想要的信息.
 {% endhint %}
 
 这些监听器在开发中有什么用?
@@ -165,7 +165,7 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 
 1. 怎样知道session多长时间没有使用？
 
-   当前时间-最后使用时间（public long getLastAccessedTime\(\)）
+   当前时间-最后使用时间（public long getLastAccessedTime()）
 
 2. 什么时候开始扫描，扫描多长时间?
 
@@ -239,7 +239,7 @@ session对象是否创建，看请求中所要的session与服务器端的sessio
 ```
 {% endhint %}
 
-## session绑定javaBean\(了解\)
+## session绑定javaBean(了解)
 
 1. HttpSessionBindingListener
 2. HttpSessionActivationListener

@@ -22,7 +22,7 @@
 
 ### **服务器端**
 
-request对象是用于获取请求信息。它有一个方法 getInputStream\(\); 可以获取一个字节输入流，通过这个流，可以读取到所有的请求正文信息.
+request对象是用于获取请求信息。它有一个方法 getInputStream(); 可以获取一个字节输入流，通过这个流，可以读取到所有的请求正文信息.
 
 ```java
 public void doGet(HttpServletRequest request,HttpServletResponse response)
@@ -96,14 +96,14 @@ List<FileItem> items = upload.parseRequest(request);
 
 * 遍历items集合，集合中的每一项，就是一个上传数据
 
-![FiledItem API](../.gitbook/assets/2020-02-29-20-16-16%20%281%29.png)
+![FiledItem API](.gitbook/assets/2020-02-29-20-16-16.png)
 
-1. isFormField\(\);
-2. getFieldName\(\);
-3. getName\(\);
-4. getString\(\);
-5. item.getInputStream\(\);
-6. IOUtils.copy\(item.getInputStream\(\), fos\);
+1. isFormField();
+2. getFieldName();
+3. getName();
+4. getString();
+5. item.getInputStream();
+6. IOUtils.copy(item.getInputStream(), fos);
 
 ### 核心API详解
 
@@ -111,7 +111,7 @@ List<FileItem> items = upload.parseRequest(request);
 
   作用:可以设置缓存大小以及临时文件保存位置.
 
-  * 默认缓存大小是  10240\(10k\)。
+  * 默认缓存大小是  10240(10k)。
   * 临时文件默认存储在系统的临时文件目录下.（可以在环境变量中查看）
 
 ```java
@@ -123,7 +123,7 @@ List<FileItem> items = upload.parseRequest(request);
         repository:临时文件存储位置
 ```
 
-如果临时文件存储位置希望是部署在服务器后工程目录下 .getServletContext\(\).getRealPath\(\)
+如果临时文件存储位置希望是部署在服务器后工程目录下 .getServletContext().getRealPath()
 
 {% hint style="danger" %}
 设定File路径后，应判断路径是否存在，不存在新建。
@@ -163,7 +163,7 @@ DiskFileItemFactory factory = new DiskFileItemFactory(1024 * 100, file);
 ```
 
 {% hint style="info" %}
-注意: 如果使用reqeust.setCharacterEncoding\("utf-8"\)也可以，但不建议使用。
+注意: 如果使用reqeust.setCharacterEncoding("utf-8")也可以，但不建议使用。
 {% endhint %}
 
 * FileItem
@@ -296,7 +296,7 @@ function removeFile(btn){
 
 * 保存在可以被浏览器直接访问的位置
 
-  例如: 商城的商品图片保存在工程的WebRoot下的路径\(不包含META-INF以及WEB-INF目录及其子目录\)
+  例如: 商城的商品图片保存在工程的WebRoot下的路径(不包含META-INF以及WEB-INF目录及其子目录)
 
 * 保存在不能被浏览器直接访问的位置
 

@@ -268,7 +268,7 @@ struts2标签
 
 在UserAction类所在包下创建一个 UserAction-user\_add-validation.xml
 
-#### 3.完成添加操作\(简历上传\)
+#### 3.完成添加操作(简历上传)
 
 在UserAction类中
 
@@ -297,7 +297,7 @@ private String uploadFileName;
 <result name="add_success" type="redirectAction">user_list</result>
 ```
 
-因为多个action在同一个配置中\(使用了通配符\)，多个请求操作时校验失败时，可能都需要跳转到input视图。但是它们跳转的页面不一样，在UserAction类中相应方法上**通过 @InputConfig注解**，改为校验失败后 跳转视图.
+因为多个action在同一个配置中(使用了通配符)，多个请求操作时校验失败时，可能都需要跳转到input视图。但是它们跳转的页面不一样，在UserAction类中相应方法上**通过 @InputConfig注解**，改为校验失败后 跳转视图.
 
 ```java
 @InputConfig(resultName = "add_input")//对应配置文件中的result标签中的name属性
@@ -345,7 +345,7 @@ struts2.xml中配置result：
 
 在dao中根据条件查询，sql语句如何写？考虑到不一定每一项条件都给出了，有几个待填参数不确定。
 
-解决方法： 创建一个List&lt;Object&gt;, 在每一次判断时，直接将参数添加到集合中，最后将集合转换成Object\[\]，做为参数传递到query方法中。
+解决方法： 创建一个List&lt;Object&gt;, 在每一次判断时，直接将参数添加到集合中，最后将集合转换成Object[]，做为参数传递到query方法中。
 
 ```java
 String sql = "select * from s_user where 1=1 ";
@@ -448,7 +448,7 @@ public String del() {
 
 ### 6.员工详细信息查看
 
-查询出用户信息\(user\),需要在view.jsp页面展示,在页面上展示时，我们不能使用valueStack栈顶的user对象，而要使用压入的action的getModel方法，重新得到user对象去获取信息，%{model.logonName}，原因见： [Struts2框架-4 - 2.8 关于默认压入到valueStack中的数据](https://github.com/QiQixvs/JavaLearnNote/tree/1f7781d590e3144a26ef80b30f22b8a3f73854bc/struts2/struts2_4.md)
+查询出用户信息(user),需要在view.jsp页面展示,在页面上展示时，我们不能使用valueStack栈顶的user对象，而要使用压入的action的getModel方法，重新得到user对象去获取信息，%{model.logonName}，原因见： [Struts2框架-4 - 2.8 关于默认压入到valueStack中的数据](https://github.com/QiQixvs/JavaLearnNote/tree/1f7781d590e3144a26ef80b30f22b8a3f73854bc/struts2/struts2_4.md)
 
 ```text
 <tr>
@@ -556,9 +556,9 @@ public String encodeDownloadFilename(String filename, String header) {
 1. 原来没有  修改也没有。---不管
 2. 原来没有  修改有了    ----处理
 3. 原来有    修改没有了 -----不管
-4. 原来有    修改也有.  -----处理\(将旧的删除\)
+4. 原来有    修改也有.  -----处理(将旧的删除)
 
-所以修改前必须先查询出用户。service.edit\(User user, boolean isEditUpload\); 通过布尔值控制对用户的更新是否包括简历。
+所以修改前必须先查询出用户。service.edit(User user, boolean isEditUpload); 通过布尔值控制对用户的更新是否包括简历。
 
 ```java
 public String edit(){
@@ -608,7 +608,7 @@ public String edit(){
 
 ### 10. struts2 提供的异常处理
 
-对于action中的操作，出现问题，直接抛出自定义异常, 例如new FindByIdException\(\)。
+对于action中的操作，出现问题，直接抛出自定义异常, 例如new FindByIdException()。
 
 在struts.xml文件中
 
@@ -622,7 +622,7 @@ public String edit(){
 
 这就可以让特定的异常，跳转到自定的页面。
 
-原理: struts2,默认加载的18个拦截器的第一个是exception这个拦截器ExceptionMappingInterceptor.class，它没有做任何操作， 直接放行，只是它将 invocation.invoke\(\)操作使用try-catch进行了处理。
+原理: struts2,默认加载的18个拦截器的第一个是exception这个拦截器ExceptionMappingInterceptor.class，它没有做任何操作， 直接放行，只是它将 invocation.invoke()操作使用try-catch进行了处理。
 
 其它的拦截器，或是action只要向外抛出异常，exception拦截器就会将其捕获。
 

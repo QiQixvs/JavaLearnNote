@@ -19,9 +19,9 @@ response.getWriter().close();
 ![responseXML](../.gitbook/assets/2020-03-04-11-15-42.png)
 
 * 填充省份名称JS代码实现
-* window.onload =function\(\){}
+* window.onload =function){}
 * xml = xmlhttp.responseXML;
-* 使用select元素的add\(option\)方法
+* 使用select元素的add(option)方法
 
 ```java
 var xml;
@@ -54,8 +54,8 @@ window.onload = function() {
 ```
 
 * 填充城市名称JS代码实现
-* 获得已选的select province.options\[province.selectedIndex\]
-* 添加option元素，可指定索引 city.add\(option，j+1\)
+* 获得已选的select province.options[province.selectedIndex]
+* 添加option元素，可指定索引 city.add()
 
 ```java
 function fillCity() {   //select标签onchange事件
@@ -89,7 +89,7 @@ function fillCity() {   //select标签onchange事件
 
 ## 通过返回json来完成省市联动
 
-如果服务器返回的是json数据，我们在浏览器端接收数据 eval\(\)转换。 有些情况下，转换会出问题。 可使用
+如果服务器返回的是json数据，我们在浏览器端接收数据 eval()转换。 有些情况下，转换会出问题。 可使用
 
 ```java
 var json=eval("("+xmlhttp.responseText+")");

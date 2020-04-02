@@ -4,7 +4,7 @@ description: 检索方式，抓取策略，二级缓存
 
 # Hibernate框架-3
 
-\[TOC\]
+[TOC]
 
 ## 1. Hibernate的检索方式
 
@@ -14,30 +14,30 @@ description: 检索方式，抓取策略，二级缓存
 
 根据已经加载的对象导航到其他对象
 
-* Customer customer = \(Customer\)session.get\(Customer.class,1\);
-* customer.getOrders\(\); // 获得到客户的订单
+* Customer customer = (Customer)session.get(Customer.class,1);
+* customer.getOrders(); // 获得到客户的订单
 
 #### B. OID 检索方式
 
 按照对象的 OID 来检索对象
 
-* get\(\)/load\(\); 方法进行检索.
+* get()/load(); 方法进行检索.
 
 #### C. HQL 检索方式
 
 使用面向对象的 HQL 查询语言
 
-* Query query = session.createQuery\(“HQL”\);
+* Query query = session.createQuery(“HQL”);
 
 #### D. QBC 检索方式
 
-使用 QBC\(Query By Criteria\) API 来检索对象. 这种 API 封装了基于字符串形式的查询语句, 提供了更加面向对象的查询接口.
+使用 QBC(Query By Criteria) API 来检索对象. 这种 API 封装了基于字符串形式的查询语句, 提供了更加面向对象的查询接口.
 
-* Criteria criteria = session.createCriteria\(Customer.class\);
+* Criteria criteria = session.createCriteria(Customer.class);
 
 #### E. 本地 SQL 检索方式: 使用本地数据库的 SQL 查询语句
 
-* SQLQuery query = session.createSQLQuery\(“SQL”\);
+* SQLQuery query = session.createSQLQuery(“SQL”);
 
 ### 1.2 HQL
 
@@ -50,9 +50,9 @@ HQL: Hibernate Query Language:
 
 使用:
 
-通过 Session 的 createQuery\(\) 方法创建一个 Query 对象, 它包括一个 HQL 查询语句. HQL 查询语句中可以包含命名参数.
+通过 Session 的 createQuery() 方法创建一个 Query 对象, 它包括一个 HQL 查询语句. HQL 查询语句中可以包含命名参数.
 
-调用 Query 的 list\(\) 方法执行查询语句. 在 List 集合中存放了符合查询条件的持久化对象
+调用 Query 的 list() 方法执行查询语句. 在 List 集合中存放了符合查询条件的持久化对象
 
 #### 1. HQL查询所有记录
 
@@ -114,7 +114,7 @@ Customer customer = (Customer) session
 
 #### 6. 参数绑定
 
-setParameter\(\): 绑定任意类型的参数.该方法的第三个参数显式指定 Hibernate 映射类型
+setParameter(): 绑定任意类型的参数.该方法的第三个参数显式指定 Hibernate 映射类型
 
 * 使用?号方式绑定
 
@@ -134,7 +134,7 @@ query.setInteger("id", 3);
 List<Customer> list = query.list();
 ```
 
-* 绑定实体setEntity\(\)
+* 绑定实体setEntity()
 
 得到某一客户的所有订单
 
@@ -177,11 +177,11 @@ List<Customer> list = query.list();
 
 与 SQL 一样, HQL 利用 GROUP BY 关键字对数据分组, 用 HAVING 关键字对分组数据设定约束条件. 在 HQL 查询语句中可以调用以下聚集函数
 
-* count\(\)
-* min\(\)
-* max\(\)
-* sum\(\)
-* avg\(\)
+* count()
+* min()
+* max()
+* sum()
+* avg()
 
 ### 1.3 QBC
 
@@ -295,12 +295,12 @@ for (Customer customer : list) {
 * 交叉连接
 * 内连接
 
-Query query = session.createQuery\("from Customer c inner join c.orders"\);
+Query query = session.createQuery("from Customer c inner join c.orders");
 
 * 隐式内连接
 * 迫切内连接
 
-Query query = session.createQuery\("from Customer c inner join fetch c.orders"\);
+Query query = session.createQuery("from Customer c inner join fetch c.orders");
 
 * 左外连接
 * 迫切左外连接
@@ -310,10 +310,10 @@ HQL的内连接和迫切内连接区别:
 
 ![&#x5185;&#x8FDE;&#x63A5;&#x548C;&#x8FEB;&#x5207;&#x5185;&#x8FDE;&#x63A5;](../.gitbook/assets/2020-03-24-16-51-09.png)
 
-* 内连接查询 : 将数据封装一个List&lt;Object\[\]&gt;中,是对象数组\[Customer对象，Order对象\].
+* 内连接查询 : 将数据封装一个List&lt;Object[]&gt;中,是对象数组[Customer对象，Order对象].
 * 迫切内连接 : 将数据封装一个List&lt;Customer&gt;中，Order对象被封装在Customer对象中的订单集合中，每查询一次就会有一个Customer对象，所以会有重复记录, 需要使用distinct排重.
 
-Query query = session.createQuery\("select distinct c from Customer c inner join fetch c.orders"\);
+Query query = session.createQuery("select distinct c from Customer c inner join fetch c.orders");
 
 这样的查询结果就会是三个不重复的Customer对象。
 
@@ -350,12 +350,12 @@ Query 的 list 方法会忽略映射文件配置的迫切左外连接检索策�
 立即检索:
 
 * 当执行某行代码的时候,马上发出SQL语句进行查询.
-* get\(\)
+* get()
 
 延迟检索:
 
 * 当执行某行代码的时候,不会马上发出SQL语句进行查询.当真正使用这个对象的时候才会发送SQL语句.
-* load\(\);
+* load();
 
 什么情况下延迟检索会失效？
 
@@ -376,7 +376,7 @@ Hibernate.initialize(c);//初始化代理对象发送sql语句
 
 ### 类级别的检索
 
-Customer c=\(Customer\)session.load\(Customer.class, 1\); session的方法直接检索Customer对象, 对Customer对象到底采用立即检索还是延迟检索方式
+Customer c=(Customer)session.load(Customer.class, 1); session的方法直接检索Customer对象, 对Customer对象到底采用立即检索还是延迟检索方式
 
 类级别可选的检索策略包括立即检索和延迟检索, 默认为延迟检索
 
@@ -384,9 +384,9 @@ Customer c=\(Customer\)session.load\(Customer.class, 1\); session的方法直接
 
 ### 关联级别的检索
 
-Customer c=\(Customer\)session.load\(Customer.class, 1\); session.load\(Customer.class, 1\);查询的主体表 c.getOrders\(\).size\(\);查询客体表的集合大小
+Customer c=(Customer)session.load(Customer.class, 1); session.load(Customer.class, 1);查询的主体表 c.getOrders().size();查询客体表的集合大小
 
-查询客体表是否发生, 以何种方式发生\(立即检索、延迟检索和迫切左外连接检索\)，就是关联级别检索
+查询客体表是否发生, 以何种方式发生(立即检索、延迟检索和迫切左外连接检索)，就是关联级别检索
 
 * 通过&lt;set&gt;/&lt;many-to-one&gt;上面的lazy进行设置.
 
@@ -400,7 +400,7 @@ Customer c=\(Customer\)session.load\(Customer.class, 1\); session.load\(Customer
 
 * join: 发送迫切左外连接的SQL查询关联对象. **如果fetch是join的情况, lazy属性将会忽略.**
 * select : 默认值, 发送多条SQL查询关联对象.
-* subselect: 发送子查询查询关联对象.\(需要使用Query接口测试\) 体现在查询多个一的对象的时候
+* subselect: 发送子查询查询关联对象.(需要使用Query接口测试) 体现在查询多个一的对象的时候
 
 **lazy**: 控制关联对象的检索是否采用延迟.
 
@@ -468,8 +468,8 @@ lazy:关联对象检索的时候,是否采用延迟
 #### 读问题
 
 * 脏读 :一个事务读到另一个事务未提交数据.
-* 不可重复读 :一个事务读到另一个事务已经提交数据\(update\),导致查询结果不一致.
-* 虚读 :一个事务读到另一个事务已经提交的数据\(insert\),导致查询结果不一致
+* 不可重复读 :一个事务读到另一个事务已经提交数据(update),导致查询结果不一致.
+* 虚读 :一个事务读到另一个事务已经提交的数据(insert),导致查询结果不一致
 
 避免三种读的问题的方法：设置事务的隔离级别
 
@@ -518,7 +518,7 @@ thread
 </property>
 ```
 
-* 使用SessionFactory中的getCurrentSession\(\);方法.同一个线程里获取的session就是同一个，这样开启的事务也就是同一个
+* 使用SessionFactory中的getCurrentSession();方法.同一个线程里获取的session就是同一个，这样开启的事务也就是同一个
 * 底层就是ThreadLocal.
 
 ![Session &#x5BF9;&#x8C61;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#x4E0E;&#x672C;&#x5730;&#x7EBF;&#x7A0B;&#x7ED1;&#x5B9A;](../.gitbook/assets/2020-03-25-00-11-16.png)

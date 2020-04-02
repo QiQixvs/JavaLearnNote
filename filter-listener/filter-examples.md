@@ -399,7 +399,7 @@ String[] getParameterValues(String name)
 Map<String, String[][]> getParameterMap()
 ```
 
-* getParamter 与 getParamterValues方法可以调用getParameterMap\(\)方法实现。重点重写getParameterMap\(\)
+* getParamter 与 getParamterValues方法可以调用getParameterMap()方法实现。重点重写getParameterMap()
 
 ```java
 //request中获得的参数只需要进行一次转码就可以，添加开关量作为判断，避免二次转码 
@@ -426,5 +426,5 @@ public Map getParameterMap() {
 }
 ```
 
-如果是post请求，只需要request.setCharacterEncoding\("utf-8"\)，也不需要flag;但是get方式的处理方式都适用。
+如果是post请求，只需要request.setCharacterEncoding("utf-8")，也不需要flag;但是get方式的处理方式都适用。
 

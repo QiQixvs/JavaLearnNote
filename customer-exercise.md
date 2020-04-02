@@ -32,7 +32,7 @@ My97DatePickerBeta
 
 使用UUID获取 生成随机不重复字符串类型ID
 
-UUID.randomUUID\(\)作用是生成随机字符串。
+UUID.randomUUID()作用是生成随机字符串。
 
 ```java
 import java.util.UUID;
@@ -99,11 +99,11 @@ function change(){
 
 * 得到所有要删除的id值
 
-request.getParameterValues\("ck"\);
+request.getParameterValues("ck");
 
 * 在dao中使用QueryRunner的batch方法
 
-batch\(sql,Object\[\]\[\]\);
+batch(sql,Object[][]);
 
 注意:参数二维数据，它代表的是每一条sql的参数。
 
@@ -162,7 +162,7 @@ batch\(sql,Object\[\]\[\]\);
 
 分页分类:
 
-1. 物理分页\(在java开发领域，我们使用的比较多的是物理分页\)
+1. 物理分页(在java开发领域，我们使用的比较多的是物理分页)
 
    只从数据库中查询出当前页的数据。
 
@@ -190,7 +190,7 @@ batch\(sql,Object\[\]\[\]\);
 
 mysql:limit, sqlservlet:top, oracle:rownum
 
-### 介绍limit\(jdbc\)
+### 介绍limit(jdbc)
 
 select \* from 表 limit m, n;
 
@@ -198,20 +198,20 @@ m：代表的是从第几条开始 注意:它是从0开始记录.
 
 n:代表查询几条记录.
 
-示例:分页显示，每页显示6条，要查询第2页的数据. \(2-1\)\*6,6
+示例:分页显示，每页显示6条，要查询第2页的数据. (2-1)*6,6
 
-select \* from 表 limit \(页码-1\)\*每页条数,每页条数;
+select \* from 表 limit (页码-1)*每页条数,每页条数;
 
 ### 分页分析
 
 1. 页码 默认第一页
 2. 每页条数 人为定义
-3. 总条数 select count\(\*\) from 表
+3. 总条数 select count(*) from 表
 4. 总页数 总页数=总条数%每页条数==0?总条数/每页条数:总条数/每页条数+1
 
-   总页数=Math.ceil\(总条数\*1.0/每页条数\);
+   总页数=Math.ceil(总条数\*1.0/每页条数);
 
-5. 当前页的数据 List&lt;?&gt;-----&gt;select \* from 表 limit \(页码-1\)\*每页条数,每页条数;
+5. 当前页的数据 List&lt;?&gt;-----&gt;select \* from 表 limit (页码-1)\*每页条数,每页条数;
 
 ### 分页代码实现
 
