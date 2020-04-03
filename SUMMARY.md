@@ -62,4 +62,4 @@
 ## SSH综合案例 <a id="ssh"></a>
 
 * [SSH综合案例-1](ssh/ssh-exercise-1.md)
-
+* [SSH综合案例-2](ssh/ssh-exercise-2.md)

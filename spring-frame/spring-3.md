@@ -997,4 +997,3 @@ public class Book {
 @Qualifier("hibernateTemplate")
 private HibernateTemplate hibernateTemplate;
 ```
-
