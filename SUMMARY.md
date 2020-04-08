@@ -31,6 +31,7 @@
 * [动态代理](za-xiang/dynamic-proxy.md)
 * [Servlet](za-xiang/servlet.md)
 * [商城项目练习笔记](za-xiang/e-store-exercise.md)
+* [Maven](za-xiang/maven.md)
 
 ## Struts2框架 <a id="struts2frame"></a>
 
@@ -65,3 +66,7 @@
 * [SSH综合案例-2](ssh/ssh-exercise-2.md)
 * [SSH综合案例-3](ssh/ssh-exercise-3.md)
 * [SSH综合案例-4](ssh/ssh-exercise-3.md)
+
+
+
+
