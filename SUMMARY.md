@@ -67,6 +67,10 @@
 * [SSH综合案例-3](ssh/ssh-exercise-3.md)
 * [SSH综合案例-4](ssh/ssh-exercise-3.md)
 
+## jQuery <a id="jquery"></a>
+
+* [jQuery-1](jquery/jquery-1.md)
+* [jQuery-1](jquery/jquery-2.md)
 
 
 
