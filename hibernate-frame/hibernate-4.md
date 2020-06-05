@@ -4,7 +4,7 @@ description: 检索方式，抓取策略，二级缓存
 
 # Hibernate框架-4
 
-[TOC]
+\[TOC\]
 
 ## 1. Hibernate的二级缓存 The Second Level Cache
 
@@ -67,7 +67,7 @@ org.hibernate.cache.EhCacheProvider
 </hibernate-mapping>
 ```
 
-* 方法二：在核心配置文件中配置(推荐)
+* 方法二：在核心配置文件中配置\(推荐\)
 
 指定使用二级缓存的类 放在maping标签下面
 
@@ -82,7 +82,7 @@ org.hibernate.cache.EhCacheProvider
 <collection-cache  collection="hibernate.demo2.Customer.orders" usage="read-write"/>
 ```
 
-5.配置ehcache默认的配置文件ehcache.xml(名字固定)（放在类路径下）
+5.配置ehcache默认的配置文件ehcache.xml\(名字固定\)（放在类路径下）
 
 * &lt;diskStore&gt;:指定一个目录, 当 EHCache 把数据写到硬盘上时, 将把数据写到这个文件目录下.  默认是C:\WINDOWS\Temp
 * &lt;defaultCache&gt;: 设置缓存的默认数据过期策略
@@ -142,7 +142,7 @@ List<Customer> list = session.createQuery("from Customer").list();
 //提交事务
 ```
 
-* Iterate() 方法执行的SQL 语句中仅包含实体类对应的数据表的 ID 字段
+* Iterate\(\) 方法执行的SQL 语句中仅包含实体类对应的数据表的 ID 字段
 
 所以使用iterate方法会发送N+1条sql，第一条用来查询id，然后根据id查询所有订单，可以使用二级缓存。
 
@@ -223,7 +223,7 @@ query.list();
 //提交事务
 ```
 
-对于希望启用查询缓存的查询语句, 调用 Query 的 setCacheable(true) 方法。
+对于希望启用查询缓存的查询语句, 调用 Query 的 setCacheable\(true\) 方法。
 
 ## 2. Struts2和Hibernate的整合
 

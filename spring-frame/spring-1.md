@@ -4,13 +4,13 @@ descriqption: 快速入门；IOC;
 
 # Spring框架-1
 
-[TOC]
+\[TOC\]
 
 ## 1 Spring框架的概述
 
 ### 1.1 什么是Spring
 
-Spring是分层的JavaSE/EE full-stack(一站式) 轻量级开源框架
+Spring是分层的JavaSE/EE full-stack\(一站式\) 轻量级开源框架
 
 分层:
 
@@ -44,7 +44,7 @@ Spring3.x和Spring4.x Spring4需要整合hibernate4. 5...
 
 EJB: SUN公司提出EE解决方案.
 
-2002 : Expert One-to-One J2EE Design and Development 2004 : Expert One-to-One J2EE Development without EJB (EE开发真正需要使用的内容.)
+2002 : Expert One-to-One J2EE Design and Development 2004 : Expert One-to-One J2EE Development without EJB \(EE开发真正需要使用的内容.\)
 
 ### 1.5 Spring优点
 
@@ -88,7 +88,7 @@ spring-framework-3.0.2.RELEASE-dependencies.zip---Spring开发中的依赖包
 
 spring-beans-3.2.0.RELEASE.jar spring-context-3.2.0.RELEASE.jar spring-core-3.2.0.RELEASE.jar spring-expression-3.2.0.RELEASE.jar
 
-开发的日志记录的包: com.springsource.org.apache.commons.logging-1.1.1.jar --- 用于整合其他的日志的包(类似Hibernate中slf4j) com.springsource.org.apache.log4j-1.2.15.jar
+开发的日志记录的包: com.springsource.org.apache.commons.logging-1.1.1.jar --- 用于整合其他的日志的包\(类似Hibernate中slf4j\) com.springsource.org.apache.log4j-1.2.15.jar
 
 ### 2.3 创建Spring的配置文件
 
@@ -128,7 +128,7 @@ public void demo2() {
 
 控制反转，将原本在程序中手动创建HelloService对象的控制权，交由Spring框架管理
 
-### 2.6 IOC和DI(**\***)区别
+### 2.6 IOC和DI\(**\***\)区别
 
 * IOC Inverse of Control 控制反转: 将**对象**的创建权,由Spring管理.
 * DI Dependency Injection依赖注入: 在Spring创建Bean对象的过程中,把**对象依赖的属性**注入到类中.
@@ -156,9 +156,9 @@ public void demo2() {
 
 ApplicationContext 应用上下文，加载Spring 框架配置文件
 
-加载classpath下面配置文件： new ClassPathXmlApplicationContext("applicationContext.xml");
+加载classpath下面配置文件： new ClassPathXmlApplicationContext\("applicationContext.xml"\);
 
-加载磁盘路径下面配置文件： new FileSystemXmlApplicationContext("applicationContext.xml");
+加载磁盘路径下面配置文件： new FileSystemXmlApplicationContext\("applicationContext.xml"\);
 
 ### 2.8 BeanFactory与ApplicationContext区别
 
@@ -166,10 +166,10 @@ ApplicationContext 应用上下文，加载Spring 框架配置文件
 
 ApplicationContext类继承了BeanFactory.
 
-BeanFactory在使用到这个类的时候, getBean()方法的时候才会加载这个类.早期开发使用BeanFactory.
+BeanFactory在使用到这个类的时候, getBean\(\)方法的时候才会加载这个类.早期开发使用BeanFactory.
 
-* BeanFactory beanFactory = new XmlBeanFactory(new FileSystemResource("applicationContext.xml"));
-* BeanFactory beanFactory = new XmlBeanFactory(new ClassPathReasource("applicationContext.xml"));
+* BeanFactory beanFactory = new XmlBeanFactory\(new FileSystemResource\("applicationContext.xml"\)\);
+* BeanFactory beanFactory = new XmlBeanFactory\(new ClassPathReasource\("applicationContext.xml"\)\);
 
 ApplicationContext类加载配置文件的时候, 创建所有的类.ApplicationContext对BeanFactory提供了扩展:
 
@@ -184,7 +184,7 @@ ApplicationContext类加载配置文件的时候, 创建所有的类.Application
 
 提供了三种方式实例化Bean
 
-* 构造方法实例化(默认无参数)
+* 构造方法实例化\(默认无参数\)
 * 静态工厂实例化
 * 实例工厂实例化
 
@@ -239,10 +239,10 @@ id遵守XML约束的id的约束. id约束保证这个属性的值是唯一的,�
 
 &lt;bean&gt;标签内scope属性
 
-* singleton:单例的.(默认的值.) 只实例化一次对象
+* singleton:单例的.\(默认的值.\) 只实例化一次对象
 * prototype:多例的.
-* request:web开发中.创建了一个对象,将这个对象存入request范围,request.setAttribute();
-* session:web开发中.创建了一个对象,将这个对象存入session范围,session.setAttribute();
+* request:web开发中.创建了一个对象,将这个对象存入request范围,request.setAttribute\(\);
+* session:web开发中.创建了一个对象,将这个对象存入session范围,session.setAttribute\(\);
 * globalSession:一般用于Porlet应用环境.指的是分布式开发.不是porlet环境,globalSession等同于session;
 
 实际开发中主要使用singleton,prototype
@@ -430,7 +430,7 @@ Spring3.0提供注入属性方式: 语法：\#{表达式}
 
 第一种写法：在创建ApplicationContext对象时传入多个配置文件
 
-ApplicationContext applicationContext = new ClassPathXmlApplicationContext("bean1.xml","bean2.xml";
+ApplicationContext applicationContext = new ClassPathXmlApplicationContext\("bean1.xml","bean2.xml";
 
 第二种方法:
 
@@ -440,7 +440,7 @@ ApplicationContext applicationContext = new ClassPathXmlApplicationContext("bean
 <import resource="applicationContext2.xml"/>
 ```
 
-## 4. IOC装配Bean(注解方式)
+## 4. IOC装配Bean\(注解方式\)
 
 ### 4.1 Spring的注解装配Bean
 
@@ -486,7 +486,7 @@ private String info;
 对象属性:
 
 * @Autowired: 自动装配，默认使用类型注入.
-* @Qualifier("userDao")  --- 按名称进行注入.
+* @Qualifier\("userDao"\)  --- 按名称进行注入.
 
 ```java
 @Autowired
@@ -509,7 +509,7 @@ init-method 和 destroy-method.
 
 #### 配置Bean的作用范围
 
-@Scope--默认单例 @Scope(value="prototype")
+@Scope--默认单例 @Scope\(value="prototype"\)
 
 ### 4.4 Spring3.0提供使用Java类定义Bean信息的方法
 

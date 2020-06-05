@@ -34,11 +34,11 @@ jdk1.5中@Override它只能描述继承中的重写. jdk1.6中@Override它不仅
 
 去除程序中的警告信息
 
-例：@SuppressWarning("all")
+例：@SuppressWarning\("all"\)
 
 * unused 变量未使用
 * deprecation 使用了不赞成使用的类或方法时的警告
-* unchecked 执行了未检查的转换时的警告，例如当使用集合时没有用泛型 (Generics) 来指定集合保存的类型。
+* unchecked 执行了未检查的转换时的警告，例如当使用集合时没有用泛型 \(Generics\) 来指定集合保存的类型。
 * fallthrough 当 Switch 程序块直接通往下一种情况而没有 Break 时的警告。
 * path 在类路径、源文件路径等中有不存在的路径时的警告。
 * serial 当在可序列化的类上缺少 serialVersionUID 定义时的警告 。
@@ -97,8 +97,8 @@ interface MyAnnotation extends Annotation
 
 **属性赋值方式**
 
-* 默认值问题 String st() default "abc";
-* 如果是单值 注解(属性名称=值) 例如:@MyAnnotation3(i=1)
+* 默认值问题 String st\(\) default "abc";
+* 如果是单值 注解\(属性名称=值\) 例如:@MyAnnotation3\(i=1\)
 * 如果是数组
 
 ```text
@@ -189,7 +189,7 @@ Class.getDeclaredMethod(String methodName,Class...paramClass);
 
 #### 2. 获取注解Annotation对象
 
-在Method类中有一个 getAnnotation(Class annotationClass)，可以获取一个注解对象
+在Method类中有一个 getAnnotation\(Class annotationClass\)，可以获取一个注解对象
 
 #### 3. 通过注解对象来调用其属性
 

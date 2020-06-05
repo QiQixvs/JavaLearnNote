@@ -4,7 +4,7 @@ description: 环境搭建，开发流程，配置和API
 
 # Hibernate框架-1
 
-[TOC]
+\[TOC\]
 
 ## 1. Hibernate框架的概述
 
@@ -42,7 +42,7 @@ Hibernate3.x版本 和 Hibernate4.x
 
 日志: 程序开发中的一些信息.
 
-常用信息输出:System.out.println(“”);
+常用信息输出:System.out.println\(“”\);
 
 这种方式不好: 如果输出内容比较多,项目已经开发完毕,不想使用输出.需要打开每个类,将输出的代码注释.
 
@@ -50,21 +50,21 @@ Hibernate3.x版本 和 Hibernate4.x
 
 **SLF4J**， 即简单日志门面（Simple Logging Facade for Java），不是具体的日志解决方案，它只服务于各种各样的日志系统。
 
-* 用于整合其他日志系统,(在企业中常用的日志记录:log4j)
+* 用于整合其他日志系统,\(在企业中常用的日志记录:log4j\)
 * 是具体的日志记录方案.
 
 ### Log4J的日志级别
 
-* fatal(致命的)
-* error(普通错误)
-* warn(警告)
-* info(信息)
-* debug(调试)
-* trace(堆栈信息)
+* fatal\(致命的\)
+* error\(普通错误\)
+* warn\(警告\)
+* info\(信息\)
+* debug\(调试\)
+* trace\(堆栈信息\)
 
 例：
 
-Logger.error(“错误信息”); 将通过配置文件的形式,显示错误信息，如果配置的级别是info，那么比info级别高的错误都会报出来。
+Logger.error\(“错误信息”\); 将通过配置文件的形式,显示错误信息，如果配置的级别是info，那么比info级别高的错误都会报出来。
 
 ![&#x65E5;&#x5FD7;&#x914D;&#x7F6E;&#x6587;&#x4EF6;](../.gitbook/assets/2020-03-19-10-24-23.png)
 
@@ -104,7 +104,7 @@ documentation:Hibernate文档 lib:Hibernate开发jar包
 
 project:Hibernate提供的工程
 
-#### 第三步:创建一个工程:(Java工程)
+#### 第三步:创建一个工程:\(Java工程\)
 
 导入相应jar包:
 
@@ -114,7 +114,7 @@ project:Hibernate提供的工程
 * 导入日志记录的包: log4j-1.2.16.jar，slf4j-log4j12-1.7.2.jar
 * 导入数据库驱动
 
-#### 第四步:创建表(关系型数据库)
+#### 第四步:创建表\(关系型数据库\)
 
 ```text
 create table customer(
@@ -124,7 +124,7 @@ create table customer(
 );
 ```
 
-#### 第五步:创建一个实体类(面向对象)
+#### 第五步:创建一个实体类\(面向对象\)
 
 ```java
 public class Customer {
@@ -330,13 +330,13 @@ customer.setName("张三");
 session.update(customer);
 ```
 
-这种方式，如果没有设置的属性, 就会将这个属性的默认值存入(不好.)
+这种方式，如果没有设置的属性, 就会将这个属性的默认值存入\(不好.\)
 
 {% hint style="info" %}
 如int数据类型的age属性，默认值会是0，引起误解，所以在设计表格字段类型时，尽量选择包装类，不使用基本数据类型。
 {% endhint %}
 
-2.先查询在修改的方式(推荐方式)
+2.先查询在修改的方式\(推荐方式\)
 
 ```java
 Customer customer = (Customer) session.get(Customer.class, 1);
@@ -384,7 +384,7 @@ query.setParameter(0, "张张");//(问号的位置，具体的值)
 Query.list();
 ```
 
-**2.QBC: Query By Criteria.(条件查询)**
+**2.QBC: Query By Criteria.\(条件查询\)**
 
 ```java
 Criteria criteria = session.createCriteria(Customer.class);
@@ -409,15 +409,15 @@ List<Customer> list = query.list(); //查询到的每条记录对应的是一个
 
 #### 核心配置有两种方式进行配置
 
-**1) 属性文件的配置**
+**1\) 属性文件的配置**
 
 * hibernate.properties
 * 格式: key = value
 * hibernate.connection.driver\_class = com.mysql.jdbc.Driver
 
-  注意:这种方式没有办法在核心配置文件中加载映射文件.(必须手动编码的方式进行加载.)
+  注意:这种方式没有办法在核心配置文件中加载映射文件.\(必须手动编码的方式进行加载.\)
 
-**2) XML格式文件配置**
+**2\) XML格式文件配置**
 
 * hibernate.cfg.xml
 * 格式:&lt;property name="hibernate.connection.username"&gt;root&lt;/property&gt;
@@ -467,7 +467,7 @@ ORM: 对象和关系映射.
 &lt;class name="hibernate3.demo1.Order" table=”orders"&gt;
 
 * name:类的全路径
-* table:表的名称:(可以省略的.使用类的名称作为表名.)
+* table:表的名称:\(可以省略的.使用类的名称作为表名.\)
 
 **2. 配置普通属性与字段映射**
 
@@ -502,7 +502,7 @@ type三种写法
 </id>
 ```
 
-* 一个表对应多个主键形式:(复合主键:) ---了解.
+* 一个表对应多个主键形式:\(复合主键:\) ---了解.
 
 由多个字段组合确定一条记录的唯一性
 
@@ -539,21 +539,21 @@ type三种写法
 
 hibernate.properties
 
-* 加载: Configuration configuration = new Configuration();
+* 加载: Configuration configuration = new Configuration\(\);
 
 hibernate.cfg.xml
 
-* 加载: Configuration configuration = new Configuration().configure();
+* 加载: Configuration configuration = new Configuration\(\).configure\(\);
 
 #### 2. 加载映射文件
 
 第一种写法:
 
-* configuration.addResource("hibernate3/demo1/Customer.hbm.xml");
+* configuration.addResource\("hibernate3/demo1/Customer.hbm.xml"\);
 
-第二种写法: (要求:映射文件名称要规范,类与映射在同一个包下)
+第二种写法: \(要求:映射文件名称要规范,类与映射在同一个包下\)
 
-* configuration.addClass(Customer.class);
+* configuration.addClass\(Customer.class\);
 
 ### 5.2 SessionFactory
 
@@ -562,7 +562,7 @@ hibernate.cfg.xml
 * SessionFactory 对象是线程安全的
 * SessionFactory 还负责维护Hibernate的二级缓存
 
-SessionFactory对象根据数据库信息,**维护连接池**, 创建Session(相当于Connection)对象。
+SessionFactory对象根据数据库信息,**维护连接池**, 创建Session\(相当于Connection\)对象。
 
 #### 抽取工具类
 
@@ -622,14 +622,14 @@ Session 是应用程序与数据库之间交互操作的一个单线程对象，
 
 Session的方法：
 
-* save()/persist() : 添加.
-* update() : 修改
-* saveOrUpdate() : 增加和修改对象
-* delete() : 删除对象
-* get()/load() : [根据主键查询](hibernate-1.md#根据主键进行查询)
-* createQuery() : 创建一个Query接口, 编写HQL语句
-* createSQLQuery() : 创建一个SQLQuery接口, 编写SQL语句数据库操作对象
-* createCriteria() : 返回一个Criteria接口. 条件查询
+* save\(\)/persist\(\) : 添加.
+* update\(\) : 修改
+* saveOrUpdate\(\) : 增加和修改对象
+* delete\(\) : 删除对象
+* get\(\)/load\(\) : [根据主键查询](hibernate-1.md#根据主键进行查询)
+* createQuery\(\) : 创建一个Query接口, 编写HQL语句
+* createSQLQuery\(\) : 创建一个SQLQuery接口, 编写SQL语句数据库操作对象
+* createCriteria\(\) : 返回一个Criteria接口. 条件查询
 
 ### 5.4 Transaction 事务
 
@@ -641,9 +641,9 @@ Transaction tx = session.beginTransaction();
 
 常用方法:
 
-* commit() : 提交相关联的session实例
-* rollback() : 撤销事务操作
-* wasCommitted() : 检查事务是否提交
+* commit\(\) : 提交相关联的session实例
+* rollback\(\) : 撤销事务操作
+* wasCommitted\(\) : 检查事务是否提交
 
 {% hint style="info" %}
 如果没有开启事务，那么Session的每次操作，都相当于一个独立的事务。如果没有提交，session关闭的时候，默认回滚。 事务是否自动提交在核心配置里设置，设置了自动提交，在这种情况下，session的操作会生效。
@@ -717,17 +717,17 @@ List<Customer> list = criteria.list();
     成绩位置，如果显示0会出现误解，用Integer类型，没成绩会显示null。
 ```
 
-* 持久化类尽量不要使用final进行修饰, 用final修饰的类是不能被继承.无法生成代理对象. (延迟加载的时候返回代理对象.延迟加载就失效.)
+* 持久化类尽量不要使用final进行修饰, 用final修饰的类是不能被继承.无法生成代理对象. \(延迟加载的时候返回代理对象.延迟加载就失效.\)
 
 ### 6.2 建表的时候自然主键和代理主键
 
 自然主键:
 
-* 创建一个人员表.人员表中某条记录唯一确定.人都有身份证号.我们可以使用身份证号作为主键.(身份证号本身就是人员的一个属性.作为主键.)
+* 创建一个人员表.人员表中某条记录唯一确定.人都有身份证号.我们可以使用身份证号作为主键.\(身份证号本身就是人员的一个属性.作为主键.\)
 
 代理主键:
 
-* 创建一个人员表.人员表中某条记录唯一确定.但是没有使用身份证号作为主键,新建字段(用新建的字段作为主键.只是一个标识作用.)
+* 创建一个人员表.人员表中某条记录唯一确定.但是没有使用身份证号作为主键,新建字段\(用新建的字段作为主键.只是一个标识作用.\)
 
 在关系数据库中，用主键来识别记录并保证每条记录的唯一性。所以作为主键的字段必须非空，不能重复且不应该被改变。自然主键，作为记录的属性之一，如果参与业务逻辑，就需要被改变，所以应该使用代理主键。
 
@@ -747,7 +747,7 @@ List<Customer> list = criteria.list();
 
 increment: 自动增长. 适合 short int long... 不是使用数据库的自动增长机制.使用Hibernate框架提供的自动增长方式.
 
-* 在增加记录时，会先查询最大的id值 select max(id) from 表; 在最大值的基础上+1.(多线程的问题.主键重复) 在集群下不要使用
+* 在增加记录时，会先查询最大的id值 select max\(id\) from 表; 在最大值的基础上+1.\(多线程的问题.主键重复\) 在集群下不要使用
 
 identity: 自动增长. 适合 short int long... 采用数据库的自动增长机制. 不适合于Oracle数据库.
 
@@ -759,7 +759,7 @@ native: 本地策略. 底层数据库不同. 自动选择适用identity 还是 s
 
 assigned: Hibernate框架不维护主键, 主键由程序自动生成.
 
-foreign: 主键的外来的. (应用在多表一对一的关系.)
+foreign: 主键的外来的. \(应用在多表一对一的关系.\)
 
 #### 扩展：复合主键
 

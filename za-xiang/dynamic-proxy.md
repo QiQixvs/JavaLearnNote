@@ -46,13 +46,13 @@ newProxyInstance(ClassLoader loader,Class[] interfaces,InvocationHandler h);
 
 要求: 传递的是被代理类的[类加载器](classloader.md).
 
-类加载器怎样获取: 得到其Class对象。在Class类中提供一个方法 getClassLoader();
+类加载器怎样获取: 得到其Class对象。在Class类中提供一个方法 getClassLoader\(\);
 
 * interfaces
 
 要求: 得到被代理对象所实现的接口的所有Class对象。
 
-怎样获取所有实现接口的Class对象? 得到其Class对象，在Class类中提供一个方法 getInterfaces(); 它返回的是Class[],就代表所实现接口的所有Class对象。
+怎样获取所有实现接口的Class对象? 得到其Class对象，在Class类中提供一个方法 getInterfaces\(\); 它返回的是Class\[\],就代表所实现接口的所有Class对象。
 
 * h  它的类型是InvocationHandler，这是一个接口。
 
@@ -252,7 +252,7 @@ String pname = bif.value();
 User user = (User) args[0];
 ```
 
-首先判断用户是否存在，也就是判断它是否登录了。if(user == null){}
+首先判断用户是否存在，也就是判断它是否登录了。if\(user == null\){}
 
 如果登录了，根据用户查询数据库，得到这个用户所具有的所有权限名称
 

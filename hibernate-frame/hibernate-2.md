@@ -4,7 +4,7 @@ description: 持久化对象的状态，一级缓存，关联关系映射
 
 # Hibernate框架-2
 
-[TOC]
+\[TOC\]
 
 ## 1. Hibernate的持久化类状态
 
@@ -14,9 +14,9 @@ description: 持久化对象的状态，一级缓存，关联关系映射
 
 Hibernate为了方便管理持久化类,将持久化类分成了三种状态:
 
-* 瞬时态 transient (临时态)
+* 瞬时态 transient \(临时态\)
 * 持久态 persistent
-* 脱管态 detached (离线态)
+* 脱管态 detached \(离线态\)
 
 ### 1.2 三种持久化对象的状态
 
@@ -62,44 +62,44 @@ public void demo1(){
 
 瞬时态:
 
-* 获得: Book book = new Book();
+* 获得: Book book = new Book\(\);
 
 瞬时---&gt;持久
 
-* save(book);
-* save()/saveOrUpdate();
+* save\(book\);
+* save\(\)/saveOrUpdate\(\);
 
 瞬时---&gt;脱管：
 
-* book.setId(1);
+* book.setId\(1\);
 
 持久态:
 
-* 获得: Book book = (Book)session.get(Book.class,1);
-* get()/load()/find()/iterate();
+* 获得: Book book = \(Book\)session.get\(Book.class,1\);
+* get\(\)/load\(\)/find\(\)/iterate\(\);
 
 持久---&gt;瞬时:
 
-* delete(book);
-* 特殊状态: 删除态. (被删除的对象,不建议去使用.)
+* delete\(book\);
+* 特殊状态: 删除态. \(被删除的对象,不建议去使用.\)
 
 持久---&gt;脱管:
 
-* session.close();
-* close()/clear()/evict();  
+* session.close\(\);
+* close\(\)/clear\(\)/evict\(\);  
 
 脱管态:
 
-* 获得: Book book = new Book(); book.setId(1);（不建议直接获得）
+* 获得: Book book = new Book\(\); book.setId\(1\);（不建议直接获得）
 
 脱管---&gt;持久:
 
-* session.update();
-* update()/saveOrUpdate()/lock()
+* session.update\(\);
+* update\(\)/saveOrUpdate\(\)/lock\(\)
 
 脱管---&gt;瞬时:
 
-* book.setId(null);
+* book.setId\(null\);
 
 ### 1.5 持久态对象有自动更新数据库的能力
 
@@ -129,7 +129,7 @@ public void demo2(){
 
 自动更新数据库的能力依赖了Hibernate的一级缓存.
 
-## 2. Hibernate的一级缓存(重要)
+## 2. Hibernate的一级缓存\(重要\)
 
 ### 2.1 Hibernate的一级缓存
 
@@ -213,12 +213,12 @@ public void demo4(){
 
 一级缓存是与session的生命周期相关的. session生命周期结束,一级缓存销毁了.
 
-* clear(): 清空一级缓存中所有的对象.
-* evict(Object obj): 清空一级缓存中某个对象.
-* flush(): 刷出缓存. 可以控制set新的数据之后，update语句发出的时间
-* refresh(Object obj): 将快照区的数据重新覆盖了一级缓存的数据. set新的数据后，在事务提交前，refresh会用快照区数据重新覆盖一级缓存区的数据，结果就是没改。
+* clear\(\): 清空一级缓存中所有的对象.
+* evict\(Object obj\): 清空一级缓存中某个对象.
+* flush\(\): 刷出缓存. 可以控制set新的数据之后，update语句发出的时间
+* refresh\(Object obj\): 将快照区的数据重新覆盖了一级缓存的数据. set新的数据后，在事务提交前，refresh会用快照区数据重新覆盖一级缓存区的数据，结果就是没改。
 
-### 2.5 Hibernate一级缓存的刷出时机:(了解.)
+### 2.5 Hibernate一级缓存的刷出时机:\(了解.\)
 
 FlushMode 常量:
 
@@ -237,17 +237,17 @@ Transaction tx = session.beginTransaction();
 
 ## 3. 操作持久化对象的方法
 
-### save()
+### save\(\)
 
 保存一条记录:将瞬时态对象转成持久态对象. 主键根据主键生成策略生成
 
-### update()
+### update\(\)
 
 更新一条记录: 将脱管态对象转成持久态对象。 通过setId变成脱管态，再通过update转为持久态。
 
 在&lt;class&gt;标签上设置select-before-update="true" 在更新之前先去查询
 
-### saveOrUpdate()
+### saveOrUpdate\(\)
 
 根据对象状态的不同执行不同的save获得update方法.
 
@@ -255,11 +255,11 @@ Transaction tx = session.beginTransaction();
 * 如果对象是一个脱管态对象: 执行update操作.
 * 设置id数据库中不存在, 就会报错, 可以在&lt;id&gt;上设置一个unsaved-value=”-1”, 这个数为刚才找不到的id，就会将这条数据作为没有存过的数据执行save的操作加一条.
 
-### delete()
+### delete\(\)
 
 将持久态对象转成瞬时态.
 
-### get()/load()
+### get\(\)/load\(\)
 
 获得一个持久态对象.
 
@@ -277,7 +277,7 @@ Transaction tx = session.beginTransaction();
 
 * 建表原则: 创建第三张表,中间表至少有两个字段, 分别作为外键指向多对多双方主键.
 
-**一对一**: (特殊.最少.) 一个公司只能有一个注册地址,一个注册地址,只能被一个公司使用.(否则将两个表建到一个表.)
+**一对一**: \(特殊.最少.\) 一个公司只能有一个注册地址,一个注册地址,只能被一个公司使用.\(否则将两个表建到一个表.\)
 
 * 建表原则:
 * 唯一外键: 一对一的双方,假设一方是多的关系.需要在多的一方创建一个字段,作为外键.指向一的一方的主键.但是在外键添加一个unique，不能出现重复值.
@@ -432,7 +432,7 @@ session.delete(customer);
 | dave-update | 保存或更新的时候级联 |
 | delete | 删除的时候级联 |
 | all | 除了孤儿删除以外的所有级联. |
-| delete-orphan | 孤儿删除(孤子删除). |
+| delete-orphan | 孤儿删除\(孤子删除\). |
 | all-delete-orphan | 包含了孤儿删除的所有的级联. |
 
 delete-orphan：
@@ -613,5 +613,5 @@ public void demo4(){
 }
 ```
 
-用集合的remove()方法实现学生退选操作，解除该学生和课程的关联。
+用集合的remove\(\)方法实现学生退选操作，解除该学生和课程的关联。
 

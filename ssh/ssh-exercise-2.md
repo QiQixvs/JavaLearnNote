@@ -14,7 +14,7 @@ List<Category>  categoryList = categoryService.findAll();
 ServletActionContext.getContext().getSession().put("categoryList", categoryList);
 ```
 
-在jsp上通过#session.categoryList获取数据
+在jsp上通过\#session.categoryList获取数据
 
 ## 首页商品显示
 
@@ -24,40 +24,40 @@ ServletActionContext.getContext().getSession().put("categoryList", categoryList)
 
 ```java
 public class PageHibernateCallback<T> implements HibernateCallback<List<T>>{
-	
-	private String hql;
-	private Object[] params;
-	private int startIndex;
-	private int pageSize;
-	
 
-	public PageHibernateCallback(String hql, Object[] params,
-			int startIndex, int pageSize) {
-		super();
-		this.hql = hql;
-		this.params = params;
-		this.startIndex = startIndex;
-		this.pageSize = pageSize;
-	}
+    private String hql;
+    private Object[] params;
+    private int startIndex;
+    private int pageSize;
 
 
+    public PageHibernateCallback(String hql, Object[] params,
+            int startIndex, int pageSize) {
+        super();
+        this.hql = hql;
+        this.params = params;
+        this.startIndex = startIndex;
+        this.pageSize = pageSize;
+    }
 
-	public List<T> doInHibernate(Session session) throws HibernateException,
-			SQLException {
-		//1 执行hql语句
-		Query query = session.createQuery(hql);
-		//2 实际参数
-		if(params != null){
-			for(int i = 0 ; i < params.length ; i ++){
-				query.setParameter(i, params[i]);
-			}
-		}
-		//3 分页
-		query.setFirstResult(startIndex);
-		query.setMaxResults(pageSize);
-		
-		return query.list();
-	}
+
+
+    public List<T> doInHibernate(Session session) throws HibernateException,
+            SQLException {
+        //1 执行hql语句
+        Query query = session.createQuery(hql);
+        //2 实际参数
+        if(params != null){
+            for(int i = 0 ; i < params.length ; i ++){
+                query.setParameter(i, params[i]);
+            }
+        }
+        //3 分页
+        query.setFirstResult(startIndex);
+        query.setMaxResults(pageSize);
+
+        return query.list();
+    }
 
 }
 ```
@@ -66,30 +66,27 @@ public class PageHibernateCallback<T> implements HibernateCallback<List<T>>{
 
 ```java
 // DAO层的查询最新商品
-	public List<Product> findNew() {
-		List<Product> list = this.getHibernateTemplate().executeFind(new PageHibernateCallback<Product>("from Product order by pdate desc", null , 0, 10));
-		return list;
+    public List<Product> findNew() {
+        List<Product> list = this.getHibernateTemplate().executeFind(new PageHibernateCallback<Product>("from Product order by pdate desc", null , 0, 10));
+        return list;
     }
 ```
 
 在indexAction类中对newList提供set方法，在jsp页面上通过value="newList"来获取最新商品信息
 
-
 ## 分类页面
 
 * 查询一级分类，以及一级分类关联二级分类，还有相应商品信息
-
 * 配置一级分类和与二级分类的关联关系，二级分类与商品的关联关系
-
 * 在一级分类的映射配置中，关闭延迟加载
 
-```maekdown
+```text
 <set name="categorySeconds" order-by="csid" lazy="false">
 ```
 
 * 循环嵌套显示
 
-```markdown
+```text
 <s:iterator value="categoryList" var="c">
             <dl>
                 <dt><a href="${pageContext.request.contextPath}/product_findByCid.action?cid=<s:property value='%{#c.cid}'/>&page=1"><s:property value="#c.cname"/> </a></dt>
@@ -107,11 +104,11 @@ public class PageHibernateCallback<T> implements HibernateCallback<List<T>>{
 
 ```java
 public class PageBean<T> {
-	private Integer page;// 当前页数.
-	private Integer limit;// 每页显示记录数
-	private Integer totalCount;// 总记录数
-	private Integer totalPage;// 总页数.
-	private List<T> list; // 显示到浏览器的数据.
+    private Integer page;// 当前页数.
+    private Integer limit;// 每页显示记录数
+    private Integer totalCount;// 总记录数
+    private Integer totalPage;// 总页数.
+    private List<T> list; // 显示到浏览器的数据.
 //set/get方法。。。
 }
 ```
@@ -155,32 +152,32 @@ public PageBean<Product> findByCsid(Integer csid, Integer page) {
 Dao
 
 ```java
-	// 统计某个分类下的商品的总数:
-	public Integer findCountByCid(Integer cid) {
-		//String hql = "select count(*) from Product p , CategorySecond cs where p.categorySecond = cs and cs.category.cid = ?";
-		String hql = "select count(*) from Product p join p.categorySecond cs join cs.category c where c.cid = ?";
-		List<Long> list = this.getHibernateTemplate().find(hql,cid);
-		System.out.println("list:============="+list.get(0).intValue());
-		return list.get(0).intValue();
+    // 统计某个分类下的商品的总数:
+    public Integer findCountByCid(Integer cid) {
+        //String hql = "select count(*) from Product p , CategorySecond cs where p.categorySecond = cs and cs.category.cid = ?";
+        String hql = "select count(*) from Product p join p.categorySecond cs join cs.category c where c.cid = ?";
+        List<Long> list = this.getHibernateTemplate().find(hql,cid);
+        System.out.println("list:============="+list.get(0).intValue());
+        return list.get(0).intValue();
     }
-    	// 统计某个二级分类下商品数量
-	public Integer findCountByCsid(Integer csid) {
-		String hql = "select count(*) from Product p join p.categorySecond cs where cs.csid = ?";
-		List<Long> list = this.getHibernateTemplate().find(hql,csid);
-		return list.get(0).intValue();
-	}
+        // 统计某个二级分类下商品数量
+    public Integer findCountByCsid(Integer csid) {
+        String hql = "select count(*) from Product p join p.categorySecond cs where cs.csid = ?";
+        List<Long> list = this.getHibernateTemplate().find(hql,csid);
+        return list.get(0).intValue();
+    }
    //查某个一级分类下产品
-	public List<Product> findByPage(Integer cid, int begin, int limit) {
-		// String hql = "select p from Product p ,CategorySecond cs where p.categorySecond = cs and cs.category.cid = ?";
-		String hql = "select p from Product p join p.categorySecond cs join cs.category c where c.cid = ?";
-		List<Product> list = this.getHibernateTemplate().executeFind(new PageHibernateCallback<Product>(hql, new Object[]{cid}, begin, limit));
-		return list;
+    public List<Product> findByPage(Integer cid, int begin, int limit) {
+        // String hql = "select p from Product p ,CategorySecond cs where p.categorySecond = cs and cs.category.cid = ?";
+        String hql = "select p from Product p join p.categorySecond cs join cs.category c where c.cid = ?";
+        List<Product> list = this.getHibernateTemplate().executeFind(new PageHibernateCallback<Product>(hql, new Object[]{cid}, begin, limit));
+        return list;
     }
     //查某个二级分类下产品
     public List<Product> findByPageCsid(Integer csid, int begin, int limit) {
-		String hql = "select p from Product p join p.categorySecond cs where cs.csid = ?";
-		List<Product> list = this.getHibernateTemplate().executeFind(new PageHibernateCallback<Product>(hql, new Object[]{csid}, begin, limit));
-		return list;
+        String hql = "select p from Product p join p.categorySecond cs where cs.csid = ?";
+        List<Product> list = this.getHibernateTemplate().executeFind(new PageHibernateCallback<Product>(hql, new Object[]{csid}, begin, limit));
+        return list;
     }
 ```
 
@@ -192,21 +189,21 @@ ActionContext.getContext().getValueStack().set("pageBean",pageBean);
 
 * 显示商品列表
 
-```markdown
+```text
 <ul>
-	<s:iterator var="p" value="pageBean.list">
-		<li>
-			<a href="${pageContext.request.contextPath}/product_findByPid.action?pid=<s:property value="#p.pid"/>">
-			<img src="${pageContext.request.contextPath}/<s:property value="#p.image"/>" width="170" height="170"  style="display: inline-block;">
-			<span style='color:green'>
-				<s:property value="#p.pname"/>
-			</span>					 
-			<span class="price">
-				商城价： ￥<s:property value="#p.shop_price"/>
-			</span>
-			</a>
-		</li>
-	</s:iterator>	
+    <s:iterator var="p" value="pageBean.list">
+        <li>
+            <a href="${pageContext.request.contextPath}/product_findByPid.action?pid=<s:property value="#p.pid"/>">
+            <img src="${pageContext.request.contextPath}/<s:property value="#p.image"/>" width="170" height="170"  style="display: inline-block;">
+            <span style='color:green'>
+                <s:property value="#p.pname"/>
+            </span>                     
+            <span class="price">
+                商城价： ￥<s:property value="#p.shop_price"/>
+            </span>
+            </a>
+        </li>
+    </s:iterator>    
 </ul>
 ```
 
@@ -214,26 +211,25 @@ ActionContext.getContext().getValueStack().set("pageBean",pageBean);
 
 根据一级商品和二级商品对应的action不同，所以提供两个不同的jsp页面
 
-
-```markdown
+```text
 <div class="pagination">
-	第  <s:property value="pageBean.page"/>/<s:property value="pageBean.totalPage"/>页
+    第  <s:property value="pageBean.page"/>/<s:property value="pageBean.totalPage"/>页
     <s:if test="pageBean.page != 1">
-		<a href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=1" class="firstPage">&nbsp;</a>		
-		<a href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=<s:property value="pageBean.page-1"/>" class="previousPage">&nbsp;</a>	
-	</s:if>	
-	<s:iterator var="i" begin="1" end="pageBean.totalPage" step="1">
-		<s:if test="pageBean.page==#i">
-			<span class="currentPage"><s:property value="#i"/></span>
-		</s:if>
-		<s:else>
-			<a href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=<s:property value="#i"/>"><s:property value="#i"/></a>
-		</s:else>
-	</s:iterator>			
-	<s:if test="pageBean.page != pageBean.totalPage">
-		<a class="nextPage" href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=<s:property value="pageBean.page+1"/>">&nbsp;</a>
-		<a class="lastPage" href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=<s:property value="pageBean.totalPage"/>">&nbsp;</a>
-	</s:if>	
+        <a href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=1" class="firstPage">&nbsp;</a>        
+        <a href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=<s:property value="pageBean.page-1"/>" class="previousPage">&nbsp;</a>    
+    </s:if>    
+    <s:iterator var="i" begin="1" end="pageBean.totalPage" step="1">
+        <s:if test="pageBean.page==#i">
+            <span class="currentPage"><s:property value="#i"/></span>
+        </s:if>
+        <s:else>
+            <a href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=<s:property value="#i"/>"><s:property value="#i"/></a>
+        </s:else>
+    </s:iterator>            
+    <s:if test="pageBean.page != pageBean.totalPage">
+        <a class="nextPage" href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=<s:property value="pageBean.page+1"/>">&nbsp;</a>
+        <a class="lastPage" href="${ pageContext.request.contextPath }/product_findByCid.action?cid=<s:property value="cid"/>&page=<s:property value="pageBean.totalPage"/>">&nbsp;</a>
+    </s:if>    
 </div>
 ```
 
@@ -241,7 +237,7 @@ ActionContext.getContext().getValueStack().set("pageBean",pageBean);
 
 在ProductAction中注入Product模型在jsp页面上通过model获取查询到的商品信息
 
-```markdown
+```text
 <div class="name"><s:property value="model.pname"/> </div>
         <div class="sn">
             <div>编号<s:property value="model.pid"/> </div>
@@ -268,8 +264,6 @@ ActionContext.getContext().getValueStack().set("pageBean",pageBean);
 ```
 
 ## 购物车
-
-
 
 ### 购物项
 
@@ -360,7 +354,7 @@ public class Cart {
 
 * pid属性和get方法，从jsp页面上获取到商品的pid
 * ProductService注入，根据pid查找商品信息
-* 从session中获得cart对象的方法request.getSession().getAttribute("cart")，第一次访问需要创建
+* 从session中获得cart对象的方法request.getSession\(\).getAttribute\("cart"\)，第一次访问需要创建
 
 ```java
 public class CartAction extends ActionSupport {
@@ -394,17 +388,4 @@ public class CartAction extends ActionSupport {
 
     }
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
 

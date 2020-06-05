@@ -72,8 +72,9 @@ Generate Column Properties选项勾选后，会在生成的实体类.hbm.xml中�
 
 ## 网页页面日期项输入
 
-```markdown
+```text
 <input type="date" value=""/>
 ```
 
 ![](../.gitbook/assets/2020-04-10-13-34-04.png)
+

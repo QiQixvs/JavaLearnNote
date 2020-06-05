@@ -30,7 +30,7 @@ java.servlet.Filter接口
 ```
 
 {% hint style="info" %}
-Idea中使用JavaEE 6 annotated class对应Filter模版。@WebFilter(filterName ="DemoFilter",urlPatterns={"过滤路径"}
+Idea中使用JavaEE 6 annotated class对应Filter模版。@WebFilter\(filterName ="DemoFilter",urlPatterns={"过滤路径"}
 {% endhint %}
 
 ## Filter怎样实现过滤操作

@@ -19,7 +19,7 @@ OGNL是Object Graphic Navigation Language（对象图导航语言）的缩写，
 
 OGNL 提供五大类功能
 
-1. 支持对象方法调用，如xxx.doSomeSpecial()；
+1. 支持对象方法调用，如xxx.doSomeSpecial\(\)；
 2. 支持类静态的方法调用和值访问
 3. 访问OGNL上下文（OGNL context）和ActionContext； （重点 操作ValueStack值栈 ）
 4. 支持赋值操作和表达式串联
@@ -51,15 +51,15 @@ OGNL 提供五大类功能
 valueStack主要是将action数据携带到页面上，通过ognl获取数据
 
 1. ValueStack有一个实现类叫**OgnlValueStack**。
-2. 每一个action都有一个ValueStack.(一个请求，一个request, 一个action，一个valueStack),valueStack**生命周期**就是request生命周期。
-3. valueStack中存储了当前action对象以及其它常用web对象(request,session,application.parameters)。
+2. 每一个action都有一个ValueStack.\(一个请求，一个request, 一个action，一个valueStack\),valueStack**生命周期**就是request生命周期。
+3. valueStack中存储了当前action对象以及其它常用web对象\(request,session,application.parameters\)。
 4. struts2框架将valueStack以“struts.valueStack”为名存储到request域中。
 
 ### 2.2 valueStack结构
 
-![valueStack&#x7ED3;&#x6784;](.gitbook/assets/2020-03-13-22-10-49.png)
+![valueStack&#x7ED3;&#x6784;](../.gitbook/assets/2020-03-13-22-10-49%20%281%29.png)
 
-ValueStack中 存在root属性 (CompoundRoot) 、 context 属性 （OgnlContext）
+ValueStack中 存在root属性 \(CompoundRoot\) 、 context 属性 （OgnlContext）
 
 * CompoundRoot 就是ArrayList
 * OgnlContext 就是 Map
@@ -68,11 +68,11 @@ list集合中存储的是action相关信息
 
 map集合中存储的是相关映射信息，包含 paramters,request,session,application attr等。
 
-想要从list中获取数据，可以不使用\#号.(它就是ognl的root)
+想要从list中获取数据，可以不使用\#号.\(它就是ognl的root\)
 
-如果从map中获取数据，需要使用\#. (其实在struts2中的map--context其实就是ognlContext)
+如果从map中获取数据，需要使用\#. \(其实在struts2中的map--context其实就是ognlContext\)
 
-![valueStack&#x7ED3;&#x6784;&#x76F8;&#x5173;&#x5206;&#x6790;](.gitbook/assets/2020-03-14-19-57-14.png)
+![valueStack&#x7ED3;&#x6784;&#x76F8;&#x5173;&#x5206;&#x6790;](../.gitbook/assets/2020-03-14-19-57-14%20%281%29.png)
 
 #### 结论
 
@@ -109,12 +109,12 @@ ValueStack vs=ActionContext.getContext().getValueStack();
 
 主要有两个方法（在OgnlValueStack类中）
 
-* push(Object obj)-------&gt;底层就是 root.add(0,obj) 将数据存储到栈顶。
-* set(String name,Object obj);-----&gt;底层是将数据封装到HashMap中，在将这个HashMap通过push存储。
+* push\(Object obj\)-------&gt;底层就是 root.add\(0,obj\) 将数据存储到栈顶。
+* set\(String name,Object obj\);-----&gt;底层是将数据封装到HashMap中，在将这个HashMap通过push存储。
 
 在jsp中 通过 &lt;s:debug /&gt; 查看值栈的内容
 
-![&#x901A;&#x8FC7;&amp;lt;s:debug&amp;gt; &#x67E5;&#x770B;&#x503C;&#x6808;&#x7684;&#x5185;&#x5BB9;](.gitbook/assets/2020-03-14-14-38-04.png)
+![&#x901A;&#x8FC7;&amp;lt;s:debug&amp;gt; &#x67E5;&#x770B;&#x503C;&#x6808;&#x7684;&#x5185;&#x5BB9;](../.gitbook/assets/2020-03-14-14-38-04%20%281%29.png)
 
 ### 2.6 在JSP中获取值栈的数据
 
@@ -215,15 +215,15 @@ vs.push(users);
 
 #### 1. 访问的action对象会被压入到valueStack中
 
-DefaultActionInvocation 的 init方法 stack.push(action);
+DefaultActionInvocation 的 init方法 stack.push\(action\);
 
 Action如果想传递数据给JSP，只要将数据保存到成员变量，并且提供get方法就可以了。然后通过Property Name就可以获取到值。
 
-![Action&#x7C7B;&#x4E2D;&#x7684;&#x6210;&#x5458;](.gitbook/assets/2020-03-14-19-18-05.png)
+![Action&#x7C7B;&#x4E2D;&#x7684;&#x6210;&#x5458;](../.gitbook/assets/2020-03-14-19-18-05%20%281%29.png)
 
 #### 2. 对于模型驱动，model对象默认被压入valuestack中
 
-![model&#x5BF9;&#x8C61;&#x88AB;&#x538B;&#x5165;valuestack&#x4E2D;](.gitbook/assets/2020-03-14-19-32-55.png)
+![model&#x5BF9;&#x8C61;&#x88AB;&#x538B;&#x5165;valuestack&#x4E2D;](../.gitbook/assets/2020-03-14-19-32-55%20%281%29.png)
 
 ModelDriveInterceptor会执行下面操作
 
@@ -238,7 +238,7 @@ if (model !=  null) {
 
 将实现了ModelDrive接口的action中getModel方法的返回值，也就是我们所说的model对象压入到了valueStack。
 
-![&#x5173;&#x4E8E;&#x9ED8;&#x8BA4;&#x538B;&#x5165;&#x7684;model&#x5206;&#x6790;](.gitbook/assets/2020-03-14-19-42-59.png)
+![&#x5173;&#x4E8E;&#x9ED8;&#x8BA4;&#x538B;&#x5165;&#x7684;model&#x5206;&#x6790;](../.gitbook/assets/2020-03-14-19-42-59%20%281%29.png)
 
 解释：值栈中默认先压入Action，Action中的成员user初始化赋值，再压入model对象，model对象指向初始化中的user对象。当执行到Action中excute方法，user引用重新赋值，而栈顶model对象仍指向最开始的数据。在jsp页面上获取数据时需要注意要想获得新的数据，需要通过action中的model来获取。
 
@@ -246,9 +246,9 @@ if (model !=  null) {
 
 struts2框架中所使用的request对象，是增强后的request对象。
 
-${username}----&gt;request.getAttribute("username");
+${username}----&gt;request.getAttribute\("username"\);
 
-StrutsPreparedAndExecuteFilter的doFilter代码中 request = prepare.wrapRequest(request);
+StrutsPreparedAndExecuteFilter的doFilter代码中 request = prepare.wrapRequest\(request\);
 
 * 对Request对象进行了包装 ，StrutsRequestWrapper
 * 重写request的 getAttribute
@@ -262,11 +262,11 @@ if (attribute == null) {
 
 增强后的request,会首先在request域范围查找，如果数据找不到，去值栈中找。 request对象 具备访问值栈数据的能力 （查找root的数据）。
 
-## 3 OGNL表达式常见使用($ % #)
+## 3 OGNL表达式常见使用\($ % \#\)
 
 ### 1. \#号
 
-#### 用法一  \# 代表 ActionContext.getContext() 上下文
+#### 用法一  \# 代表 ActionContext.getContext\(\) 上下文
 
 ```text
 <s:property value="#request.name" />  -->  ActionContext().getContext().getRequest().get("name");
@@ -293,7 +293,7 @@ if (attribute == null) {
 
 #### 用法三 ：进行投影映射 （结合复杂对象遍历 ）
 
-1）集合的投影(只输出部分属性)
+1）集合的投影\(只输出部分属性\)
 
 ```text
 遍历集合只要name属性
@@ -410,7 +410,7 @@ regist.jsp-----&gt;RegistServlet
 
 解决方案:
 
-在页面上生成一个令牌(就是一个随机字符串),将其存储到session中，并在表单中携带.在服务器端，获取数据时，也将令牌获取，将它与session中存储的token对比，没问题，将session中令牌删除。
+在页面上生成一个令牌\(就是一个随机字符串\),将其存储到session中，并在表单中携带.在服务器端，获取数据时，也将令牌获取，将它与session中存储的token对比，没问题，将session中令牌删除。
 
 ### 3.2 struts2中怎样解决表单重复提交
 
@@ -442,7 +442,7 @@ regist.jsp-----&gt;RegistServlet
 
 ## 4. struts2中json插件使用
 
-### 4.1 struts2中怎样处理异步提交(ajax)
+### 4.1 struts2中怎样处理异步提交\(ajax\)
 
 异步提交参考[ajax](../ajax/ajax1.md)
 
@@ -481,7 +481,7 @@ response.getWriter().close();
 
 ### 4.2 怎样设置转换成json的对象中不包含特定的属性
 
-1. @JSON(serialize=false) 在getXxx方法上设置
+1. @JSON\(serialize=false\) 在getXxx方法上设置
 2. 还可以通过json插件的interceptor完成.
 
 ```text

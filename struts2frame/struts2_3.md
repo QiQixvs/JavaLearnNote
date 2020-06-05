@@ -119,9 +119,9 @@ JSP页面上：
 
 结果就是 hello world 张三.
 
-## 2. 拦截器(interceptor)
+## 2. 拦截器\(interceptor\)
 
-struts2拦截器使用的是AOP思想(面向切面编程）。AOP的底层实现就是动态代理。
+struts2拦截器使用的是AOP思想\(面向切面编程）。AOP的底层实现就是动态代理。
 
 拦截器 采用 **责任链** 模式
 
@@ -144,7 +144,7 @@ struts2中在struts-default.xml文件中声明了所有的拦截器, 而struts2�
 
 在这个接口中有三个方法 init destory intercept， intercept方法是真正拦截的方法。
 
-在intercept方法中如果要向下继续执行，通过其参数ActionInvocation调用它的invoke()方法就可以。
+在intercept方法中如果要向下继续执行，通过其参数ActionInvocation调用它的invoke\(\)方法就可以。
 
 #### 2. 声明一个Interceptor
 
@@ -178,13 +178,13 @@ interceptor配置写在action配置之前。
 
 #### 1. 在StrutsPrepareAndExecuteFilter中查找
 
-在doFilter方法内有一句话 execute.executeAction (request, response, mapping) 执行Action操作.
+在doFilter方法内有一句话 execute.executeAction \(request, response, mapping\) 执行Action操作.
 
 #### 2. 在executeAction执行过程中会访问Dispatcher类中的serviceAction
 
 在这个方法中会创建一个
 
-ActionProxy proxy = config.getContainer().getInstance(ActionProxyFactory.class).createActionProxy(namespace, name, method, extraContext, true, false);
+ActionProxy proxy = config.getContainer\(\).getInstance\(ActionProxyFactory.class\).createActionProxy\(namespace, name, method, extraContext, true, false\);
 
 这就是我们的Action的代理对象
 

@@ -3,7 +3,7 @@
 文件下载的方式
 
 1. 超链接下载
-2. 服务器端通过流下载(服务器端编程)
+2. 服务器端通过流下载\(服务器端编程\)
 
 ## 超链接下载
 
@@ -93,11 +93,11 @@ response.setHeader("content-disposition","attachment;filename=下载文件名称
 
 ### 服务器端编程下载
 
-1. 将下载的文件通过resposne.getOutputStream()流写回到浏览器端。
-2. 设置mimeType  response.setContentType(getServletContext.getMimeType(String filename));
+1. 将下载的文件通过resposne.getOutputStream\(\)流写回到浏览器端。
+2. 设置mimeType  response.setContentType\(getServletContext.getMimeType\(String filename\)\);
 3. 设置响应头，目的是永远是下载操作
 
-   response.setHeader("content-disposition","attachment;filename=下载文件名称");
+   response.setHeader\("content-disposition","attachment;filename=下载文件名称"\);
 
 ## 文件下载时的乱码问题
 
@@ -123,9 +123,9 @@ new String(filename.getBytes("iso8859-1"),"utf-8");
 response.setHeader("content-disposition", "attachment;filename="+filename);
 ```
 
-* Edge浏览器，关键字Edge。使用utf-8对文件名编码。URLEncoder.encode(fileName,“UTF8”);
-* Firefox 可以使用Firefox区分, 用ISO编码的中文输出。 new String(fileName.getBytes(“UTF-8”), “ISO8859-1”);
-* chrome 用ISO编码的中文输出。 new String(fileName.getBytes(), “ISO8859-1”)
+* Edge浏览器，关键字Edge。使用utf-8对文件名编码。URLEncoder.encode\(fileName,“UTF8”\);
+* Firefox 可以使用Firefox区分, 用ISO编码的中文输出。 new String\(fileName.getBytes\(“UTF-8”\), “ISO8859-1”\);
+* chrome 用ISO编码的中文输出。 new String\(fileName.getBytes\(\), “ISO8859-1”\)
 
 怎样判断浏览器?
 
@@ -133,11 +133,11 @@ response.setHeader("content-disposition", "attachment;filename="+filename);
 String agent = request.getHeader("user-agent");
 ```
 
-**Edge**：Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362
+**Edge**：Mozilla/5.0 \(Windows NT 10.0; Win64; x64\) AppleWebKit/537.36 \(KHTML, like Gecko\) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362
 
-**Firefox**：Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:73.0) Gecko/20100101 Firefox/73.0
+**Firefox**：Mozilla/5.0 \(Windows NT 10.0; Win64; x64; rv:73.0\) Gecko/20100101 Firefox/73.0
 
-**Chrome**：Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36
+**Chrome**：Mozilla/5.0 \(Windows NT 10.0; Win64; x64\) AppleWebKit/537.36 \(KHTML, like Gecko\) Chrome/80.0.3987.122 Safari/537.36
 
 ```java
 if (agent.contains("Edge")) {

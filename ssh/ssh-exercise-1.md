@@ -8,7 +8,7 @@ description: 网上商城用户模块注册和登录功能
 
 Struts2的jar包:
 
-* struts2框架解压路径/apps/struts2-blank.war/WEB-INF/lib/*.jar
+* struts2框架解压路径/apps/struts2-blank.war/WEB-INF/lib/\*.jar
 * struts2框架解压路径/lib/struts2-spring-plugin-2.3.15.3.jar
 * struts2框架解压路径/lib/struts2-json-plugin-2.3.15.3.jar
 
@@ -23,7 +23,7 @@ Spring开发基本jar包
 * spring框架依赖包解压路径/com.springsource.org.apache.commons.logging-1.1.1.jar
 * spring框架依赖包解压路径/com.springsource.org.apache.log4j-1.2.15.jar
 
-Spring的AOP开发(Aspectj)
+Spring的AOP开发\(Aspectj\)
 
 * spring框架解压路径/lib/spring-aop-3.2.0.RELEASE.jar
 * spring框架解压路径/lib/spring-aspects-3.2.0.RELEASE.jar
@@ -43,11 +43,10 @@ Spring的JDBC支持、事务管理、整合Hibernate
 Hibernate框架jar包:
 
 * hibernate框架解压路径/hibernate3.jar
-* hibernate框架解压路径/lib/required/*.jar
-* hibernate框架解压路径/lib/jpr/*.jar
+* hibernate框架解压路径/lib/required/\*.jar
+* hibernate框架解压路径/lib/jpr/\*.jar
 * hibernate框架整合log4j
 * slf4j-log4j12-1.7.2.jar
-
 * 数据库驱动包
 * c3p0连接池jar包.
 
@@ -73,125 +72,122 @@ UserService类增加事务管理注解@Transactional
 
 * 首页显示 通过action跳转
 * 注册页面显示 通过action跳转
-* 注册功能 Regist.jsp----->UserAction(regist方法)----->UserService（设置state和激活码，传递user对象）--------->UserDao,注册成功跳转信息页面，显示ActionMessage----this.addActionMessage("注册成功，请去邮箱激活");
-* 注册后台校验 UserAction-user_regist-validation.xml，校验后的INPUT视图配置 @InputConfig(resultName = "registInput")
+* 注册功能 Regist.jsp-----&gt;UserAction\(regist方法\)-----&gt;UserService（设置state和激活码，传递user对象）---------&gt;UserDao,注册成功跳转信息页面，显示ActionMessage----this.addActionMessage\("注册成功，请去邮箱激活"\);
+* 注册后台校验 UserAction-user\_regist-validation.xml，校验后的INPUT视图配置 @InputConfig\(resultName = "registInput"\)
 * 发送激活邮件
-* 在邮箱地址上点击链接------->UserAction(active方法)--------->UserService------->UserDao，根据激活码完成查找，找到该用户，修改用户的状态. 0 修改为1，update数据库.
-
-* 登录页面 UserAction(loginPage方法)，通过action跳转
-* 登录，登录页面------->UserAction(login方法)--------UserService---------UserDao，接收提交的用户名和密码.调用Service根据用户名和密码及用户的状态查询. 登录失败显示错误信息this.addActionError("登录失败");
-* 登录后台校验 UserAction-user_login-validation.xml@InputConfig(resultName = "loginInput")
-* 登录成功，将用户存到Session作用范围，ServletActionContext.getRequest().getSession().setAttribute("existUser",existUser);，重定向到首页的Action显示用户姓名，type="redirectAction"，&lt;s:property value="#session.existUser.name"/&gt;
-* 退出 user_quit.action 获得用户的session，将session销毁，ServletActionContext.getRequest().getSession().invalidate(); 重定向到首页的Action.
-
+* 在邮箱地址上点击链接-------&gt;UserAction\(active方法\)---------&gt;UserService-------&gt;UserDao，根据激活码完成查找，找到该用户，修改用户的状态. 0 修改为1，update数据库.
+* 登录页面 UserAction\(loginPage方法\)，通过action跳转
+* 登录，登录页面-------&gt;UserAction\(login方法\)--------UserService---------UserDao，接收提交的用户名和密码.调用Service根据用户名和密码及用户的状态查询. 登录失败显示错误信息this.addActionError\("登录失败"\);
+* 登录后台校验 UserAction-user\_login-validation.xml@InputConfig\(resultName = "loginInput"\)
+* 登录成功，将用户存到Session作用范围，ServletActionContext.getRequest\(\).getSession\(\).setAttribute\("existUser",existUser\);，重定向到首页的Action显示用户姓名，type="redirectAction"，&lt;s:property value="\#session.existUser.name"/&gt;
+* 退出 user\_quit.action 获得用户的session，将session销毁，ServletActionContext.getRequest\(\).getSession\(\).invalidate\(\); 重定向到首页的Action.
 * 注册页面Ajax校验
 
 ## 注册页面前台js校验
 
 ```java
 function checkForm(){
-		// 校验用户名:
-		var username = document.getElementById("username").value;
-		if(username == ''){
-			alert("用户名不能为空!");
-			return false;
-		}
-		// 校验密码:
-		var password = document.getElementById("password").value;
-		if(password == ''){
-			alert("密码不能为空!");
-			return false;
-		}
-		
-		// 校验确认密码
-		var repassword = document.getElementById("repassword").value;
-		if(password != repassword){
-			alert("两次密码不一致!");
-			return false;
-		}
-	}
+        // 校验用户名:
+        var username = document.getElementById("username").value;
+        if(username == ''){
+            alert("用户名不能为空!");
+            return false;
+        }
+        // 校验密码:
+        var password = document.getElementById("password").value;
+        if(password == ''){
+            alert("密码不能为空!");
+            return false;
+        }
+
+        // 校验确认密码
+        var repassword = document.getElementById("repassword").value;
+        if(password != repassword){
+            alert("两次密码不一致!");
+            return false;
+        }
+    }
 ```
 
 ## 发送激活邮件
 
 ```java
 public class MailUtils {
-	public static void sendMail(String to,String code) throws Exception{
-		Properties props = new Properties();
-		props.setProperty("mail.smtp", "localhost");
-		// 1.Session对象.连接(与邮箱服务器连接)
-		Session session = Session.getInstance(props, new Authenticator() {
+    public static void sendMail(String to,String code) throws Exception{
+        Properties props = new Properties();
+        props.setProperty("mail.smtp", "localhost");
+        // 1.Session对象.连接(与邮箱服务器连接)
+        Session session = Session.getInstance(props, new Authenticator() {
 
-			@Override
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("service@shop.com", "111");
-			}
-			
-		});
-		
-		// 2.构建邮件信息:
-		Message message = new MimeMessage(session);
-		// 发件人:
-		message.setFrom(new InternetAddress("service@shop.com"));
-		// 收件人:
-		message.setRecipient(RecipientType.TO, new InternetAddress(to));
-		// 设置标题
-		message.setSubject("来自SHOP激活邮件");
-		// 设置正文
-		message.setContent("<h1>来自SHOP的官网激活邮件</h1><h3><a href='http://192.168.40.99:8080/shop/user_active.action?code="+code+"'>http://192.168.40.99:8080/shop/user_active.action?code="+code+"</a></h3>", "text/html;charset=UTF-8");
-	
-		// 3.发送对象
-		Transport.send(message);
-	}
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("service@shop.com", "111");
+            }
+
+        });
+
+        // 2.构建邮件信息:
+        Message message = new MimeMessage(session);
+        // 发件人:
+        message.setFrom(new InternetAddress("service@shop.com"));
+        // 收件人:
+        message.setRecipient(RecipientType.TO, new InternetAddress(to));
+        // 设置标题
+        message.setSubject("来自SHOP激活邮件");
+        // 设置正文
+        message.setContent("<h1>来自SHOP的官网激活邮件</h1><h3><a href='http://192.168.40.99:8080/shop/user_active.action?code="+code+"'>http://192.168.40.99:8080/shop/user_active.action?code="+code+"</a></h3>", "text/html;charset=UTF-8");
+
+        // 3.发送对象
+        Transport.send(message);
+    }
 }
-
 ```
 
-在邮箱地址上点击链接------->UserAction(active方法)--------->UserService---------->UserDao
+在邮箱地址上点击链接-------&gt;UserAction\(active方法\)---------&gt;UserService----------&gt;UserDao
 
 修改用户的状态. 0 修改为1.
 
 ## 注册页面的Ajax校验
 
-```markdown
+```text
 <script type="text/javascript">
-	function checkUserName(){
-		// 获得用户名的值:
-		var username = document.getElementById("username").value;
-		// 1.创建异步加载对象:
-		var xhr = createXMLHttpRequest();
-		// 2.设置监听
-		xhr.onreadystatechange = function(){
-			if(xhr.readyState == 4){
-				if(xhr.status == 200){
-					var data = xhr.responseText;
-					document.getElementById("span1").innerHTML = data;
-				}
-			}
-		}
-		// 3.打开连接:
-		xhr.open("GET","${pageContext.request.contextPath}/user_checkUserName.action?"+new Date().getTime()+"&username="+username,true);
-		// 4.发送
-		xhr.send(null);
-	}
+    function checkUserName(){
+        // 获得用户名的值:
+        var username = document.getElementById("username").value;
+        // 1.创建异步加载对象:
+        var xhr = createXMLHttpRequest();
+        // 2.设置监听
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4){
+                if(xhr.status == 200){
+                    var data = xhr.responseText;
+                    document.getElementById("span1").innerHTML = data;
+                }
+            }
+        }
+        // 3.打开连接:
+        xhr.open("GET","${pageContext.request.contextPath}/user_checkUserName.action?"+new Date().getTime()+"&username="+username,true);
+        // 4.发送
+        xhr.send(null);
+    }
 
-	function createXMLHttpRequest() {
-		var xmlHttp;
-		try { // Firefox, Opera 8.0+, Safari
-			xmlHttp = new XMLHttpRequest();
-		} catch (e) {
-			try {// Internet Explorer
-				xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
-			} catch (e) {
-				try {
-					xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-				} catch (e) {
-				}
-			}
-		}
+    function createXMLHttpRequest() {
+        var xmlHttp;
+        try { // Firefox, Opera 8.0+, Safari
+            xmlHttp = new XMLHttpRequest();
+        } catch (e) {
+            try {// Internet Explorer
+                xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {
+                }
+            }
+        }
 
-		return xmlHttp;
-	}
+        return xmlHttp;
+    }
 
 </script>
 ```
@@ -226,7 +222,6 @@ public class MailUtils {
 在struts2中配置action，类交由spring管理，注意scope
 
 * 重写execute方法，不需要返回值。
-
 * 主要注意两处代码要用ServletActionContext，存验证码，和回写图片。
 
 ```java
@@ -238,5 +233,5 @@ ImageIO.write(bufferedImage, "jpg", ServletActionContext.getResponse()
 ```
 
 * 在jsp页面上增加点击图片刷新验证码功能
-
 * 在login和registAction中验证验证码
+
