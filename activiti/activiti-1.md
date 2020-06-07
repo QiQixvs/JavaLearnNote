@@ -1,6 +1,5 @@
 # Activiti-1
 
-
 ## 1. 了解
 
 ### 1.1 工作流
@@ -15,12 +14,12 @@ Activity5.13、JBPM4.4、OSWorkFlow、WorkFlow
 
 ## 2. 初始化表结构
 
-###	2.1 使用activiti框架提供的建表语句
+### 2.1 使用 activiti 框架提供的建表语句
 
-### 2.2 使用activiti框架的自动建表功能
+### 2.2 使用 activiti 框架的自动建表功能
 
-* 不使用配置文件（不建议）
-  
+- 不使用配置文件（不建议）
+
 ```java
 public void test1() {
 		//创建一个流程引擎配置对象
@@ -30,23 +29,24 @@ public void test1() {
 		conf.setJdbcUrl("jdbc:mysql:///activiti_1110");
 		conf.setJdbcUsername("root");
 		conf.setJdbcPassword("0608");
-		
+
 		//设置自动建表
 		conf.setDatabaseSchemaUpdate("true");
-		
+
 		//创建一个流程引擎对象
 		ProcessEngine processEngine = conf.buildProcessEngine();
 }
-```  
+```
 
-* 使用配置文件
+- 使用配置文件
 
-Activiti核心配置文件，配置流程引擎创建工具的基本参数和数据库连接池参数
+Activiti 核心配置文件，配置流程引擎创建工具的基本参数和数据库连接池参数
 
-activiti-context.xml或activiti.cfg.xml
+activiti-context.xml 或 activiti.cfg.xml
 
 ```markdown
 <?xml version="1.0" encoding="UTF-8"?>
+
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
   xmlns:jee="http://www.springframework.org/schema/jee" xmlns:aop="http://www.springframework.org/schema/aop"
@@ -55,16 +55,15 @@ activiti-context.xml或activiti.cfg.xml
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
-       <!-- 配置流程引擎配置对象 -->
-      	<bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
-		<property name="jdbcDriver" value="com.mysql.jdbc.Driver"/>
-		<property name="jdbcUrl" value="jdbc:mysql:///activiti_1110"/>
-		<property name="jdbcUsername" value="****"/>
-		<property name="jdbcPassword" value="****"/>
-		<property name="databaseSchemaUpdate" value="true"/>
-	</bean>
-       
-  
+<!-- 配置流程引擎配置对象 -->
+<bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
+<property name="jdbcDriver" value="com.mysql.jdbc.Driver"/>
+<property name="jdbcUrl" value="jdbc:mysql:///activiti_1110"/>
+<property name="jdbcUsername" value="****"/>
+<property name="jdbcPassword" value="****"/>
+<property name="databaseSchemaUpdate" value="true"/>
+</bean>
+
 </beans>
 ```
 
@@ -74,14 +73,14 @@ public void test2() {
     String resource="activiti-custom-context.xml";
     String beanName="processEngineConfiguration";
     ProcessEngineConfiguration conf = ProcessEngineConfiguration.createProcessEngineConfigurationFromResource(resource, beanName);
-    
+
     ProcessEngine processEngine = conf.buildProcessEngine();
 }
 ```
-  
-* 使用默认配置
 
-要求配置文件名**必须**为activiti-context.xml 或者activiti.cfg.xml
+- 使用默认配置
+
+要求配置文件名**必须**为 activiti-context.xml 或者 activiti.cfg.xml
 
 ```markdown
  <!-- 配置流程引擎配置对象 -->
@@ -97,61 +96,66 @@ public void test2() {
 ```
 
 ```java
-public void test3() {		
-	ProcessEngine defaultProcessEngine = ProcessEngines.getDefaultProcessEngine();	
+public void test3() {
+	ProcessEngine defaultProcessEngine = ProcessEngines.getDefaultProcessEngine();
 }
 ```
 
-## 3. 23张表
+## 3. 23 张表
 
-Activiti的后台是有数据库的支持，所有的表都以ACT_开头。 第二部分是表示表的用途的两个字母标识。 用途也和服务的API对应。
+Activiti 的后台是有数据库的支持，所有的表都以 ACT\_开头。 第二部分是表示表的用途的两个字母标识。 用途也和服务的 API 对应。
 
-1. ACT_RE_*: 'RE'表示repository。 这个前缀的表包含了流程定义和流程静态资源 （图片，规则，等等）。
-2. ACT_RU_*: 'RU'表示runtime。 这些运行时的表，包含流程实例，任务，变量，异步任务，等运行中的数据。 Activiti只在流程实例执行过程中保存这些数据， 在流程结束时就会删除这些记录。 这样运行时表可以一直很小速度很快。
-3. ACT_ID_*: 'ID'表示identity。 这些表包含身份信息，比如用户，组等等。
-4. ACT_HI_*: 'HI'表示history。 这些表包含历史数据，比如历史流程实例， 变量，任务等等。
-5. ACT_GE_*: 通用数据， 用于不同场景下。
+1. ACT*RE*\*: 'RE'表示 repository。 这个前缀的表包含了流程定义和流程静态资源 （图片，规则，等等）。
+2. ACT*RU*\*: 'RU'表示 runtime。 这些运行时的表，包含流程实例，任务，变量，异步任务，等运行中的数据。 Activiti 只在流程实例执行过程中保存这些数据， 在流程结束时就会删除这些记录。 这样运行时表可以一直很小速度很快。
+3. ACT*ID*\*: 'ID'表示 identity。 这些表包含身份信息，比如用户，组等等。
+4. ACT*HI*\*: 'HI'表示 history。 这些表包含历史数据，比如历史流程实例， 变量，任务等等。
+5. ACT*GE*\*: 通用数据， 用于不同场景下。
 
 ### 3.1 资源库流程规则表
-1)	act_re_deployment 	部署信息表
-2)	act_re_model  	流程设计模型部署表
-3)	act_re_procdef  	流程定义数据表
+
+1. act_re_deployment 部署信息表
+2. act_re_model 流程设计模型部署表
+3. act_re_procdef 流程定义数据表
 
 ### 3.2 运行时数据库表
-1)	act_ru_execution	运行时流程执行实例表
-2)	act_ru_identitylink	运行时流程人员表，主要存储任务节点与参与者的相关信息
-3)	act_ru_task		运行时任务节点表
-4)	act_ru_variable	运行时流程变量数据表
+
+1. act_ru_execution 运行时流程执行实例表
+2. act_ru_identitylink 运行时流程人员表，主要存储任务节点与参与者的相关信息
+3. act_ru_task 运行时任务节点表
+4. act_ru_variable 运行时流程变量数据表
 
 ### 3.3 历史数据库表
-1)	act_hi_actinst 		历史节点表
-2)	act_hi_attachment		历史附件表
-3)	act_hi_comment		历史意见表
-4)	act_hi_identitylink		历史流程人员表
-5)	act_hi_detail			历史详情表，提供历史变量的查询
-6)	act_hi_procinst		历史流程实例表
-7)	act_hi_taskinst		历史任务实例表
-8)	act_hi_varinst		历史变量表
+
+1. act_hi_actinst 历史节点表
+2. act_hi_attachment 历史附件表
+3. act_hi_comment 历史意见表
+4. act_hi_identitylink 历史流程人员表
+5. act_hi_detail 历史详情表，提供历史变量的查询
+6. act_hi_procinst 历史流程实例表
+7. act_hi_taskinst 历史任务实例表
+8. act_hi_varinst 历史变量表
 
 ### 3.4 组织机构表
-1)	act_id_group		用户组信息表
-2)	act_id_info		用户扩展信息表
-3)	act_id_membership	用户与用户组对应信息表
-4)	act_id_user		用户信息表
 
-这四张表很常见，基本的组织机构管理，关于用户认证方面建议还是自己开发一套，组件自带的功能太简单，使用中有很多需求难以满足 
+1. act_id_group 用户组信息表
+2. act_id_info 用户扩展信息表
+3. act_id_membership 用户与用户组对应信息表
+4. act_id_user 用户信息表
+
+这四张表很常见，基本的组织机构管理，关于用户认证方面建议还是自己开发一套，组件自带的功能太简单，使用中有很多需求难以满足
 
 ### 3.5 通用数据表
-1)	act_ge_bytearray		二进制数据表
-2)	act_ge_property	
 
-## 4. 使用框架提供的API完成流程操作
+1. act_ge_bytearray 二进制数据表
+2. act_ge_property
 
-新建流程图activiti diagram 后缀bpmn，保存后生成png图，在properties标签页中修改process的ID（不要中文），Name，task的id，name， Assignee。
+## 4. 使用框架提供的 API 完成流程操作
+
+新建流程图 activiti diagram 后缀 bpmn，保存后生成 png 图，在 properties 标签页中修改 process 的 ID（不要中文），Name，task 的 id，name， Assignee。
 
 ### 4.1 部署流程定义
 
-* 方式一：读取单个流程定义文件
+- 方式一：读取单个流程定义文件
 
 ```java
 public void test4() {
@@ -166,7 +170,7 @@ public void test4() {
 }
 ```
 
-* 方式二：读取zip压缩文件
+- 方式二：读取 zip 压缩文件
 
 ```java
 public void test1() {
@@ -187,8 +191,8 @@ DeploymentQuery query = processEngine.getRepositoryService().createDeploymentQue
 
 ### 4.3 查询流程定义列表
 
-* 流程定义的信息存放在仓库中，所以获取RepositoryService。
-* 创建流程定义查询对象，可以在ProcessDefinitionQuery上设置查询过滤参数
+- 流程定义的信息存放在仓库中，所以获取 RepositoryService。
+- 创建流程定义查询对象，可以在 ProcessDefinitionQuery 上设置查询过滤参数
 
 ```java
 public void test5() {
@@ -200,7 +204,7 @@ public void test5() {
     query.orderByProcessDefinitionVersion().desc();
     //添加分页查询
     query.listPage(0, 10);
-    
+
     List<ProcessDefinition> list = query.list();
     for(ProcessDefinition pd:list) {
         System.out.println(pd.getId());
@@ -237,24 +241,24 @@ public void test6() throws IOException {
 	}
 ```
 
-1)	deploymentId为流程部署ID
-2)	resourceName为act_ge_bytearray表中NAME_列的值
-3)	使用repositoryService的getDeploymentResourceNames方法可以获取指定部署下得所有文件的名称
-4)	使用repositoryService的getResourceAsStream方法传入部署ID和文件名称可以获取部署下指定名称文件的输入流
-5)	最后的有关IO流的操作，使用FileUtils工具的copyInputStreamToFile方法完成流程流程到文件的拷贝
+1. deploymentId 为流程部署 ID
+2. resourceName 为 act*ge_bytearray 表中 NAME*列的值
+3. 使用 repositoryService 的 getDeploymentResourceNames 方法可以获取指定部署下得所有文件的名称
+4. 使用 repositoryService 的 getResourceAsStream 方法传入部署 ID 和文件名称可以获取部署下指定名称文件的输入流
+5. 最后的有关 IO 流的操作，使用 FileUtils 工具的 copyInputStreamToFile 方法完成流程流程到文件的拷贝
 
 ```java
 //从流程定义获取流程图片输入流
 String processDefinitionId = "qjlc:9:27504";
 InputStream in = processEngine.getRepositoryService().getProcessDiagram(processDefinitionId);
-```   
+```
 
 ### 4.6 启动流程实例
 
 **流程实例**,根据一个流程定义具体的一次执行过程就是一个流程实例,一个流程定义对应多个流程实例(一对多关系),一个流程实例可以对应多个任务。
 
-* 方式一：根据流程定义的id启动
-  
+- 方式一：根据流程定义的 id 启动
+
 ```java
 /**
     * 根据流程定义的id启动一个流程实例
@@ -269,7 +273,7 @@ public void test6() {
 
 ![runtime_task表](../.gitbook/assets/2020-06-06-13-21-03.png)
 
-* 方式二：根据流程定义的key启动，自动选择最新版本的流程定义实现启动流程实例
+- 方式二：根据流程定义的 key 启动，自动选择最新版本的流程定义实现启动流程实例
 
 ```java
 ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey(processDefinitionKey);
@@ -277,7 +281,7 @@ ProcessInstance processInstance = processEngine.getRuntimeService().startProcess
 
 ### 查询流程实例列表
 
-查询act_ru_execution表
+查询 act_ru_execution 表
 
 ```java
 public void test9() {
@@ -297,7 +301,7 @@ public void test9() {
 processEngine.getRuntimeService().deleteProcessInstance(processInstanceId, deleteReason);
 ```
 
-在结束流程实例同时也会影响到任务表act_ru_task
+在结束流程实例同时也会影响到任务表 act_ru_task
 
 ### 4.7 查询个人任务列表
 
@@ -316,11 +320,12 @@ public void test7() {
     }
 }
 ```
-1)	因为是任务查询，所以从processEngine中应该得到TaskService
-2)	使用TaskService获取到任务查询对象TaskQuery
-3)	为查询对象添加查询过滤条件，使用taskAssignee指定任务的候选者（即查询指定用户的代办任务），添加分页排序等过滤条件
-4)	调用list方法执行查询，返回办理者为指定用户的任务列表
-5)	任务ID、名称、办理人、创建时间可以从act_ru_task表中查到。
+
+1. 因为是任务查询，所以从 processEngine 中应该得到 TaskService
+2. 使用 TaskService 获取到任务查询对象 TaskQuery
+3. 为查询对象添加查询过滤条件，使用 taskAssignee 指定任务的候选者（即查询指定用户的代办任务），添加分页排序等过滤条件
+4. 调用 list 方法执行查询，返回办理者为指定用户的任务列表
+5. 任务 ID、名称、办理人、创建时间可以从 act_ru_task 表中查到。
 
 ### 4.8 办理任务
 
@@ -332,11 +337,12 @@ public void test7() {
 public void test8() {
     String taskId="27508";
     processEngine.getTaskService().complete(taskId);
-}	
+}
 ```
+
 ### 查询最新版本的流程定义列表
 
-按版本号升序排列后，存入map，相同的key高版本会覆盖低版本。
+按版本号升序排列后，存入 map，相同的 key 高版本会覆盖低版本。
 
 ```java
 public void test14(){
@@ -354,7 +360,7 @@ public void test14(){
 }
 ```
 
-### 各个Service的作用
+### 各个 Service 的作用
 
 | Service           | 作用                                     |
 | ----------------- | ---------------------------------------- |
@@ -368,34 +374,29 @@ public void test14(){
 
 #### RepositoryService
 
-是Activiti的仓库服务类。所谓的仓库指流程定义文档的两个文件：bpmn文件和流程图片。
+是 Activiti 的仓库服务类。所谓的仓库指流程定义文档的两个文件：bpmn 文件和流程图片。
 
-1)	产生方式 processEngine.getRepositoryService()
- 
-2)	可以产生 DeploymentBuilder，createDeployment()，用来定义流程部署的相关参数
- 
-3)	删除流程定义 
- 
+1. 产生方式 processEngine.getRepositoryService()
+
+2. 可以产生 DeploymentBuilder，createDeployment()，用来定义流程部署的相关参数
+
+3. 删除流程定义
+
 #### RuntimeService
 
-是activiti的流程执行服务类。可以从这个服务类中获取很多关于流程执行相关的信息。
+是 activiti 的流程执行服务类。可以从这个服务类中获取很多关于流程执行相关的信息。
 
 #### TaskService
 
-是activiti的任务服务类。可以从这个类中获取任务的信息
+是 activiti 的任务服务类。可以从这个类中获取任务的信息
 
 #### ProcessDefinition
 
 流程定义类。可以从这里获得资源文件等。
 
-### Activiti框架提供的对象(和表有对应关系)
+### Activiti 框架提供的对象(和表有对应关系)
 
-* Deployment-----act_re_deployment
-* ProcessDefinition----act_re_procdef
-* ProcessInstance-----act_ru_execution
-* Task-----act_ru_task
-
-
-
-
-
+- Deployment-----act_re_deployment
+- ProcessDefinition----act_re_procdef
+- ProcessInstance-----act_ru_execution
+- Task-----act_ru_task
