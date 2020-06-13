@@ -270,7 +270,7 @@ public class MyTaskListener implements TaskListener{
 ![排他网关流程图](../.gitbook/assets/2020-06-07-22-35-10.png)
 
 ```markdown
-condition 表达式格式
+condition 表达式格式 结果应该是布尔量
 #{bxje<200>}
 bxje 为对应流程变量的 key
 ```
