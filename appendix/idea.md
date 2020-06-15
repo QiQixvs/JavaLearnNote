@@ -78,3 +78,44 @@ Generate Column Properties选项勾选后，会在生成的实体类.hbm.xml中�
 
 ![](../.gitbook/assets/2020-04-10-13-34-04.png)
 
+## 用idea模板建立webservice服务器端和客户端
+
+环境选择 jdk1.7 tomcat7 Axis 
+
+### 建立webservice服务器端
+
+![建立webservice项目](../.gitbook/assets/2020-06-15-16-02-09.png)
+
+Tools-->WebServices-->generate wsdl from java code
+
+![generate wsdl](../.gitbook/assets/2020-06-15-16-03-50.png)
+
+在java类同目录下生成了wsdl文件。
+
+![配置tomcat](../.gitbook/assets/2020-06-15-16-07-33.png)
+
+这里要注意在Artifacts中点fix，解决Axis的路径问题
+
+![加入Axis包](../.gitbook/assets/2020-06-15-16-09-40.png)
+
+启动Tomcat服务器，在浏览器访问，路径为Tomcat配置的URL+services
+
+![](../.gitbook/assets/2020-06-15-16-12-10.png)
+
+点击对应的链接，显示wsdl页面，将网址copy就可以给客户端使用了。
+
+### 从wsdl生成服务器端
+
+新建一个空白java项目，建包，选择Tools-->WebServices-->generate java code from wsdl
+
+![从wsdl生成java类](../.gitbook/assets/2020-06-15-16-19-27.png)
+
+第一行是wsdl对应的网址或路径
+第三行是目标package，先建包，再到这里使用，不然会报红
+第四行选择对应的WS Platform，根据实际情况选择
+
+之后就可以编写测试类调用服务了。
+
+
+
+
