@@ -296,3 +296,62 @@ SQL> select *
 8. 一般先执行子查询，再执行主查询；但相关子查询例外
 9. 单行子查询只能使用单行操作符；多行子查询只能使用多行操作符
 10. 子查询中的 null
+
+## 4. 集合运算
+
+- UNION/UNION ALL 并集
+- INTERSECT 交集
+- MINUS 差集
+
+注意的问题
+
+1. 参与运算的各个集合必须列数相同，且类型一致
+2. 采用第一个集合作为最后的表头
+3. order by 永远在最后
+4. 括号
+
+```text
+查询10和20号部门的员工
+select * from emp where deptno=10
+ 加上
+select * from emp where deptno=20
+
+SQL> select * from emp where deptno=10
+  2  union
+  3  select * from emp where deptno=20;
+===============================================================
+SQL> select deptno,job,sum(sal) from emp group by rollup(deptno,job);
+使用集合运算的方法
+SQL>  select deptno,job,sum(sal) from emp group by deptno,job
+  2   union
+  3   select deptno,sum(sal) from emp group by deptno
+  4   union
+  5   select sum(sal) from emp;
+
+ select deptno,sum(sal) from emp group by deptno
+ *
+第 3 行出现错误:
+ORA-01789: 查询块具有不正确的结果列数
+
+SQL>  select deptno,job,sum(sal) from emp group by deptno,job
+  2   union
+  3   select deptno,to_char(null),sum(sal) from emp group by deptno
+  4   union
+  5   select to_number(null),to_char(null),sum(sal) from emp;
+
+SQL> --打开SQL执行时间的开关
+SQL> set timing on
+SQL> select deptno,job,sum(sal) from emp group by rollup(deptno,job);
+...
+已用时间:  00: 00: 00.02
+
+SQL>  select deptno,job,sum(sal) from emp group by deptno,job
+  2   union
+  3   select deptno,to_char(null),sum(sal) from emp group by deptno
+  4   union
+  5   select to_number(null),to_char(null),sum(sal) from emp;
+...
+已用时间:  00: 00: 00.08
+SQL> --SQL 优化原则 5：尽量不要使用集合运算,会随着参与的集合增加效率显著降低
+SQL> set timing off
+```
