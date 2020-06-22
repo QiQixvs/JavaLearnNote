@@ -1,0 +1,298 @@
+# oracle-2
+
+## 1. 多表查询
+
+笛卡尔集，列数相加，行数相乘
+
+使用连接条件避免使用笛卡尔全集合，连接条件的个数至少有 N-1 个，N 是表的个数
+
+Oracle 的连接：等值连接，不等值连接，外连接，自连接。
+
+```text
+SQL> --等值连接
+SQL> --查询员工信息：员工号 姓名 月薪 部门名称
+SQL> select e.empno,e.ename,e.sal,d.dname
+  2  from emp e,dept d
+  3  where e.deptno=d.deptno;
+============================================
+SQL> --不等值连接
+SQL> --查询员工信息：员工号 姓名 月薪 工资级别
+SQL> select * from salgrade;
+
+     GRADE      LOSAL      HISAL
+---------- ---------- ----------
+         1        700       1200
+         2       1201       1400
+         3       1401       2000
+         4       2001       3000
+         5       3001       9999
+
+SQL> select e.empno,e.ename,e.sal,s.grade
+  2  from emp e,salgrade s
+  3  where e.sal between s.losal and s.hisal;
+
+     EMPNO ENAME             SAL      GRADE
+---------- ---------- ---------- ----------
+      7369 SMITH             800          1
+      7900 JAMES             950          1
+      7876 ADAMS            1100          1
+      7521 WARD             1250          2
+      7654 MARTIN           1250          2
+      7934 MILLER           1300          2
+      7844 TURNER           1500          3
+      7499 ALLEN            1600          3
+      7782 CLARK            2450          4
+      7698 BLAKE            2850          4
+      7566 JONES            2975          4
+
+     EMPNO ENAME             SAL      GRADE
+---------- ---------- ---------- ----------
+      7788 SCOTT            3000          4
+      7902 FORD             3000          4
+      7839 KING             5000          5
+
+已选择 14 行。
+```
+
+```text
+SQL> --外连接
+SQL> --按部门统计员工人数：部门号  部门名称  人数
+SQL> select d.deptno 部门号,d.dname 部门名称,count(e.empno) 人数
+  2  from emp e,dept d
+  3  where e.deptno=d.deptno
+  4  group by d.deptno,d.dname;
+
+    部门号 部门名称             人数
+---------- -------------- ----------
+        10 ACCOUNTING              3
+        20 RESEARCH                5
+        30 SALES                   6
+
+SQL> select * from dept;
+
+    DEPTNO DNAME          LOC
+---------- -------------- -------------
+        10 ACCOUNTING     NEW YORK
+        20 RESEARCH       DALLAS
+        30 SALES          CHICAGO
+        40 OPERATIONS     BOSTON
+
+SQL> select * from emp where deptno=40;
+
+未选定行(该部门没有人)
+```
+
+**外连接**：某些不成立的记录，通过外连接依然可以包含在最后的结果中
+
+- 左外连接：当 where e.deptno=d.deptno 不成立的时候，等号左边的表任然包含在最后的结果中.写法：where e.deptno=d.deptno(+)
+- 右外连接：当 where e.deptno=d.deptno 不成立的时候，等号右边的表任然包含在最后的结果中.写法： where e.deptno(+)=d.deptno
+
+```text
+SQL> select d.deptno 部门号,d.dname 部门名称,count(e.empno) 人数
+  2  from emp e,dept d
+  3  where e.deptno(+)=d.deptno
+  4  group by d.deptno,d.dname;
+
+    部门号 部门名称             人数
+---------- -------------- ----------
+        10 ACCOUNTING              3
+        40 OPERATIONS              0
+        20 RESEARCH                5
+        30 SALES                   6
+```
+
+**自连接**：通过表的别名，将同一张表视为多张表
+
+```text
+SQL> --自连接
+SQL> --查询员工信息： 员工的名字 老板的名字
+
+SQL> select e.ename 员工的名字,b.ename 老板名字
+  2  from emp e,emp b
+  3  where e.mgr=b.empno;
+
+SQL> --自连接：不适合操作大表,相当于数据量n倍
+```
+
+## 2. 层次查询
+
+本质上是单表查询，不会产生笛卡尔集
+
+![](../.gitbook/assets/2020-06-22-00-20-44.png)
+
+```text
+SQL> select level,empno,ename,mgr（level是伪列）
+  2  from emp
+  3  connect by prior empno=mgr(where 上一层的员工号等于老板号)
+  4  start with mgr is null（从指定节点往下遍历这棵树）
+  5  order by 1;（按level排序）
+
+     LEVEL      EMPNO ENAME             MGR                                                                                      ---------- ---------- ---------- ----------
+         1       7839 KING
+         2       7566 JONES            7839
+         2       7698 BLAKE            7839
+         2       7782 CLARK            7839
+         3       7902 FORD             7566
+         3       7521 WARD             7698
+         3       7900 JAMES            7698
+         3       7934 MILLER           7782
+         3       7499 ALLEN            7698
+         3       7788 SCOTT            7566
+         3       7654 MARTIN           7698
+
+     LEVEL      EMPNO ENAME             MGR
+---------- ---------- ---------- ----------
+         3       7844 TURNER           7698
+         4       7876 ADAMS            7788
+         4       7369 SMITH            7902
+
+已选择 14 行。
+
+SQL> /*
+SQL>  第一层: start with mgr is null
+SQL> 第二层: where mgr= 7839---> (7566,****,***)
+SQL> 第三层: where mgr in (7566,****,***)
+SQL> ****
+SQL> */
+```
+
+## 3. 子查询
+
+子查询所要解决的问题：不能一步求解
+
+```text
+SQL> --查询工资比SCOTT高的员工信息
+SQL> select *
+  2  from emp
+  3  where sal > (select sal
+  4               from emp
+  5               where ename='SCOTT');
+===========================================
+SQL> --3. 可以在主查询的where  select having from后面都可以放置子查询
+SQL> select empno,ename,sal,(select job from emp where empno=7839) row4
+  2  from emp;
+
+     EMPNO ENAME             SAL ROW4
+---------- ---------- ---------- ---------
+      7369 SMITH             800 PRESIDENT
+      7499 ALLEN            1600 PRESIDENT
+      7521 WARD             1250 PRESIDENT
+...
+===========================================
+SQL> --5. 强调from后面的子查询(子查询查到的多条数据可以做为from的来源数据集合)
+SQL> --查询员工信息：员工号 姓名 月薪
+SQL> select *
+  2  from (select empno,ename,sal from emp);
+SQL> --查询员工信息：员工号 姓名 月薪 年薪
+SQL> select * from (select empno,ename,sal,sal*12 annasal from emp);
+===========================================
+SQL> --6. 主查询和子查询可以不是同一张表；只要子查询返回的结果主查询可以使用即可
+SQL> --查询部门名称是SALES的员工信息
+SQL> select *
+  2  from emp
+  3  where deptno=(select deptno
+  4                from dept
+  5                where dname='SALES');
+相当于多表查询写法
+SQL> select e.*
+  2  from emp e,dept d
+  3  where e.deptno=d.deptno and d.dname='SALES';
+SQL> --SQL优化 4： 理论上，尽量使用多表查询
+```
+
+子查询类型
+
+- 单行子查询，只返回一行使用单行比较操作符（=,>,>=,<,<=,<>）
+
+```text
+在子查询中使用组函数
+select ename, job, sal from emp where sal =
+                                         (select MIN(sal) from emp);
+在子查询中的HAVING子句
+select 的deptno, MIN(sal)
+from emp
+group by deptnp
+HAVING MIN(sal) >
+                  (SELECT MIN(SAL)
+                   from emp
+                   where deptno = 10);
+单行子查询中的空值问题
+select ename,job
+from emp
+where job =
+            (selet job
+            from emp
+            where ename = 'Mike');
+no row selected (空值不能相等)
+```
+
+- 多行子查询，返回多行，使用多行操作比较符（IN，ANY，ALL）
+
+```text
+SQL> --in 在集合中
+SQL> --查询部门名称是SALES和ACCOUNTING的员工
+SQL> select *
+  2  from emp
+  3  where deptno in (select depno from dept where
+  4  dname='SALES' or dname ='ACCOUNTING');
+SQL> select e.*
+  2  from emp e,dept d
+  3  where e.deptno=d.deptno and (d.dname='SALES' or d.dname='ACCOUNTING');
+==================================================
+SQL> --any: 和集合中任意一个值比较
+SQL> --查询工资比30号部门任意一个员工高的员工信息
+SQL> select *
+  2  from emp
+  3  where sal > any (select sal from emp where deptno=30);
+改成单行子查询
+  1  select *
+  2  from emp
+  3* where sal > (select min(sal) from emp where deptno=30)
+==================================================
+SQL> --all: 和集合中的所有值比较
+SQL>  --查询工资比30号部门所有员工高的员工信息
+SQL> select *
+  2  from emp
+  3  where sal > all (select sal from emp where deptno=30);
+改成单行子查询
+  1  select *
+  2  from emp
+  3* where sal > (select max(sal) from emp where deptno=30)
+==================================================
+SQL> --多行子查询中的null
+SQL> --not in (10,20,null)
+如果集合中，含有 null，不能使用 not in; 但可以使用 in
+
+SQL> --查询不是老板的员工
+SQL> select *
+  2  from emp
+  3  where empno not in (select mgr from emp);
+未选定行
+
+SQL> --查询是老板的员工
+SQL> select *
+  2  from emp
+  3  where empno in (select mgr from emp);
+...
+已选择 6 行。
+
+SQL> select *
+  2  from emp
+  3  where empno not in (select mgr from emp where mgr is not null);
+...
+已选择 8 行。
+
+```
+
+注意的问题：
+
+1. 括号
+2. 合理的书写风格
+3. 可以在主查询的 where select having from 后面都可以放置子查询
+4. 不可以在 group by 放置子查询
+5. 强调 from 后面的子查询
+6. 主查询和子查询可以不是同一张表；只要子查询返回的结果主查询可以使用即可
+7. 一般不在子查询排序；但在 top-n 分析问题中，必须对子查询排序
+8. 一般先执行子查询，再执行主查询；但相关子查询例外
+9. 单行子查询只能使用单行操作符；多行子查询只能使用多行操作符
+10. 子查询中的 null
