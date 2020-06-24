@@ -491,7 +491,7 @@ SQL> truncate table testdelete;
 已用时间:  00: 00: 02.62
 ```
 
-## Oracle 中的事务
+## 6. Oracle 中的事务
 
 数据库事务由以下的部分组成：
 
@@ -555,7 +555,7 @@ SQL> rollback;
 回退已完成。
 ```
 
-## 创建和管理表
+## 7. 创建和管理表
 
 命名规则：
 
@@ -778,4 +778,228 @@ ORA-00001: 违反唯一约束条件 (SCOTT.STUDENT_EMAIL_UNIQUE)
 - ON DELETE CASCADE：当删除父表时，级联删除子表记录
 - ON DELETE SET NULL: 将子表的相关依赖记录的外键值置为 null
 
-## 其他数据库对象
+## 8. 其他数据库对象
+
+常见的数据库对象：表，视图，序列，索引，同义词
+
+### 8.1 视图 view
+
+视图是一种虚表，建立在已有表的基础上。视图依赖的这些表称为基表。视图相当于对基表中数据的一种显示方式，能简化复杂查询，但是不能提高性能
+
+```text
+SQL> create view empinfoview
+  2  as
+  3  select e.empno,e.ename,e.sal,e.sal*12 annsal,d.dname
+  4  from emp e,dept d
+  5  where e.deptno=d.deptno;
+
+视图已创建。(需要创建权限)
+
+SQL> desc empinfoview
+ 名称                                      是否为空? 类型
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                     NOT NULL NUMBER(4)
+ ENAME                                              VARCHAR2(10)
+ SAL                                                NUMBER(7,2)
+ ANNSAL                                             NUMBER
+ DNAME                                              VARCHAR2(14)
+
+SQL> select * from empinfoview;（视图也是表，查询方式一样）
+
+SQL> create or replace view empinfoview
+  2  as
+  3  select e.empno,e.ename,e.sal,e.sal*12 annsal,d.dname
+  4  from emp e,dept d
+  5  where e.deptno=d.deptno
+  6  with read only;
+
+视图已创建。
+=============================================================
+SQL> --with check option 只能操作该视图中看得到的部分
+
+```
+
+- 对视图的 DML 限制复杂，建议使用 with read only 屏蔽 DML 语句，也就是不建议通过视图对表进行修改。
+- 删除视图只是删除视图的定义，并不会删除基表的数据 drop view 视图名；
+
+### 8.2 序列 sequence
+
+可供多个用户用来产生唯一数值的数据库对象
+
+- 自动提供唯一的数值
+- 共享对象
+- 主要用于提供主键值
+- 将序列值装入内存可以提高访问效率
+
+```text
+SQL> create sequence dept_deptid_seq
+  2 increment by 10 (后面这些不写则是默认)
+  3 start with 123
+  4 maxvalue 9999
+  5 nocache
+  6 nocycle;
+```
+
+NEXTVAL 和 CURRVAL 伪列：
+
+- NEXTVAL 返回序列中下一个有效的值，任何用户都可以引用
+- CURRVAL 中存放序列的当前值
+- NEXTVAL 应在 CURRVAL 之前指定，二者应同时有效
+
+```text
+SQL> create sequence myseq;
+
+序列已创建。
+
+SQL> create table testseq
+  2  (tid number,
+  3   tname varchar2(20));
+
+表已创建。
+
+SQL> select myseq.currval from dual;
+select myseq.currval from dual
+       *
+第 1 行出现错误:
+ORA-08002: 序列 MYSEQ.CURRVAL 尚未在此会话中定义
+
+SQL> select myseq.nextval from dual;
+
+   NEXTVAL
+----------
+         1
+
+已选择 1 行。
+
+SQL> select myseq.currval from dual;
+
+   CURRVAL
+----------
+         1
+
+已选择 1 行。
+
+SQL> -- insert into testseq(tid,tname) values(?,?);
+SQL> insert into testseq(tid,tname) values(myseq.nextval,'aaa');
+
+已创建 1 行。
+
+SQL> /
+
+已创建 1 行。
+
+SQL> /
+
+已创建 1 行。
+
+SQL> /
+
+已创建 1 行。
+
+SQL> select * from testseq;
+
+       TID TNAME
+---------- --------------------
+         2 aaa
+         3 aaa
+         4 aaa
+         5 aaa
+
+已选择 4 行。
+
+SQL> commit;
+
+提交完成。
+
+SQL> insert into testseq(tid,tname) values(myseq.nextval,'aaa');
+
+已创建 1 行。
+
+SQL> /
+
+已创建 1 行。
+
+SQL> rollback;
+
+回退已完成。
+
+SQL> insert into testseq(tid,tname) values(myseq.nextval,'aaa');
+
+已创建 1 行。
+
+SQL> select * from testseq;
+
+       TID TNAME
+---------- --------------------
+         2 aaa
+         3 aaa
+         4 aaa
+         5 aaa
+         8 aaa
+
+已选择 5 行。(对序列操作时尽量避免回滚)
+```
+
+序列在下列情况下出现裂缝：回滚，系统异常多个表同时使用同一序列
+
+### 8.3 索引 index
+
+索引表由 oracle 数据库自己维护，相当于对原表操作的目录
+
+```text
+SQL> create index myindex
+  2  on emp(deptno);（按照deptno创建索引表）
+
+索引已创建。
+```
+
+![索引](../.gitbook/assets/2020-06-23-18-36-17.png)
+
+### 8.4 同义词（别名）synonym
+
+- 方便访问其他用户的对象
+- 缩短对象名字的长度
+
+```text
+SQL> --同义词(别名)：代表：表，视图，存储过程*****
+
+SQL> show user
+USER 为 "SCOTT"
+SQL> select count(*) from hr.employees;
+select count(*) from hr.employees
+                        *
+第 1 行出现错误:
+ORA-00942: 表或视图不存在
+
+SQL> grant select on hr.employees to scott;
+授权成功；
+
+SQL> select count(*) from hr.employees;
+
+  COUNT(*)
+----------
+       107
+
+已选择 1 行。
+====================================================
+SQL> --为hr.employees起别名 ---> 同义词
+SQL> create synonym hremp for hr.employees;
+create synonym hremp for hr.employees
+*
+第 1 行出现错误:
+ORA-01031: 权限不足
+
+SQL> grant create synonym to scott;
+授权成功；
+
+SQL> /
+同义词已创建。
+
+SQL> select count(*) from hremp;
+
+  COUNT(*)
+----------
+       107
+
+已选择 1 行。
+```
