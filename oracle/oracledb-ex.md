@@ -31,6 +31,9 @@ SQL> select count(*) Total,
         14          1         10          1          0
 ```
 
+第四题 限制每个部门只招聘 5 名员工，超过计划则报出错误信息
+![](../.gitbook/assets/2020-06-25-22-26-28.png)
+
 ## rownum
 
 伪列，行号，从 1 开始
@@ -163,4 +166,67 @@ SQL> select deptno,wm_concat(ename) nameslist
         10    CLARK,KING,MILLER
         20    SMITH,FORD,ADAMS,SCOTT,JONES
         30    ALLEN,BLAKE,MARTIN,TURNER,JAMES,WARD
+```
+
+## 面试题
+
+![案例一](../.gitbook/assets/2020-06-24-18-04-36.png)
+
+```text
+create table test1
+(id int primary key,
+ name varchar(20),
+ money int);
+
+insert into test1 values(1,'Tom',1000);
+insert into test1 values(2,'Mary',2000);
+insert into test1 values(3,'Mike',3000);
+insert into test1 values(4,'Jeff',4000);
+commit;
+=======================================================
+SQL> select id,name,money,
+  2  (select money from test1 where id=t.id-1) money1
+  3  from test1 t;
+```
+
+![案例二](../.gitbook/assets/2020-06-24-18-04-01.png)
+
+```text
+ create table pm_ci
+ (ci_id varchar(20) primary key,
+  stu_ids varchar(100));
+
+insert into pm_ci values('1','1,2,3,4');
+insert into pm_ci values('2','1,4');
+
+ create table pm_stu
+ (stu_id varchar(20) primary key,
+  stu_name varchar(20));
+insert into pm_stu values('1','张三');
+insert into pm_stu values('2','李四');
+insert into pm_stu values('3','王五');
+insert into pm_stu values('4','赵六');
+commit;
+=========================================================
+SQL> select c.ci_id, s.stu_name
+  2  from pm_ci c,pm_stu s
+  3  where instr(c.stu_ids,s.stu_id) >0;(局限于学生编号个位数)
+
+CI_ID                STU_NAME
+-------------------- --------------------
+1                    zhangsan
+1                    lisi
+1                    wangwu
+1                    zhaoliu
+2                    zhangsan
+2                    zhaoliu
+
+6 rows selected.
+
+SQL> select ci_id,wm_concat(stu_name) namelist
+  2  from (select c.ci_id, s.stu_name
+  3  from pm_ci c,pm_stu s
+  4  where instr(c.stu_ids,s.stu_id) >0)
+  5  group by ci_id;
+
 ```
