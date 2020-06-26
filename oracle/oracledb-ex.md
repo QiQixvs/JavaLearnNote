@@ -230,3 +230,75 @@ SQL> select ci_id,wm_concat(stu_name) namelist
   5  group by ci_id;
 
 ```
+
+## PLSQL 练习
+
+编写一个程序，按照系名分段统计（成绩小于 60 分，60-85 分，85 分以上）
+"大学物理"课程各分数段的学生人数，及各系的学生的平均成绩
+
+```text
+分析用到的查询语句
+====================
+系：select dno,dname from dep;
+成绩：select grade from sc where cno = (select cno from cource where cname=?)
+                          and sno in (select sno from student where dno=?);
+平均成绩：select avg(grade) from sc where cno = (select cno from cource where cname=?)
+                          and sno in (select sno from student where dno=?);
+
+```
+
+```text
+set serveroutput on
+declare
+  -- 光标：系
+  cursor cdep is select dno,dname from dep;
+  pdno dep.dno%type;
+  pdname dep.dame%type;
+
+  -- 光标：学生成绩（指定系，指定课）
+  cursor cgrade(courseName varchar, deptNo number) is select grade from sc where cno = (select cno from cource where cname=courseName)
+                          and sno in (select sno from student where dno=deptNo);
+  pgrade sc.grade%type;
+
+  --计数器
+  count1 number;count2 number;count3 number;
+
+  --平均分
+  avggrade number；
+
+  --课程名称
+  pcourseName varchar2(10):='大学物理';
+
+begin
+  open cdep;
+  loop
+    --取一个系
+    fetch cdep into pdno,pdname;
+    exit when cdep%notfound;
+    --清零
+    count1:=0;count2:=0;count3:=0;
+    --系平均分
+    select avg(grade) into avggrade from sc where cno = (select cno from cource where cname=pcourseName)
+                          and sno in (select sno from student where dno=pdno);
+    --取成绩
+    open cgrade(pcourseName,pdno);
+    loop
+      --每个学生的成绩
+      fetch cgrade into pgrade;
+      exit when cgrade%notfound;
+      if pgrade<60 then count1:=coun1+1;
+        elsif pgrade>60 and pgrade<85 then count2:=count2+1;
+        else count3:=count3+1;
+      end if;
+    end loop;
+    close cgrade;
+
+    --保存结果
+    insert into msg values(courseName,pdname,count1,count2,count3,avggrade);
+    commit;
+
+  end loop;
+  close cdep;
+end;
+/
+```
