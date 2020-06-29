@@ -1,12 +1,14 @@
 # PLSQL 程序设计
 
+[TOC]
+
 - Procedure Language /SQL 面向过程的语言
 - PLSQL 是 ORACLE 对 SQL 语句的过程化扩展
 - 在 SQL 命令语言中增加了过程处理语句
 
-## 基本语法
+## 1. 基本语法
 
-### 程序结构
+### 1.1 程序结构
 
 ```text
 SQL> declare
@@ -28,7 +30,7 @@ hello world
 PL/SQL procedure successfully completed.
 ```
 
-### 变量
+### 1.2 变量
 
 ![变量和常量的说明](../.gitbook/assets/2020-06-24-08-23-19.png)
 
@@ -66,7 +68,7 @@ end;
 /
 ```
 
-### IF 语句
+### 1.3 IF 语句
 
 ![IF语句格式](<../.gitbook/assets/![if语句格式](../.gitbook/assets/2020-06-24-10-39-40.png).png>)
 
@@ -91,7 +93,7 @@ end;
 /
 ```
 
-### 循环语句
+### 1.4 循环语句
 
 ![循环语句三种](../.gitbook/assets/2020-06-24-10-44-43.png)
 
@@ -114,7 +116,7 @@ end;
 /
 ```
 
-## 光标 Cursor
+## 2. 光标 Cursor
 
 相当于 ResultSet 用于存储一个查询返回的多行数据
 
@@ -222,9 +224,9 @@ end;
 /
 ```
 
-## Oracle 的异常处理
+## 3. Oracle 的异常处理
 
-### 系统定义例外
+### 3.1 系统定义例外
 
 - No_data_found (没有找到数据)
 - Too_many_rows (select..into 语句匹配多行)
@@ -250,7 +252,7 @@ end;
 /
 ```
 
-### 用户定义的例外
+### 3.2 用户定义的例外
 
 ```text
 --查询并打印50号部门的员工姓名
@@ -283,7 +285,7 @@ end;
 /
 ```
 
-## 案例
+## 4. 案例
 
 ### 案例一
 

@@ -1,6 +1,6 @@
 # oracle-4
 
-## DBCA 管理数据库
+## 1. DBCA 管理数据库
 
 DataBase Configuration Assistant
 
@@ -10,7 +10,7 @@ DataBase Configuration Assistant
 
 ![](../.gitbook/assets/2020-06-26-14-21-03.png)
 
-## 闪回 Flashback
+## 2. 闪回 Flashback
 
 应用场景
 
@@ -28,7 +28,7 @@ DataBase Configuration Assistant
 5. 闪回数据库：将数据库回到过去的一个时间上
 6. 闪回归档日志：log 文件
 
-### 闪回表
+### 2.1 闪回表
 
 ```text
 管理员登录sqlplus / as sysdba
@@ -79,7 +79,7 @@ SQL> flashback table flashback_table to SCN 1580697;
 - 会被写入警告日志
 - 产生撤销和重做的数据
 
-### 闪回删除
+### 2.2 闪回删除
 
 从系统的回收站中将已删除的对象，恢复到删除之前的状态。管理员没有回收站。
 
@@ -124,7 +124,7 @@ Flashback complete.
 */
 ```
 
-### 闪回版本查询
+### 2.3 闪回版本查询
 
 ![闪回版本查询语法](../.gitbook/assets/2020-06-26-16-57-51.png)
 
@@ -158,7 +158,7 @@ SQL> select vid,vname,versions_operation,versions_starttime,versions_endtime,ver
          2 Mary123  U 26-JUN-20 17.01.26                                            08000B0048050000
 ```
 
-### 闪回事务查询
+### 2.4 闪回事务查询
 
 ```text
 SQL> desc flashback_transaction_query
@@ -236,11 +236,11 @@ SQL> alter database add supplemental log data (primary key) columns;
 Database altered.
 ```
 
-## 导入导出 exp/imp
+## 3. 导入导出 exp/imp
 
 RMAN = Recovery Manager
 
-### exp 命令
+### 3.1 exp 命令
 
 exp -help
 
@@ -252,11 +252,11 @@ or TABLES=(T1:P1,T1:P2), if T1 is partitioned table
 
 - 如果不写用户名和密码之后的内容，会进入提示模式
 
-### imp 命令
+### 3.2 imp 命令
 
 ![imp命令举例](../.gitbook/assets/2020-06-26-19-26-29.png)
 
-## 管理方案 Schema
+## 4. 管理方案 Schema
 
 https://localhost:1158/em/ 登录 EM
 
@@ -270,9 +270,9 @@ Grant succeeded.
 
 管理员登录，查看修改 initialization Parameters
 
-## 管理用户安全
+## 5. 管理用户安全
 
-### 创建用户
+### 5.1 创建用户
 
 - 用命令行创建的新用户没有登录权限。用 EM 创建的用户则已经自动给予了连接数据库的权限
 
@@ -300,7 +300,7 @@ ORA-01045: user UNAME lacks CREATE SESSION privilege; logon denied
 
 ![](../.gitbook/assets/2020-06-26-20-03-14.png)
 
-### 验证用户
+### 5.2 验证用户
 
 - 密码验证方式 Password
 - 外部验证方式 External
@@ -311,11 +311,11 @@ sqlplus / as sysdba
 这种登录方式是外部验证登录方式，前提是操作系统当前用户是数据库的拥有者，不需要密码。外部认证优先于密码认证
 ```
 
-### 预定义账户 SYS 和 SYSTEM
+### 5.3 预定义账户 SYS 和 SYSTEM
 
 ![预定义账户](../.gitbook/assets/2020-06-26-20-04-30.png)
 
-### 解锁和改密码
+### 5.4 解锁和改密码
 
 ```TEXT
 1. 管理员登录
@@ -326,14 +326,14 @@ sql> ALTER USER SCOTT ACCOUNT UNLOCK;
 SQL> ALTER USER SCOTT IDENTIFIED BY 新密码：
 ```
 
-### 用户权限 User Privileges
+### 5.5 用户权限 User Privileges
 
 两类权限
 
 - System 允许用户执行对数据库的特定行为，如创建表，创建用户
 - Object 允许用户访问和操作一个特定的对象，如对其他方案下的表的查询
 
-#### 权限的级联问题
+#### 5.5.1 权限的级联问题
 
 ```text
 grant create session to jeff; 使能登录
@@ -355,7 +355,7 @@ revoke select on emp from jeff;撤销
 
 ![GRANT OPTION](../.gitbook/assets/2020-06-26-20-26-05.png)
 
-### 用户--角色--权限
+### 5.6 用户--角色--权限
 
 ```text
 create role hr_mgr; 建立角色
@@ -369,13 +369,13 @@ grant hr_clerk to emi;把角色给用户
 
 - 创建普通用户时一般同时给与 connect，resource 角色
 
-### 概要文件 Profiles
+### 5.7 概要文件 Profiles
 
 每一个用户只能被关联到一个概要文件
 
 概要文件： 控制消费资源，管理账户状态和密码有效期
 
-## 分布式数据库
+## 6. 分布式数据库
 
 ![分布操作](../.gitbook/assets/2020-06-26-20-55-29.png)
 
@@ -399,9 +399,9 @@ as
 select * from emp;
 ```
 
-### 分布式数据库的跨节点更新
+### 6.1 分布式数据库的跨节点更新
 
-#### 快照
+#### 6.1.1 快照
 
 定义快照维护关系表的异步副本，在主表修改后的指定时间内刷新副本，用于主表修改少，但是频繁查询的表
 
@@ -409,7 +409,7 @@ select * from emp;
 
 ![定义快照](../.gitbook/assets/2020-06-26-21-17-39.png)
 
-#### 触发器
+#### 6.1.2 触发器
 
 实现数据的同步
 

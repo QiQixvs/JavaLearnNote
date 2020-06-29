@@ -1,5 +1,7 @@
 # oracle-2
 
+[TOC]
+
 ## 1. 多表查询
 
 笛卡尔集，列数相加，行数相乘
@@ -567,7 +569,7 @@ SQL> rollback;
 - Oracle 默认存储都是存为大写
 - 数据库只能是 1~8 位，datalink 可以使 128 位和其他一些特殊字符
 
-### CREATE TABLE
+### 7.1 CREATE TABLE
 
 要求：
 
@@ -621,7 +623,7 @@ SQL> select * from empinfo;
      ...
 ```
 
-### 修改表 ALTER TABLE
+### 7.2 修改表 ALTER TABLE
 
 - 追加新列
 - 修改列（数据类型，尺寸，和默认值），对默认值的修改只影响今后对表的修改
@@ -642,7 +644,7 @@ SQL> alter table test3 rename column tname to username;（重命名列）
 SQL> rename test3 to test4;（重命名表）
 ```
 
-### 删除表 drop table
+### 7.3 删除表 drop table
 
 ```
 SQL> drop table test4;
@@ -715,7 +717,7 @@ SQL> select * from "BIN$IC4h7QX9Sv2aRY11zR9/hg==$0";（查询回收站中表中�
 SQL> --Oracle回收站：参考——》闪回（闪回删除）
 ```
 
-### 约束
+### 7.4 约束
 
 约束是表一级的限制，如果存在依赖关系，约束可以防止错误的删除数据
 

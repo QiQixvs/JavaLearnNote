@@ -1,6 +1,8 @@
 # oracle-练习
 
-##
+[TOC]
+
+## 1. 题目
 
 第一题：找出员工表中工资最高的前三名
 
@@ -34,7 +36,7 @@ SQL> select count(*) Total,
 第四题 限制每个部门只招聘 5 名员工，超过计划则报出错误信息
 ![](../.gitbook/assets/2020-06-25-22-26-28.png)
 
-## rownum
+## 2. rownum
 
 伪列，行号，从 1 开始
 
@@ -99,7 +101,7 @@ SQL>  select *
 
 ```
 
-## 临时表
+## 3. 临时表
 
 ```text
 SQL> --create global temporary table ******
@@ -152,7 +154,7 @@ SQL> select * from test2;
          1 Tom
 ```
 
-## 行转列
+## 4. 行转列
 
 wm_concat(字符串) 组函数
 
@@ -168,7 +170,7 @@ SQL> select deptno,wm_concat(ename) nameslist
         30    ALLEN,BLAKE,MARTIN,TURNER,JAMES,WARD
 ```
 
-## 面试题
+## 5. 面试题
 
 ![案例一](../.gitbook/assets/2020-06-24-18-04-36.png)
 
@@ -231,7 +233,7 @@ SQL> select ci_id,wm_concat(stu_name) namelist
 
 ```
 
-## PLSQL 练习
+## 6. PLSQL 练习
 
 编写一个程序，按照系名分段统计（成绩小于 60 分，60-85 分，85 分以上）
 "大学物理"课程各分数段的学生人数，及各系的学生的平均成绩
