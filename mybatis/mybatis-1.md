@@ -297,7 +297,7 @@ try {
 
 1. 编写 SqlMapConfig.xml
 2. 编写 mapper.xml
-   定义了 statement
+   定义了 statement (sql 语句可以在数据库先测试,验证找错)
 3. 编程通过配置文件创建 SqlSessionFactory
 4. 通过 SqlSessionFactory 获取 SqlSession
 5. 通过 SqlSession 操作数据库
@@ -787,10 +787,6 @@ mybatis 重点是对 sql 的灵活解析和处理。
 		<!-- <include refid="其它的sql片段"></include> -->
 	</where>	
 </select>
-```
-
-```markdwon
-
 ```
 
 ### foreach
