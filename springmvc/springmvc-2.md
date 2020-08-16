@@ -524,7 +524,15 @@ RESTful 的 url 是简洁的：http:// localhost:8080/items/editItems/1,参数�
 - 第二步:参数通过 url 传递
 
 ```java
+//根据商品id查看商品信息rest接口
+		//RequestMapping中指定restful方式的url的参数,参数需要用{}包起来
+		//PathVariable将url中的{}包起来的参数和形参进行绑定
+		@RequestMapping("/viewItems/{id}")
+		public @ResponseBody ItemsCustom viewItems(@PathVariable("id") Integer id) throws Exception{
+			ItemsCustom itemsCustom = itemsService.findItemsById(id);
 
+			return itemsCustom;
+		}
 ```
 
 ## springmvc 拦截器
