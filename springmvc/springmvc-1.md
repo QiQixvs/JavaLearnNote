@@ -784,7 +784,7 @@ public class CustomPropertyEditor implements PropertyEditorRegistrar {
 </filter>
 	<filter-mapping>
 	<filter-name>CharacterEncodingFilter</filter-name>
-<url-pattern>/\*</url-pattern>
+<url-pattern>/*</url-pattern>
 </filter-mapping>
 ```
 
