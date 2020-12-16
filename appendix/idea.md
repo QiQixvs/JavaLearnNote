@@ -1,9 +1,26 @@
-# IDEA踩坑记录
+# IDEA 踩坑记录
 
-## Tomcat 部署时 war exploded的问题
+## 添加依赖
 
-war exploded模式是直接把文件夹、jsp页面 、classes等等移到Tomcat 部署文件夹里面，进行加载部署。
+![](../.gitbook/assets/2020-12-10-15-55-38.png)
 
+![](../.gitbook/assets/2020-12-10-15-56-33.png)
+
+## Tomcat 配置
+
+![](../.gitbook/assets/2020-12-10-15-50-30.png)
+
+Edit Configuration -- 添加(+) Tomcat(local)-- 选择 Tomcat 所在的路径
+
+![](../.gitbook/assets/2020-12-10-15-52-32.png)
+
+Deployment(部署) -- 添加(+)Artifact-- 指定访问路径
+
+## Tomcat 部署时 war exploded 的问题
+
+war exploded 模式是直接把文件夹、jsp 页面 、classes 等等移到 Tomcat 部署文件夹里面，进行加载部署。
+
+````
 ![](../.gitbook/assets/image7.png) ![](https://github.com/QiQixvs/JavaLearnNote/tree/9f84335b1fb8c1e792ddb4feebf55381c89f784e/.gitbook/assets/capture.png)
 
 用于获取上下文环境绝对路径的代码：
@@ -80,7 +97,7 @@ Generate Column Properties选项勾选后，会在生成的实体类.hbm.xml中�
 
 ## 用idea模板建立webservice服务器端和客户端
 
-环境选择 jdk1.7 tomcat7 Axis 
+环境选择 jdk1.7 tomcat7 Axis
 
 ### 建立webservice服务器端
 
@@ -119,3 +136,4 @@ Tools-->WebServices-->generate wsdl from java code
 
 
 
+````
